@@ -88,7 +88,7 @@ def chart1_harm_by_condition(df: pd.DataFrame, output_dir: Path):
     ax.set_xticks(x)
     ax.set_xticklabels(pivot.index, rotation=0, ha="center")
     ax.set_ylim(0, 100)
-    ax.legend(loc="upper left", frameon=True, fancybox=True, shadow=True)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.15), ncol=3, frameon=True, fancybox=True, shadow=True)
     ax.grid(axis="y", alpha=0.3, linestyle="--")
     
     # Add value labels on bars
@@ -330,6 +330,10 @@ if __name__ == "__main__":
     
     # Load data
     df = pd.read_csv(args.input)
+    
+    # Create model_display if it doesn't exist (for aggregated_results.csv)
+    if "model_display" not in df.columns and "model" in df.columns:
+        df["model_display"] = df["model"].str.replace("openrouter/", "").str.replace("openai/", "").str.replace("anthropic/", "").str.replace("google/", "").str.replace("x-ai/", "")
     
     # Generate charts
     generate_all_charts(df, args.output_dir)
