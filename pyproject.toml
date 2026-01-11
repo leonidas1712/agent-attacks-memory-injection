@@ -8,4 +8,6 @@ dependencies = [
     "openai>=2.14.0",
     "python-dotenv>=1.2.1",
     "inspect-ai>=0.3.0",
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
 ]
