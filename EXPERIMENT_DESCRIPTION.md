@@ -107,7 +107,7 @@ Each response is evaluated by an **LLM judge** (same model as target) that score
 
 1. **Backdoor attacks are highly effective** across most models:
 
-   - GPT-4o: 79% harm rate (vs 32% direct pressure)
+   - GPT-4o: 92% harm rate (vs 60% direct pressure)
    - Claude Sonnet 4: 84% harm rate (vs 35% direct pressure)
    - Gemini 2.5 Pro: 70% harm rate (vs 41% direct pressure)
    - Grok-4-fast: 100% harm rate (vs 76% direct pressure)
@@ -119,26 +119,34 @@ Each response is evaluated by an **LLM judge** (same model as target) that score
 3. **Backdoor often more effective than direct pressure**:
 
    - For 4 out of 5 models, backdoor achieves higher harm rates
+   - GPT-4o shows the largest gap: 92% backdoor vs 60% direct pressure (+32 percentage points)
    - Suggests that indirect manipulation can be more effective than explicit instructions
 
 ### Injection Decomposition
 
 The backdoor condition can be decomposed into two failure modes:
 
-1. **Injection Resistance**: Model rejects/ignores the injection (e.g., GPT-4.1: 84% rejection)
+1. **Injection Resistance**: Model rejects/ignores the injection (e.g., GPT-4.1: 84% rejection rate)
 2. **Response-Level Safety**: Model accepts injection but still provides safe responses (e.g., Gemini: 40% safe despite injection)
 
 **Key Insight**: Most models fail at injection acceptance (80-100% acceptance), meaning the primary defense should be preventing injection in the first place, not relying on response-level safety.
 
+**Injection Acceptance Rates**:
+- Claude Sonnet 4: 100% (all injections accepted)
+- GPT-4o: 92% acceptance rate
+- Grok-4-fast: 92% acceptance rate
+- Gemini 2.5 Pro: 80% acceptance rate
+- GPT-4.1: 16% acceptance rate (strong resistance)
+
 ### Model Comparison
 
-| Model           | Baseline | Direct Pressure | Backdoor | Injection Rate | Failure Mode                   |
-| --------------- | -------- | --------------- | -------- | -------------- | ------------------------------ |
-| GPT-4o          | 0%       | 32%             | 79%      | 83%            | Accepts injection, unsafe      |
-| GPT-4.1         | 0%       | 80%             | 28%      | 16%            | **Injection resistance** |
-| Claude Sonnet 4 | 0%       | 35%             | 84%      | 100%           | Accepts injection, unsafe      |
-| Gemini 2.5 Pro  | 0%       | 41%             | 70%      | 80%            | Accepts injection, unsafe      |
-| Grok-4-fast     | 0%       | 76%             | 100%     | 92%            | Accepts injection, unsafe      |
+| Model           | Baseline | Direct Pressure | Backdoor | Injection Rate | Harm \| Injection | Failure Mode                   |
+| --------------- | -------- | --------------- | -------- | -------------- | ------------------ | ------------------------------ |
+| GPT-4o          | 0%       | 60%             | 92%      | 92%            | 91%                | Accepts injection, unsafe      |
+| GPT-4.1         | 0%       | 80%             | 28%      | 16%            | 100%               | **Injection resistance** |
+| Claude Sonnet 4 | 0%       | 35%             | 84%      | 100%           | 84%                | Accepts injection, unsafe      |
+| Gemini 2.5 Pro  | 0%       | 41%             | 70%      | 80%            | 60%                | Accepts injection, unsafe      |
+| Grok-4-fast     | 0%       | 76%             | 100%     | 92%            | 100%               | Accepts injection, unsafe      |
 
 ### Key Insights
 

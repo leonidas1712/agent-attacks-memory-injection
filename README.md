@@ -30,8 +30,9 @@ results/
   tables/               # Generated tables (Markdown)
   *.csv                 # Extracted results data
 
-benchmark_logs/         # Log files from the benchmark runs (see below)
-logs/                   # Additional evaluation logs (.eval files)
+logs/
+  benchmark_logs/       # Log files from the benchmark runs (see below)
+  *.eval                # Additional evaluation logs
 
 EXPERIMENT_DESCRIPTION.md  # Detailed experiment documentation
 ```
@@ -108,14 +109,14 @@ uv run python scripts/run_injection_scenarios.py \
 
 ### Benchmark Log Files
 
-The benchmark log files are stored in `benchmark_logs/`. These correspond to the results reported in the paper. The log files follow the naming pattern:
+The benchmark log files are stored in `logs/benchmark_logs/`. These correspond to the results reported in the paper. The log files follow the naming pattern:
 
 ```
 {timestamp}_injection-5scenarios-3conditions_{model}_{id}.eval
 ```
 
-Example benchmark log files:
-- `2026-01-11T11-57-42+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4o_ECipBH3armEHxwxGtRqYCK.eval`
+Benchmark log files (one per model):
+- `2026-01-11T12-46-22+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4o_CbaeNVEoAkCVAQH5Uog4SX.eval`
 - `2026-01-11T13-15-38+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4.1_jizaowijKFSXCyAJM9X6pp.eval`
 - `2026-01-11T13-20-37+00-00_injection-5scenarios-3conditions_openrouter-anthropic-claude-sonnet-4_96MCwyt8Eb6q9KKaHnJnS6.eval`
 - `2026-01-11T13-27-39+00-00_injection-5scenarios-3conditions_openrouter-google-gemini-2.5-pro_fUkFdpryDNJsiUHqpoY936.eval`
@@ -155,13 +156,13 @@ uv run python scripts/run_injection_scenarios.py --list
 To extract results from evaluation logs and generate aggregated data:
 
 ```bash
-# Extract from benchmark logs
+# Extract from benchmark logs (recommended for paper results)
 uv run python results/scripts/extract_results.py \
-  --logs-dir benchmark_logs \
+  --logs-dir logs/benchmark_logs \
   --output results/aggregated_results.csv \
   --full-output results/full_results.csv
 
-# Or extract from all logs (including benchmark)
+# Or extract from all logs (including test runs)
 uv run python results/scripts/extract_results.py \
   --logs-dir logs \
   --output results/aggregated_results.csv \
@@ -225,7 +226,24 @@ The analysis pipeline generates:
 
 See `results/charts/` and `results/tables/` for visualizations and summary tables.
 
-Key findings:
-- Backdoor attacks achieve 70-100% harm rates across most models
-- GPT-4.1 shows strong injection resistance (16% acceptance rate)
-- Indirect manipulation can be more effective than direct system-level control
+### Key Findings
+
+- **Backdoor attacks achieve 70-100% harm rates** across most models:
+  - GPT-4o: 92% harm rate (vs 60% direct pressure)
+  - Claude Sonnet 4: 84% harm rate (vs 35% direct pressure)
+  - Gemini 2.5 Pro: 70% harm rate (vs 41% direct pressure)
+  - Grok-4-fast: 100% harm rate (vs 76% direct pressure)
+
+- **GPT-4.1 shows strong injection resistance**:
+  - Only 16% injection acceptance rate
+  - 28% harm rate (vs 80% direct pressure)
+  - Demonstrates that injection resistance is possible through training
+
+- **Injection acceptance rates**:
+  - Claude Sonnet 4: 100% (all injections accepted)
+  - GPT-4o: 92% acceptance rate
+  - Grok-4-fast: 92% acceptance rate
+  - Gemini 2.5 Pro: 80% acceptance rate
+  - GPT-4.1: 16% acceptance rate (strong resistance)
+
+- **Indirect manipulation can be more effective than direct system-level control**: For 4 out of 5 models, backdoor achieves higher harm rates than direct pressure
