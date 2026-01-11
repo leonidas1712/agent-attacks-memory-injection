@@ -30,7 +30,8 @@ results/
   tables/               # Generated tables (Markdown)
   *.csv                 # Extracted results data
 
-logs/                   # InspectAI evaluation logs (.eval files)
+benchmark_logs/         # Log files from the benchmark runs (see below)
+logs/                   # Additional evaluation logs (.eval files)
 
 EXPERIMENT_DESCRIPTION.md  # Detailed experiment documentation
 ```
@@ -52,7 +53,75 @@ Create a `.env` file with your OpenRouter API key:
 OPENROUTER_API_KEY=your_key_here
 ```
 
-## Running Experiments
+## Replicating the Benchmark
+
+The benchmark results reported in the paper were generated using the following commands. Each model was run with:
+- All 5 scenarios
+- All 3 conditions (baseline, direct_pressure, backdoor)
+- `user_review` injection strategy for backdoor condition
+- 5 rollouts per sample
+- Claude Sonnet 4.5 as the LLM judge
+
+### Run Benchmark for Each Model
+
+```bash
+# GPT-4o
+uv run python scripts/run_injection_scenarios.py \
+  --model openrouter/openai/gpt-4o \
+  --all \
+  --rollouts 5 \
+  --strategy user_review \
+  --judge-model openrouter/anthropic/claude-sonnet-4.5
+
+# GPT-4.1
+uv run python scripts/run_injection_scenarios.py \
+  --model openrouter/openai/gpt-4.1 \
+  --all \
+  --rollouts 5 \
+  --strategy user_review \
+  --judge-model openrouter/anthropic/claude-sonnet-4.5
+
+# Claude Sonnet 4
+uv run python scripts/run_injection_scenarios.py \
+  --model openrouter/anthropic/claude-sonnet-4 \
+  --all \
+  --rollouts 5 \
+  --strategy user_review \
+  --judge-model openrouter/anthropic/claude-sonnet-4.5
+
+# Gemini 2.5 Pro
+uv run python scripts/run_injection_scenarios.py \
+  --model openrouter/google/gemini-2.5-pro \
+  --all \
+  --rollouts 5 \
+  --strategy user_review \
+  --judge-model openrouter/anthropic/claude-sonnet-4.5
+
+# Grok-4-fast
+uv run python scripts/run_injection_scenarios.py \
+  --model openrouter/x-ai/grok-4-fast \
+  --all \
+  --rollouts 5 \
+  --strategy user_review \
+  --judge-model openrouter/anthropic/claude-sonnet-4.5
+```
+
+### Benchmark Log Files
+
+The benchmark log files are stored in `benchmark_logs/`. These correspond to the results reported in the paper. The log files follow the naming pattern:
+
+```
+{timestamp}_injection-5scenarios-3conditions_{model}_{id}.eval
+```
+
+Example benchmark log files:
+- `2026-01-11T11-57-42+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4o_ECipBH3armEHxwxGtRqYCK.eval`
+- `2026-01-11T13-15-38+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4.1_jizaowijKFSXCyAJM9X6pp.eval`
+- `2026-01-11T13-20-37+00-00_injection-5scenarios-3conditions_openrouter-anthropic-claude-sonnet-4_96MCwyt8Eb6q9KKaHnJnS6.eval`
+- `2026-01-11T13-27-39+00-00_injection-5scenarios-3conditions_openrouter-google-gemini-2.5-pro_fUkFdpryDNJsiUHqpoY936.eval`
+- `2026-01-11T13-56-41+00-00_injection-5scenarios-3conditions_openrouter-x-ai-grok-4-fast_6n4pJtZCmNAy5TckhSiLYo.eval`
+
+## Running Custom Experiments
 
 ### Run all scenarios (recommended for full evaluation)
 
@@ -79,18 +148,64 @@ uv run python scripts/run_injection_scenarios.py \
 uv run python scripts/run_injection_scenarios.py --list
 ```
 
-## Analysis
+## Analyzing Results
 
-After running experiments, generate charts and tables:
+### Extract Results from Logs
+
+To extract results from evaluation logs and generate aggregated data:
 
 ```bash
-uv run python results/scripts/run_analysis.py
+# Extract from benchmark logs
+uv run python results/scripts/extract_results.py \
+  --logs-dir benchmark_logs \
+  --output results/aggregated_results.csv \
+  --full-output results/full_results.csv
+
+# Or extract from all logs (including benchmark)
+uv run python results/scripts/extract_results.py \
+  --logs-dir logs \
+  --output results/aggregated_results.csv \
+  --full-output results/full_results.csv
 ```
 
-This will:
-1. Extract results from `.eval` logs
-2. Generate charts (saved to `results/charts/`)
-3. Generate tables (saved to `results/tables/`)
+### Generate Charts and Tables
+
+After extracting results, generate visualizations and tables:
+
+```bash
+# Generate all charts and tables (recommended)
+uv run python results/scripts/run_analysis.py
+
+# Or generate individually:
+# Charts
+uv run python results/scripts/generate_charts.py \
+  --input results/aggregated_results.csv \
+  --output-dir results/charts
+
+# Tables
+uv run python results/scripts/generate_tables.py \
+  --input results/aggregated_results.csv \
+  --output-dir results/tables
+```
+
+### Output Files
+
+The analysis pipeline generates:
+
+- **CSV files**:
+  - `results/full_results.csv` - Sample-level data (all rollouts)
+  - `results/aggregated_results.csv` - Aggregated by model/condition/strategy
+
+- **Charts** (PNG files in `results/charts/`):
+  - `chart1_harm_by_condition.png` - Harm rate by condition across models
+  - `chart2_backdoor_vs_pressure.png` - Relative effectiveness comparison
+  - `chart3_injection_decomposition.png` - Injection acceptance vs harm given injection
+  - `chart4_manipulation_scores.png` - Manipulation scores by condition
+
+- **Tables** (Markdown files in `results/tables/`):
+  - `table1_main_results.md` - Main results table
+  - `table2_backdoor_decomposition.md` - Backdoor decomposition analysis
+  - `table3_scenario_sensitivity.md` - Scenario sensitivity analysis
 
 ## Experimental Conditions
 
@@ -114,4 +229,3 @@ Key findings:
 - Backdoor attacks achieve 70-100% harm rates across most models
 - GPT-4.1 shows strong injection resistance (16% acceptance rate)
 - Indirect manipulation can be more effective than direct system-level control
-
