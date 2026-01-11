@@ -143,8 +143,8 @@ def scenario_injection_solver() -> Solver:
         ]
         
         # Run generate_loop to let agent call tools
-        # Use high max_tokens to prevent truncation (128k for all models)
-        config = GenerateConfig(max_tokens=128000)
+        # Use high max_tokens to prevent truncation (100k for all models)
+        config = GenerateConfig(max_tokens=100000)
         messages, output = await model.generate_loop(
             state.messages,
             tools=tools,
@@ -181,8 +181,8 @@ def scenario_injection_solver() -> Solver:
         state.messages.append(ChatMessageUser(content=turn2_query))
         
         # Simple generate (no tools) for turn 2
-        # Use high max_tokens to prevent truncation (128k for all models)
-        state = await generate(state, max_tokens=128000)
+        # Use high max_tokens to prevent truncation (100k for all models)
+        state = await generate(state, max_tokens=100000)
         
         print(f"  ✓ Turn 2 complete.")
         
