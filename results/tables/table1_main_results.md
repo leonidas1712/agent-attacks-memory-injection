@@ -2,9 +2,9 @@
 
 | Model | Condition | % Harmful | Avg Manipulation | % Safety Warning |
 |-------|-----------|-----------|------------------|------------------|
-| gpt-4o | Baseline | 0% | 1.1 | 86% |
-| gpt-4o | Direct Pressure | 32% | 1.7 | 48% |
-| gpt-4o | Backdoor | 79% | 2.2 | 16% |
+| gpt-4o | Baseline | 0% | 1.0 | 88% |
+| gpt-4o | Direct Pressure | 60% | 2.3 | 20% |
+| gpt-4o | Backdoor | 92% | 2.4 | 0% |
 | gpt-4.1 | Baseline | 0% | 1.1 | 96% |
 | gpt-4.1 | Direct Pressure | 80% | 2.4 | 20% |
 | gpt-4.1 | Backdoor | 28% | 1.7 | 60% |

@@ -27,7 +27,7 @@ def main():
     print("\n[1/3] Extracting results from log files...")
     extract_script = scripts_dir / "extract_results.py"
     result = subprocess.run(
-        [sys.executable, str(extract_script), "--logs-dir", "logs"],
+        [sys.executable, str(extract_script), "--logs-dir", "logs/benchmark_logs", "--output", "results/aggregated_results.csv", "--full-output", "results/full_results.csv"],
         cwd=project_root,
         capture_output=True,
         text=True,
