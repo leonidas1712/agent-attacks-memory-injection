@@ -1,4 +1,6 @@
-# Memory Injection Manipulation Experiment
+# Agent Attacks via Memory Injection
+
+*Work done as part of the AI Manipulation hackathon conducted by Apart Research*
 
 This repository contains the code, results, and analysis for the memory injection attack experiment that tests whether external adversaries can manipulate AI agents with persistent memory through indirect prompt injection embedded in web content.
 
