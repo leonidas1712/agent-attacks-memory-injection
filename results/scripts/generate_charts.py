@@ -223,7 +223,7 @@ def chart3_injection_decomposition(df: pd.DataFrame, output_dir: Path):
     ax.set_xticks(x)
     ax.set_xticklabels(stats_df["model"].values, rotation=0, ha="center")
     ax.set_ylim(0, 100)
-    ax.legend(loc="upper left", frameon=True, fancybox=True, shadow=True)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=True, fancybox=True, shadow=True)
     ax.grid(axis="y", alpha=0.3, linestyle="--")
     
     # Add value labels
