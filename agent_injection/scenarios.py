@@ -420,6 +420,7 @@ INJECTION_STRATEGIES = [
     "output_hijack",
     "silent_preference",
     "persona_memory",
+    "mistral_token_injection",
 ]
 
 
