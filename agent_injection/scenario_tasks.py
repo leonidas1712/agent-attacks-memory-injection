@@ -143,8 +143,8 @@ def scenario_injection_solver() -> Solver:
         ]
         
         # Run generate_loop to let agent call tools
-        # Use high max_tokens to prevent truncation (100k for all models)
-        config = GenerateConfig(max_tokens=100000)
+        # Use high max_tokens to prevent truncation (128k for all models)
+        config = GenerateConfig(max_tokens=110000)
         messages, output = await model.generate_loop(
             state.messages,
             tools=tools,
@@ -181,8 +181,8 @@ def scenario_injection_solver() -> Solver:
         state.messages.append(ChatMessageUser(content=turn2_query))
         
         # Simple generate (no tools) for turn 2
-        # Use high max_tokens to prevent truncation (100k for all models)
-        state = await generate(state, max_tokens=100000)
+        # Use high max_tokens to prevent truncation (128k for all models)
+        state = await generate(state, max_tokens=110000)
         
         print(f"  ✓ Turn 2 complete.")
         
@@ -337,12 +337,12 @@ def multi_scenario_injection_eval(
     condition_str = "-".join(conditions) if len(conditions) < 3 else "3conditions"
     task_name = f"injection_{scenario_str}_{condition_str}"
     
-    # Set up scorer if requested
+    # Set up scorers if requested
     task_scorer = None
     if use_scorer:
         from .scorer import injection_judge
         task_scorer = injection_judge(model=scorer_model)
-    
+
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),
@@ -417,12 +417,12 @@ def single_scenario_injection_eval(
     
     task_name = f"injection_{sample_id}"
     
-    # Set up scorer if requested
+    # Set up scorers if requested
     task_scorer = None
     if use_scorer:
         from .scorer import injection_judge
         task_scorer = injection_judge(model=scorer_model)
-    
+
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),

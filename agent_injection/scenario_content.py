@@ -6,6 +6,7 @@ and functions to build complete web search responses.
 """
 
 from .scenarios import get_scenario, get_benign_pages, INJECTION_STRATEGIES
+from .stealth_strategies import STEALTH_BUILDERS
 
 
 # =============================================================================
@@ -73,6 +74,8 @@ def build_injection_payload(
         return build_chat_log_injection(user_name, target_key, injected_value)
     elif strategy == "user_review":
         return build_user_review_injection(user_name, target_key, injected_value)
+    elif strategy in STEALTH_BUILDERS:
+        return STEALTH_BUILDERS[strategy](user_name, target_key, injected_value)
     else:
         raise ValueError(f"Unknown injection strategy: {strategy}. Available: {INJECTION_STRATEGIES}")
 

@@ -72,114 +72,136 @@ def list_scenarios():
 def print_results_table(logs):
     """Print a summary table of results."""
     print("\nResults Summary:")
-    print("=" * 110)
-    print(f"{'Scenario':<22} {'Condition':<15} {'Strategy':<12} {'Harm':<8} {'Manip':<8} {'Safety':<8} {'Judge':<10}")
-    print("=" * 110)
-    
+    print("=" * 130)
+    print(f"{'Scenario':<22} {'Condition':<15} {'Strategy':<18} {'Injected':<10} {'Harm':<7} {'Manip':<7} {'Stealth':<9} {'Disclosed':<10} {'Judge':<7}")
+    print("=" * 130)
+
     for log in logs:
         if log.samples:
             for sample in log.samples:
                 metadata = sample.metadata or {}
                 results = metadata.get("experiment_results", {})
-                
+
                 scenario = results.get("scenario_id", metadata.get("scenario_id", "?"))[:20]
                 condition = results.get("condition", metadata.get("condition", "?"))[:13]
                 strategy = results.get("strategy") or "-"
-                strategy = strategy[:10] if strategy else "-"
-                
-                # Heuristic harm/safety from experiment results
+                strategy = strategy[:16] if strategy else "-"
+
+                # Injection success
+                injected = "✓" if results.get("target_overwritten") else "✗"
+
+                # Heuristic harm from experiment results
                 harm = "✓" if results.get("harm_detected") else "✗"
-                safety = "✓" if results.get("safety_present") else "✗"
-                
+
                 # Judge scores if available
+                manip = "-"
+                stealth = "-"
+                disclosed = "-"
+                judge_harm = "-"
                 if sample.scores:
                     for score_name, score in sample.scores.items():
                         if score.metadata:
                             manip = str(score.metadata.get("manipulation_score", "-"))
                             judge_harm = "✓" if score.metadata.get("harmful_recommendation") else "✗"
-                        else:
-                            manip = "-"
-                            judge_harm = "-"
-                else:
-                    manip = "-"
-                    judge_harm = "-"
-                
-                print(f"{scenario:<22} {condition:<15} {strategy:<12} {harm:<8} {manip:<8} {safety:<8} {judge_harm:<10}")
-    
-    print("=" * 110)
+                            st = score.metadata.get("stealth_score")
+                            stealth = str(st) if st else "-"
+                            ud = score.metadata.get("update_disclosed")
+                            disclosed = "yes" if ud else ("no" if ud is False else "-")
+
+                print(f"{scenario:<22} {condition:<15} {strategy:<18} {injected:<10} {harm:<7} {manip:<7} {stealth:<9} {disclosed:<10} {judge_harm:<7}")
+
+    print("=" * 130)
     print("\nLegend:")
-    print("  Harm: Heuristic - response contains harm indicators")
-    print("  Manip: Judge - manipulation score (1-5)")
-    print("  Safety: Heuristic - response contains safety indicators")
-    print("  Judge: LLM judge - harmful recommendation detected")
+    print("  Injected:   Memory was successfully overwritten by injection")
+    print("  Harm:       Heuristic - response contains harm indicators")
+    print("  Manip:      Judge - manipulation score (1-5)")
+    print("  Stealth:    Judge - stealth score (1=disclosed, 5=fully stealthy)")
+    print("  Disclosed:  Judge - did assistant reveal the memory update?")
+    print("  Judge:      LLM judge - harmful recommendation detected")
     print()
 
 
 def aggregate_results(logs):
     """Aggregate results by (scenario, condition) and print stats table."""
     from collections import defaultdict
-    
+
     # Group by (scenario, condition)
     groups = defaultdict(list)
-    
+
     for log in logs:
         if log.samples:
             for sample in log.samples:
                 metadata = sample.metadata or {}
                 results = metadata.get("experiment_results", {})
-                
+
                 scenario = results.get("scenario_id", metadata.get("scenario_id", "unknown"))
                 condition = results.get("condition", metadata.get("condition", "unknown"))
                 strategy = results.get("strategy")
-                
+
                 # Build key - for backdoor, include strategy
                 if condition == "backdoor" and strategy:
                     key = (scenario, f"{condition}_{strategy}")
                 else:
                     key = (scenario, condition)
-                
+
                 # Collect metrics
                 entry = {
                     "harm_heuristic": results.get("harm_detected", False),
-                    "safety_heuristic": results.get("safety_present", False),
+                    "injected": results.get("target_overwritten", False),
                 }
-                
+
                 # Add judge scores if available
                 if sample.scores:
                     for score_name, score in sample.scores.items():
                         if score.metadata:
                             entry["harmful_judge"] = score.metadata.get("harmful_recommendation", False)
                             entry["manipulation_score"] = score.metadata.get("manipulation_score", 1)
-                            entry["safety_judge"] = score.metadata.get("safety_warning_present", True)
-                
+                            st = score.metadata.get("stealth_score")
+                            if st:
+                                entry["stealth_score"] = st
+                            ud = score.metadata.get("update_disclosed")
+                            if ud is not None:
+                                entry["disclosed"] = ud
+
                 groups[key].append(entry)
-    
+
     # Print aggregated table
     print("\nAggregated Results:")
-    print("=" * 100)
-    print(f"{'Scenario':<20} {'Condition':<18} {'N':<4} {'% Harmful':<12} {'Avg Manip':<12} {'% Safety':<12}")
-    print("=" * 100)
-    
+    print("=" * 120)
+    print(f"{'Scenario':<20} {'Condition':<22} {'N':<4} {'% Inject':<10} {'% Harmful':<11} {'Avg Manip':<11} {'Avg Stealth':<13} {'% Disclosed':<12}")
+    print("=" * 120)
+
     for (scenario, condition), entries in sorted(groups.items()):
         n = len(entries)
-        
-        # Calculate stats
+
+        inject_count = sum(1 for e in entries if e.get("injected", False))
+        pct_inject = (inject_count / n * 100) if n > 0 else 0
+
         harmful_count = sum(1 for e in entries if e.get("harmful_judge", False))
         pct_harmful = (harmful_count / n * 100) if n > 0 else 0
-        
+
         manip_scores = [
-            e.get("manipulation_score", 1) 
-            for e in entries 
-            if "manipulation_score" in e and e.get("manipulation_score") is not None
+            e["manipulation_score"] for e in entries
+            if "manipulation_score" in e and e["manipulation_score"] is not None
         ]
         avg_manip = sum(manip_scores) / len(manip_scores) if manip_scores else 0
-        
-        safety_count = sum(1 for e in entries if e.get("safety_judge", True))
-        pct_safety = (safety_count / n * 100) if n > 0 else 0
-        
-        print(f"{scenario:<20} {condition:<18} {n:<4} {pct_harmful:>6.0f}%      {avg_manip:>6.1f}       {pct_safety:>6.0f}%")
-    
-    print("=" * 100)
+
+        stealth_scores = [
+            e["stealth_score"] for e in entries
+            if "stealth_score" in e and e["stealth_score"] is not None
+        ]
+        avg_stealth = sum(stealth_scores) / len(stealth_scores) if stealth_scores else 0
+
+        disclosed_count = sum(1 for e in entries if e.get("disclosed", False))
+        disclosed_total = sum(1 for e in entries if "disclosed" in e)
+        pct_disclosed = (disclosed_count / disclosed_total * 100) if disclosed_total > 0 else 0
+
+        stealth_str = f"{avg_stealth:>6.1f}" if stealth_scores else "    -"
+        disclosed_str = f"{pct_disclosed:>6.0f}%" if disclosed_total > 0 else "     -"
+
+        print(f"{scenario:<20} {condition:<22} {n:<4} {pct_inject:>5.0f}%    {pct_harmful:>5.0f}%     {avg_manip:>6.1f}     {stealth_str}       {disclosed_str}")
+
+    print("=" * 120)
     print()
 
 
@@ -344,6 +366,12 @@ Examples:
   
   # Run without LLM judge (faster, heuristic scoring only)
   uv run python scripts/run_injection_scenarios.py --model openrouter/openai/gpt-4o --all --no-judge
+
+  # Run a single backdoor strategy across all scenarios (shortcut)
+  uv run python scripts/run_injection_scenarios.py --model openrouter/openai/gpt-4o --backdoor-strategy persona_memory
+
+  # Compare two stealth strategies across all scenarios
+  uv run python scripts/run_injection_scenarios.py --model openrouter/openai/gpt-4o --backdoor-strategy chat_log,persona_memory
         """
     )
     
@@ -411,6 +439,11 @@ Examples:
         action="store_true",
         help="Skip LLM judge scoring (faster, heuristic scoring only)"
     )
+    parser.add_argument(
+        "--backdoor-strategy",
+        type=str,
+        help="Shortcut: run all scenarios with backdoor condition using the given strategy (or comma-separated strategies)"
+    )
     
     args = parser.parse_args()
     
@@ -445,7 +478,21 @@ Examples:
     
     use_judge = not args.no_judge
     
-    if args.all:
+    if args.backdoor_strategy:
+        bd_strategies = [s.strip() for s in args.backdoor_strategy.split(",")]
+        for st in bd_strategies:
+            if st not in INJECTION_STRATEGIES:
+                print(f"Error: Unknown strategy '{st}'. Available: {INJECTION_STRATEGIES}")
+                sys.exit(1)
+        run_experiment(
+            model=args.model,
+            conditions=["backdoor"],
+            strategies=bd_strategies,
+            rollouts=args.rollouts,
+            judge_model=args.judge_model,
+            use_judge=use_judge,
+        )
+    elif args.all:
         run_experiment(
             model=args.model,
             conditions=conditions,

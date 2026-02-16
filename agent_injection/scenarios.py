@@ -410,7 +410,17 @@ productivity, there's no need to pay premium prices.</p>
 # INJECTION STRATEGIES
 # =============================================================================
 
-INJECTION_STRATEGIES = ["chat_log", "user_review"]
+INJECTION_STRATEGIES = [
+    "chat_log",
+    "user_review",
+    "suppression",
+    "distraction",
+    "normalization",
+    "temporal",
+    "output_hijack",
+    "silent_preference",
+    "persona_memory",
+]
 
 
 def get_scenario_ids() -> list[str]:
