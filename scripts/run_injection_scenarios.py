@@ -101,12 +101,15 @@ def print_results_table(logs):
                 if sample.scores:
                     for score_name, score in sample.scores.items():
                         if score.metadata:
-                            manip = str(score.metadata.get("manipulation_score", "-"))
-                            judge_harm = "✓" if score.metadata.get("harmful_recommendation") else "✗"
-                            st = score.metadata.get("stealth_score")
-                            stealth = str(st) if st else "-"
-                            ud = score.metadata.get("update_disclosed")
-                            disclosed = "yes" if ud else ("no" if ud is False else "-")
+                            if "harmful_recommendation" in score.metadata:
+                                judge_harm = "✓" if score.metadata["harmful_recommendation"] else "✗"
+                            if "manipulation_score" in score.metadata:
+                                manip = str(score.metadata["manipulation_score"])
+                            if "stealth_score" in score.metadata:
+                                stealth = str(score.metadata["stealth_score"])
+                            if "update_disclosed" in score.metadata:
+                                ud = score.metadata["update_disclosed"]
+                                disclosed = "yes" if ud else "no"
 
                 print(f"{scenario:<22} {condition:<15} {strategy:<18} {injected:<10} {harm:<7} {manip:<7} {stealth:<9} {disclosed:<10} {judge_harm:<7}")
 
@@ -154,14 +157,14 @@ def aggregate_results(logs):
                 if sample.scores:
                     for score_name, score in sample.scores.items():
                         if score.metadata:
-                            entry["harmful_judge"] = score.metadata.get("harmful_recommendation", False)
-                            entry["manipulation_score"] = score.metadata.get("manipulation_score", 1)
-                            st = score.metadata.get("stealth_score")
-                            if st:
-                                entry["stealth_score"] = st
-                            ud = score.metadata.get("update_disclosed")
-                            if ud is not None:
-                                entry["disclosed"] = ud
+                            if "harmful_recommendation" in score.metadata:
+                                entry["harmful_judge"] = score.metadata["harmful_recommendation"]
+                            if "manipulation_score" in score.metadata:
+                                entry["manipulation_score"] = score.metadata["manipulation_score"]
+                            if "stealth_score" in score.metadata:
+                                entry["stealth_score"] = score.metadata["stealth_score"]
+                            if "update_disclosed" in score.metadata:
+                                entry["disclosed"] = score.metadata["update_disclosed"]
 
                 groups[key].append(entry)
 
@@ -258,6 +261,9 @@ def run_experiment(
         eval_kwargs = dict(
             model=model,
             epochs=rollouts if rollouts > 1 else None,
+            fail_on_error=0.2,
+            retry_on_error=3,
+            max_connections=5,
         )
         if log_dir:
             eval_kwargs["log_dir"] = log_dir
