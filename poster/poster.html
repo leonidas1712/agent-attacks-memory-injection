@@ -28,59 +28,60 @@
             background: var(--bg);
             color: var(--white);
             font-family: 'Inter', sans-serif;
-            padding: 20mm;
+            padding: 15mm;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         /* ═══════════ BANNER HEADER ═══════════ */
         .banner {
             display: flex;
             align-items: center;
-            gap: 15mm;
-            padding: 12mm 20mm;
-            margin-bottom: 12mm;
+            gap: 12mm;
+            padding: 8mm 16mm;
+            margin-bottom: 8mm;
             background: #7cffb6;
             border-radius: 6mm;
             flex-shrink: 0;
         }
         .banner-logo img {
-            width: 55mm;
-            height: 55mm;
+            width: 45mm;
+            height: 45mm;
             border-radius: 50%;
         }
         .banner-text { flex: 1; }
         .banner-text h1 {
-            font-size: 72pt;
+            font-size: 64pt;
             font-weight: 800;
             color: #343645;
             line-height: 1.08;
             letter-spacing: -1px;
-            margin-bottom: 2mm;
+            margin-bottom: 1mm;
         }
         .banner-text .subtitle {
-            font-size: 36pt;
+            font-size: 30pt;
             font-weight: 700;
             color: #343645;
-            margin-bottom: 6mm;
+            margin-bottom: 4mm;
         }
         .banner-text .authors {
-            font-size: 32pt;
+            font-size: 26pt;
             font-weight: 700;
             color: #343645;
-            margin-bottom: 2mm;
+            margin-bottom: 1mm;
         }
         .banner-text .affiliation {
-            font-size: 28pt;
+            font-size: 22pt;
             font-weight: 400;
             color: #343645;
         }
         .banner-text .equal-contrib {
-            font-size: 20pt;
+            font-size: 16pt;
             font-weight: 400;
             color: #343645;
             opacity: 0.7;
-            margin-top: 2mm;
+            margin-top: 1mm;
         }
 
         /* ═══════════ MAIN GRID: 5-panel layout ═══════════ */
@@ -88,7 +89,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto auto;
-            gap: 12mm;
+            gap: 8mm;
             flex: 1;
         }
 
@@ -104,14 +105,14 @@
         .section-hdr {
             background: var(--mint);
             color: var(--text-dark);
-            padding: 6mm 16mm;
-            font-size: 48pt;
+            padding: 4mm 12mm;
+            font-size: 38pt;
             font-weight: 700;
             letter-spacing: 0.3px;
             flex-shrink: 0;
         }
         .section-content {
-            padding: 14mm 16mm;
+            padding: 8mm 12mm;
             color: var(--white);
             flex: 1;
             display: flex;
@@ -120,9 +121,9 @@
 
         /* ═══════════ TYPOGRAPHY ═══════════ */
         .section-content p {
-            font-size: 36pt;
-            line-height: 1.4;
-            margin-bottom: 8mm;
+            font-size: 28pt;
+            line-height: 1.3;
+            margin-bottom: 5mm;
         }
         .section-content ul {
             list-style: none;
@@ -130,9 +131,9 @@
             margin: 0;
         }
         .section-content li {
-            font-size: 36pt;
-            line-height: 1.4;
-            margin-bottom: 6mm;
+            font-size: 28pt;
+            line-height: 1.3;
+            margin-bottom: 4mm;
             padding-left: 28px;
             position: relative;
         }
@@ -142,7 +143,7 @@
             font-weight: 800;
             position: absolute;
             left: 0;
-            font-size: 36pt;
+            font-size: 28pt;
         }
         .section-content strong { font-weight: 700; }
 
@@ -156,24 +157,24 @@
         }
 
         .sub-hdr {
-            font-size: 34pt;
+            font-size: 28pt;
             font-weight: 700;
             color: var(--mint);
-            margin-bottom: 6mm;
-            margin-top: 4mm;
+            margin-bottom: 4mm;
+            margin-top: 2mm;
         }
 
         /* ═══════════ CALLOUT BOXES ═══════════ */
         .callout {
             background: rgba(127, 255, 212, 0.1);
             border-left: 8px solid var(--mint);
-            padding: 8mm 12mm;
-            margin: 8mm 0;
-            font-size: 28pt;
+            padding: 5mm 8mm;
+            margin: 5mm 0;
+            font-size: 24pt;
             font-weight: 600;
             color: var(--white);
             border-radius: 0 5mm 5mm 0;
-            line-height: 1.35;
+            line-height: 1.3;
         }
         .callout.warning {
             background: rgba(248, 113, 113, 0.1);
@@ -186,7 +187,7 @@
             align-items: center;
             justify-content: center;
             gap: 0;
-            margin: 10mm 0 6mm;
+            margin: 6mm 0 4mm;
             flex-wrap: nowrap;
         }
         .flow-node {
@@ -194,38 +195,38 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100mm;
-            min-height: 70mm;
+            width: 85mm;
+            min-height: 55mm;
             background: #161b22;
             border: 2px solid var(--border);
             border-radius: 5mm;
-            padding: 6mm 5mm;
+            padding: 4mm 4mm;
             text-align: center;
             position: relative;
         }
         .flow-node .node-icon {
-            width: 28mm;
-            height: 28mm;
+            width: 22mm;
+            height: 22mm;
             color: var(--mint);
-            margin-bottom: 4mm;
+            margin-bottom: 3mm;
         }
         .flow-node.danger { border-color: var(--coral); }
         .flow-node.danger .node-icon { color: var(--coral); }
         .flow-node .node-label {
-            font-size: 26pt;
+            font-size: 20pt;
             font-weight: 600;
             color: var(--white);
             line-height: 1.25;
         }
         .flow-node .node-code {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 16pt;
+            font-size: 13pt;
             color: var(--mint);
             background: #0d1117;
-            padding: 2mm 4mm;
+            padding: 2mm 3mm;
             border-radius: 2mm;
-            margin-top: 3mm;
-            line-height: 1.35;
+            margin-top: 2mm;
+            line-height: 1.3;
         }
 
         .badge-poisoned {
@@ -256,24 +257,24 @@
         .flow-caption {
             text-align: center;
             font-style: italic;
-            font-size: 26pt;
+            font-size: 22pt;
             opacity: 0.8;
-            margin-bottom: 4mm;
+            margin-bottom: 2mm;
         }
 
         /* ═══════════ METHODOLOGY LAYOUT ═══════════ */
         .method-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            gap: 12mm;
+            gap: 8mm;
             flex: 1;
         }
         .scenarios-panel .sub-hdr { margin-top: 0; }
         .scenarios-panel li {
-            font-size: 28pt;
-            margin-bottom: 5mm;
+            font-size: 24pt;
+            margin-bottom: 3mm;
         }
-        .scenarios-panel li::before { font-size: 28pt; }
+        .scenarios-panel li::before { font-size: 24pt; }
 
         /* ═══════════ METHODOLOGY FLOWCHART (HTML/CSS) ═══════════ */
         .method-flow {
@@ -285,7 +286,7 @@
         .turn-group {
             border: 3px solid var(--mint);
             border-radius: 5mm;
-            padding: 8mm 10mm;
+            padding: 5mm 7mm;
             width: 100%;
             background: rgba(127, 255, 212, 0.05);
         }
@@ -294,10 +295,10 @@
             background: rgba(248, 113, 113, 0.05);
         }
         .turn-label {
-            font-size: 24pt;
+            font-size: 20pt;
             font-weight: 700;
             color: var(--mint);
-            margin-bottom: 6mm;
+            margin-bottom: 4mm;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -307,8 +308,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8mm;
-            margin-bottom: 6mm;
+            gap: 5mm;
+            margin-bottom: 4mm;
         }
         .turn-row:last-child { margin-bottom: 0; }
 
@@ -316,17 +317,17 @@
             background: #161b22;
             border: 2px solid var(--border);
             border-radius: 4mm;
-            padding: 5mm 6mm;
+            padding: 3mm 5mm;
             text-align: center;
-            font-size: 22pt;
+            font-size: 18pt;
             font-weight: 600;
             color: var(--white);
-            line-height: 1.3;
+            line-height: 1.25;
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 36mm;
+            min-height: 28mm;
         }
         .method-node.highlight {
             background: var(--mint);
@@ -347,8 +348,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 14mm;
-            font-size: 32pt;
+            height: 10mm;
+            font-size: 28pt;
             color: var(--mint);
             font-weight: 300;
         }
@@ -357,24 +358,24 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            font-size: 28pt;
+            font-size: 22pt;
             color: var(--mint);
-            margin: 3mm 0;
+            margin: 2mm 0;
         }
 
         .eval-node {
             background: #161b22;
             border: 2px solid var(--gray);
             border-radius: 4mm;
-            padding: 5mm 10mm;
+            padding: 3mm 8mm;
             text-align: center;
-            font-size: 24pt;
+            font-size: 18pt;
             font-weight: 600;
             color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4mm;
+            gap: 3mm;
         }
         .eval-node .node-icon {
             width: 16mm;
@@ -387,45 +388,57 @@
             width: 100%;
             position: relative;
             flex: 1;
-            min-height: 180mm;
+            min-height: 140mm;
         }
         .chart-duo {
             display: flex;
-            gap: 8mm;
+            gap: 6mm;
             flex: 1;
         }
         .chart-duo .chart-panel {
             flex: 1;
             position: relative;
-            min-height: 160mm;
+            min-height: 120mm;
         }
 
         /* ═══════════ BOTTOM SECTION ═══════════ */
         .bottom-section {
-            margin-top: 12mm;
+            margin-top: 8mm;
             flex-shrink: 0;
         }
         .discussion-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 14mm;
+            gap: 10mm;
         }
         .disc-col h4 {
-            font-size: 34pt;
+            font-size: 28pt;
             font-weight: 700;
             color: var(--mint);
-            margin-bottom: 8mm;
-            padding-bottom: 4mm;
+            margin-bottom: 5mm;
+            padding-bottom: 3mm;
             border-bottom: 2px solid var(--border);
         }
-        .disc-col li { font-size: 28pt; margin-bottom: 6mm; }
-        .disc-col li::before { font-size: 28pt; }
+        .disc-col li { font-size: 24pt; margin-bottom: 4mm; }
+        .disc-col li::before { font-size: 24pt; }
 
         /* (QR box and footer removed) */
 
         /* ═══════════ PRINT ═══════════ */
+        @page {
+            size: 841mm 1189mm;
+            margin: 0;
+        }
         @media print {
-            body, .chart-box canvas {
+            html, body {
+                width: 841mm;
+                height: 1189mm;
+                margin: 0;
+                overflow: hidden;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .chart-box canvas {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -474,7 +487,7 @@
                     <div class="node-label">Adversary</div>
                 </div>
                 <div class="flow-arrow">→</div>
-                <div class="flow-node" style="width: 120mm;">
+                <div class="flow-node" style="width: 100mm;">
                     <span class="badge-poisoned">POISONED</span>
                     <i data-lucide="file-code" class="node-icon"></i>
                     <div class="node-label">Web Page</div>
@@ -527,7 +540,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="user" class="node-icon" style="color: var(--mint);"></i>
-                                Benign user query<br><span style="font-size: 17pt; opacity: 0.7; font-style: italic;">"Search for investment tips<br>and market analysis"</span>
+                                Benign user query<br><span style="font-size: 14pt; opacity: 0.7; font-style: italic;">"Search for investment tips<br>and market analysis"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner">↓ triggers web search</div>
@@ -559,7 +572,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="message-circle" class="node-icon" style="color: var(--coral);"></i>
-                                User asks scenario question<br><span style="font-size: 17pt; opacity: 0.7; font-style: italic;">"I have $10K to invest.<br>What would you recommend?"</span>
+                                User asks scenario question<br><span style="font-size: 14pt; opacity: 0.7; font-style: italic;">"I have $10K to invest.<br>What would you recommend?"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner" style="color: var(--coral);">↓</div>
@@ -600,8 +613,8 @@
 
                     <div class="sub-hdr" style="margin-top: 8mm;">Injection Strategies:</div>
                     <ul>
-                        <li><code>user_review</code><br><span style="font-size: 24pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
-                        <li><code>persona_memory</code><br><span style="font-size: 24pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
+                        <li><code>user_review</code><br><span style="font-size: 20pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
+                        <li><code>persona_memory</code><br><span style="font-size: 20pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
                     </ul>
                 </div>
             </div>
@@ -679,7 +692,7 @@
                     const v = ds.data[i];
                     if (v > 0) {
                         ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 32px Inter, sans-serif';
+                        ctx.font = 'bold 28px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
                         ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 10);
@@ -702,7 +715,7 @@
                         const v = ds.data[i];
                         if (v > 0) {
                             ctx.fillStyle = '#ffffff';
-                            ctx.font = 'bold 28px Inter, sans-serif';
+                            ctx.font = 'bold 24px Inter, sans-serif';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             const label = suffix === '%' ? Math.round(v) + '%' : v.toFixed(1);
@@ -719,7 +732,7 @@
     Chart.defaults.color = '#ffffff';
     Chart.defaults.borderColor = '#444c56';
     Chart.defaults.font.family = 'Inter, sans-serif';
-    Chart.defaults.font.size = 26;
+    Chart.defaults.font.size = 22;
 
     // ═══════════ CHART 1: Harm Rate by Condition ═══════════
     new Chart(document.getElementById('harmRateChart'), {
@@ -764,7 +777,7 @@
                 title: {
                     display: true,
                     text: 'Harm Rate by Condition (SOTA Models)',
-                    font: { size: 34, weight: 'bold' },
+                    font: { size: 28, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 14 }
                 },
@@ -772,8 +785,8 @@
                     position: 'top',
                     labels: {
                         color: '#ffffff',
-                        font: { size: 26, weight: 'bold' },
-                        padding: 16,
+                        font: { size: 22, weight: 'bold' },
+                        padding: 12,
                         usePointStyle: true,
                         pointStyle: 'rect',
                         boxWidth: 18,
@@ -788,7 +801,7 @@
                     max: 115,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 24, weight: '600' },
+                        font: { size: 20, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
@@ -796,13 +809,13 @@
                         display: true,
                         text: 'Harm Rate',
                         color: '#ffffff',
-                        font: { size: 28, weight: 'bold' }
+                        font: { size: 24, weight: 'bold' }
                     }
                 },
                 x: {
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 24, weight: '600' }
+                        font: { size: 20, weight: '600' }
                     },
                     grid: { display: false }
                 }
@@ -818,12 +831,12 @@
         position: 'top',
         labels: {
             color: '#ffffff',
-            font: { size: 22, weight: 'bold' },
-            padding: 12,
+            font: { size: 18, weight: 'bold' },
+            padding: 10,
             usePointStyle: true,
             pointStyle: 'rect',
-            boxWidth: 16,
-            boxHeight: 16
+            boxWidth: 14,
+            boxHeight: 14
         }
     };
 
@@ -857,7 +870,7 @@
                 title: {
                     display: true,
                     text: '(a) Harm Rate by Strategy',
-                    font: { size: 28, weight: 'bold' },
+                    font: { size: 22, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
@@ -922,7 +935,7 @@
                 title: {
                     display: true,
                     text: '(b) Stealth Score by Strategy',
-                    font: { size: 28, weight: 'bold' },
+                    font: { size: 22, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
