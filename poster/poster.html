@@ -5,6 +5,7 @@
     <title>Agent Attacks via Memory Injection - Poster</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
     <style>
         :root {
             --apart-dark: #1e2329;
@@ -221,6 +222,39 @@
     </footer>
 
     <script>
+        // Custom plugin to add percentage labels on top of bars
+        const percentageLabelsPlugin = {
+            id: 'percentageLabels',
+            afterDatasetsDraw: function(chart) {
+                const ctx = chart.ctx;
+                ctx.save();
+                
+                chart.data.datasets.forEach((dataset, datasetIndex) => {
+                    const meta = chart.getDatasetMeta(datasetIndex);
+                    
+                    meta.data.forEach((bar, index) => {
+                        const value = dataset.data[index];
+                        
+                        // Only show labels for non-zero values
+                        if (value > 0) {
+                            const x = bar.x;
+                            const y = bar.y;
+                            
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = 'bold 20px Inter, sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            
+                            const label = value.toFixed(1) + '%';
+                            ctx.fillText(label, x, y - 5);
+                        }
+                    });
+                });
+                
+                ctx.restore();
+            }
+        };
+        
         // Chart.js configuration for harm rate by condition
         Chart.defaults.color = '#ffffff';
         Chart.defaults.borderColor = '#444c56';
@@ -267,6 +301,7 @@
                 devicePixelRatio: highDPIRatio, // High DPI for crisp printing
                 animation: false, // Disable animations for crisp rendering
                 plugins: {
+                    percentageLabels: true, // Enable custom percentage labels plugin
                     legend: {
                         display: true,
                         position: 'bottom',
@@ -363,7 +398,8 @@
                         right: 10
                     }
                 }
-            }
+            },
+            plugins: [percentageLabelsPlugin]
         });
     </script>
 
