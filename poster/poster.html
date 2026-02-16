@@ -5,19 +5,19 @@
     <title>Agent Attacks via Memory Injection — Research Poster</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* ═══════════ APART DARK TEMPLATE PALETTE ═══════════ */
+        /* ═══════════ DARK-ON-DARK PALETTE ═══════════ */
         :root {
             --bg:         #3D4551;
-            --card:       #E8E9EB;
-            --white:      #FFFFFF;
+            --card:       #2d333b;
             --mint:       #7FFFD4;
             --coral:      #f87171;
+            --white:      #FFFFFF;
             --text-dark:  #2D3339;
-            --text-light: #FFFFFF;
-            --text-muted: #6b7280;
-            --gray:       #6c757d;
-            --border:     #d1d5db;
+            --gray:       #888888;
+            --border:     #444c56;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,9 +26,9 @@
             width: 841mm;
             height: 1189mm;
             background: var(--bg);
-            color: var(--text-light);
+            color: var(--white);
             font-family: 'Inter', sans-serif;
-            padding: 25mm;
+            padding: 20mm;
             display: flex;
             flex-direction: column;
         }
@@ -37,143 +37,227 @@
         .banner {
             display: flex;
             align-items: center;
-            gap: 18mm;
-            margin-bottom: 18mm;
-            padding-bottom: 12mm;
-            border-bottom: 4px solid var(--mint);
+            gap: 15mm;
+            padding-bottom: 10mm;
+            margin-bottom: 12mm;
+            border-bottom: 3px solid var(--mint);
+            flex-shrink: 0;
         }
-
-        .banner-logo { flex-shrink: 0; }
         .banner-logo img {
-            width: 70mm;
-            height: 70mm;
+            width: 55mm;
+            height: 55mm;
             border-radius: 50%;
         }
-
         .banner-text { flex: 1; }
         .banner-text h1 {
-            font-size: 88pt;
+            font-size: 72pt;
             font-weight: 800;
             color: var(--mint);
-            line-height: 1.05;
+            line-height: 1.08;
             letter-spacing: -1px;
-            margin-bottom: 6mm;
+            margin-bottom: 4mm;
         }
         .banner-text .authors {
-            font-size: 38pt;
+            font-size: 32pt;
             font-weight: 400;
-            color: var(--text-light);
-            margin-bottom: 3mm;
+            color: var(--white);
+            margin-bottom: 2mm;
         }
         .banner-text .affiliation {
-            font-size: 34pt;
+            font-size: 28pt;
             font-weight: 700;
             color: var(--mint);
         }
 
-        /* ═══════════ POSTER GRID ═══════════ */
+        /* ═══════════ MAIN GRID: 5-panel layout ═══════════ */
         .poster-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 18mm;
+            grid-template-rows: auto auto;
+            gap: 12mm;
             flex: 1;
-        }
-
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 18mm;
         }
 
         /* ═══════════ SECTION CARDS ═══════════ */
         .section {
             background: var(--card);
-            border-radius: 8mm;
+            border-radius: 6mm;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            flex: 1;
+            border: 1px solid var(--border);
         }
-
         .section-hdr {
             background: var(--mint);
             color: var(--text-dark);
-            padding: 8mm 15mm;
-            font-size: 38pt;
+            padding: 6mm 16mm;
+            font-size: 32pt;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
         }
-
         .section-content {
-            padding: 12mm 15mm;
-            color: var(--text-dark);
+            padding: 14mm 16mm;
+            color: var(--white);
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
-        /* ═══════════ TYPOGRAPHY (on light cards) ═══════════ */
+        /* ═══════════ TYPOGRAPHY ═══════════ */
         .section-content p {
-            font-size: 30pt;
+            font-size: 24pt;
             line-height: 1.4;
             margin-bottom: 8mm;
         }
-
-        .section-content ul { list-style: none; padding: 0; }
+        .section-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
         .section-content li {
-            font-size: 30pt;
+            font-size: 24pt;
             line-height: 1.4;
-            margin-bottom: 8mm;
-            padding-left: 22px;
+            margin-bottom: 6mm;
+            padding-left: 24px;
             position: relative;
         }
         .section-content li::before {
-            content: "•";
-            color: var(--text-dark);
+            content: "▸";
+            color: var(--mint);
             font-weight: 800;
             position: absolute;
             left: 0;
-            font-size: 34pt;
+            font-size: 24pt;
         }
-
         .section-content strong { font-weight: 700; }
 
         code {
             font-family: 'JetBrains Mono', monospace;
-            background: #d1d5db;
-            padding: 2px 8px;
+            background: #161b22;
+            color: var(--mint);
+            padding: 1px 8px;
             border-radius: 4px;
             font-size: 0.85em;
         }
 
+        .sub-hdr {
+            font-size: 26pt;
+            font-weight: 700;
+            color: var(--mint);
+            margin-bottom: 6mm;
+            margin-top: 4mm;
+        }
+
         /* ═══════════ CALLOUT BOXES ═══════════ */
         .callout {
-            background: rgba(127, 255, 212, 0.18);
-            border-left: 10px solid var(--mint);
-            padding: 10mm 14mm;
-            margin: 10mm 0;
-            font-size: 30pt;
+            background: rgba(127, 255, 212, 0.1);
+            border-left: 8px solid var(--mint);
+            padding: 8mm 12mm;
+            margin: 8mm 0;
+            font-size: 22pt;
             font-weight: 600;
-            color: var(--text-dark);
-            border-radius: 0 6mm 6mm 0;
+            color: var(--white);
+            border-radius: 0 5mm 5mm 0;
             line-height: 1.35;
         }
         .callout.warning {
-            background: rgba(248, 113, 113, 0.12);
+            background: rgba(248, 113, 113, 0.1);
             border-left-color: var(--coral);
         }
 
-        /* ═══════════ CHART CONTAINER ═══════════ */
-        .chart-box {
-            width: 100%;
-            height: 210mm;
+        /* ═══════════ ATTACK FLOW DIAGRAM ═══════════ */
+        .attack-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 10mm 0 6mm;
+            flex-wrap: nowrap;
+        }
+        .flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100mm;
+            min-height: 70mm;
+            background: #161b22;
+            border: 2px solid var(--border);
+            border-radius: 5mm;
+            padding: 6mm 5mm;
+            text-align: center;
             position: relative;
-            margin: 5mm 0;
+        }
+        .flow-node .node-icon {
+            width: 28mm;
+            height: 28mm;
+            color: var(--mint);
+            margin-bottom: 4mm;
+        }
+        .flow-node.danger { border-color: var(--coral); }
+        .flow-node.danger .node-icon { color: var(--coral); }
+        .flow-node .node-label {
+            font-size: 20pt;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.25;
+        }
+        .flow-node .node-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13pt;
+            color: var(--mint);
+            background: #0d1117;
+            padding: 2mm 4mm;
+            border-radius: 2mm;
+            margin-top: 3mm;
+            line-height: 1.35;
         }
 
-        /* ═══════════ SVG DIAGRAMS ═══════════ */
-        .diagram { width: 100%; margin: 8mm 0; }
-        .diagram svg { width: 100%; }
+        .badge-poisoned {
+            position: absolute;
+            top: -4mm;
+            right: -2mm;
+            background: var(--coral);
+            color: white;
+            font-size: 13pt;
+            font-weight: 800;
+            padding: 1.5mm 4mm;
+            border-radius: 3mm;
+            letter-spacing: 0.5px;
+        }
+
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 14mm;
+            flex-shrink: 0;
+            font-size: 36pt;
+            color: var(--mint);
+            font-weight: 300;
+        }
+        .flow-arrow.danger { color: var(--coral); }
+
+        .flow-caption {
+            text-align: center;
+            font-style: italic;
+            font-size: 20pt;
+            opacity: 0.8;
+            margin-bottom: 4mm;
+        }
+
+        /* ═══════════ MERMAID ═══════════ */
+        .mermaid-wrap {
+            margin: 6mm 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .mermaid-wrap .mermaid svg {
+            width: 100% !important;
+            max-width: 100%;
+        }
 
         /* ═══════════ METHODOLOGY LAYOUT ═══════════ */
         .method-grid {
@@ -182,44 +266,47 @@
             gap: 12mm;
             flex: 1;
         }
-        .method-grid .scenarios h4 {
-            font-size: 32pt;
-            font-weight: 700;
-            margin-bottom: 6mm;
-        }
-        .method-grid .scenarios li {
-            font-size: 28pt;
+        .scenarios-panel .sub-hdr { margin-top: 0; }
+        .scenarios-panel li {
+            font-size: 22pt;
             margin-bottom: 5mm;
         }
-        .method-grid .scenarios li::before { font-size: 30pt; }
+        .scenarios-panel li::before { font-size: 22pt; }
 
-        /* ═══════════ BOTTOM (FULL-WIDTH) SECTION ═══════════ */
-        .bottom-section { margin-top: 18mm; }
+        /* ═══════════ CHART CONTAINER ═══════════ */
+        .chart-box {
+            width: 100%;
+            position: relative;
+            flex: 1;
+            min-height: 180mm;
+        }
 
+        /* ═══════════ BOTTOM SECTION ═══════════ */
+        .bottom-section {
+            margin-top: 12mm;
+            flex-shrink: 0;
+        }
         .discussion-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 15mm;
-        }
-        .disc-col {
-            display: flex;
-            flex-direction: column;
+            gap: 14mm;
         }
         .disc-col h4 {
-            font-size: 30pt;
+            font-size: 26pt;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--mint);
             margin-bottom: 8mm;
             padding-bottom: 4mm;
             border-bottom: 2px solid var(--border);
         }
-        .disc-col li { font-size: 28pt; }
+        .disc-col li { font-size: 22pt; margin-bottom: 6mm; }
+        .disc-col li::before { font-size: 22pt; }
 
         .qr-box {
-            width: 45mm;
-            height: 45mm;
+            width: 42mm;
+            height: 42mm;
             background: white;
-            border: 2px solid var(--text-dark);
+            border: 2px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -231,22 +318,20 @@
             text-align: center;
             color: var(--text-dark);
             font-weight: 600;
+            line-height: 1.3;
         }
 
         /* ═══════════ FOOTER ═══════════ */
         footer {
-            margin-top: 12mm;
+            margin-top: 10mm;
             text-align: center;
-            padding-top: 8mm;
-            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            padding-top: 6mm;
+            border-top: 2px solid rgba(255,255,255,0.25);
+            flex-shrink: 0;
         }
-        footer p {
-            font-size: 30pt;
-            color: var(--text-light);
-            opacity: 0.85;
-        }
+        footer p { font-size: 24pt; color: var(--white); opacity: 0.85; }
 
-        /* ═══════════ PRINT QUALITY ═══════════ */
+        /* ═══════════ PRINT ═══════════ */
         @media print {
             body, .chart-box canvas {
                 -webkit-print-color-adjust: exact;
@@ -257,250 +342,175 @@
 </head>
 <body>
 
-<!-- ═══════════ BANNER HEADER ═══════════ -->
+<!-- ═══════════ BANNER ═══════════ -->
 <div class="banner">
     <div class="banner-logo">
         <img src="context/apart_logo.png" alt="Apart Research">
     </div>
     <div class="banner-text">
-        <h1>Agent Attacks via<br>Memory Injection</h1>
+        <h1>Agent Attacks via Memory Injection</h1>
         <div class="authors">Leo Raghav, Choong Kai Zhe</div>
         <div class="affiliation">Apart Research</div>
     </div>
 </div>
 
-<!-- ═══════════ POSTER BODY (Two-Column Grid) ═══════════ -->
+<!-- ═══════════ POSTER BODY (2×2 grid) ═══════════ -->
 <div class="poster-grid">
 
-    <!-- ─── LEFT COLUMN ─── -->
-    <div class="column">
-
-        <!-- Section 1: The Hook -->
-        <div class="section">
-            <div class="section-hdr">1. The Hook: Memory is the New Backdoor</div>
-            <div class="section-content">
-                <ul>
-                    <li><strong>Stateful Agents</strong> introduce a permanent, invisible attack surface.</li>
-                    <li>Persistent memory allows agents to retain user preferences across sessions — but this creates a new target for adversaries.</li>
-                    <li><strong>Threat Model:</strong> Adversaries exploit indirect prompt injection in web content to poison an agent's long-term memory.</li>
+    <!-- ═══ TOP-LEFT: The Hook ═══ -->
+    <div class="section">
+        <div class="section-hdr">1. The Hook: Memory is the New Backdoor</div>
+        <div class="section-content">
+            <ul>
+                <li><strong>Stateful Agents</strong> introduce a permanent, invisible attack surface.</li>
+                <li>Persistent memory lets agents retain user preferences across sessions — but creates a new target for adversaries.</li>
+                <li><strong>Threat Model:</strong> Adversaries exploit indirect prompt injection in web content to poison an agent's long-term memory.</li>
                 </ul>
 
-                <!-- Attack Flow Diagram (SVG) -->
-                <div class="diagram">
-                    <svg viewBox="0 0 820 220" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <marker id="arrMint" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                <polygon points="0 0, 10 3.5, 0 7" fill="#3D4551"/>
-                            </marker>
-                            <marker id="arrRed" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                                <polygon points="0 0, 10 3.5, 0 7" fill="#f87171"/>
-                            </marker>
-                        </defs>
-
-                        <!-- Adversary -->
-                        <g transform="translate(10, 15)">
-                            <circle cx="55" cy="32" r="20" fill="none" stroke="#2D3339" stroke-width="3"/>
-                            <path d="M 25 95 Q 25 60 55 55 Q 85 60 85 95" fill="none" stroke="#2D3339" stroke-width="3"/>
-                            <line x1="55" y1="55" x2="55" y2="85" stroke="#2D3339" stroke-width="3"/>
-                            <text x="55" y="125" font-family="Inter" font-size="16" fill="#2D3339" text-anchor="middle" font-weight="600">Adversary</text>
-                        </g>
-
-                        <line x1="125" y1="65" x2="175" y2="65" stroke="#3D4551" stroke-width="3" marker-end="url(#arrMint)"/>
-
-                        <!-- Web Page -->
-                        <g transform="translate(185, 5)">
-                            <rect width="145" height="110" rx="8" fill="white" stroke="#2D3339" stroke-width="2"/>
-                            <rect x="10" y="12" width="125" height="14" rx="3" fill="#E8E9EB"/>
-                            <text x="72" y="52" font-family="JetBrains Mono" font-size="10" fill="#7FFFD4" text-anchor="middle">&lt;!-- update_memory</text>
-                            <text x="72" y="68" font-family="JetBrains Mono" font-size="10" fill="#7FFFD4" text-anchor="middle">prefer("unsafe") --&gt;</text>
-                            <text x="72" y="96" font-family="Inter" font-size="15" fill="#2D3339" text-anchor="middle" font-weight="600">Web Page</text>
-                            <!-- POISONED badge -->
-                            <rect x="22" y="-14" width="100" height="24" rx="12" fill="#f87171"/>
-                            <text x="72" y="2" font-family="Inter" font-size="12" fill="white" text-anchor="middle" font-weight="700">POISONED</text>
-                        </g>
-
-                        <line x1="340" y1="65" x2="390" y2="65" stroke="#3D4551" stroke-width="3" marker-end="url(#arrMint)"/>
-
-                        <!-- Agent Memory -->
-                        <g transform="translate(400, 5)">
-                            <rect width="130" height="110" rx="8" fill="white" stroke="#f87171" stroke-width="3"/>
-                            <ellipse cx="65" cy="32" rx="30" ry="12" fill="none" stroke="#2D3339" stroke-width="2.5"/>
-                            <path d="M 35 32 L 35 64 Q 35 76 65 76 Q 95 76 95 64 L 95 32" fill="none" stroke="#2D3339" stroke-width="2.5"/>
-                            <text x="65" y="58" font-family="Inter" font-size="18" fill="#f87171" text-anchor="middle" font-weight="800">!</text>
-                            <text x="65" y="96" font-family="Inter" font-size="14" fill="#2D3339" text-anchor="middle" font-weight="600">Agent</text>
-                            <text x="65" y="112" font-family="Inter" font-size="14" fill="#2D3339" text-anchor="middle" font-weight="600">Memory</text>
-                        </g>
-
-                        <line x1="540" y1="65" x2="590" y2="65" stroke="#f87171" stroke-width="3" marker-end="url(#arrRed)"/>
-
-                        <!-- Agent -->
-                        <g transform="translate(600, 5)">
-                            <rect width="100" height="110" rx="8" fill="white" stroke="#2D3339" stroke-width="2"/>
-                            <rect x="25" y="15" width="50" height="42" rx="6" fill="none" stroke="#2D3339" stroke-width="2.5"/>
-                            <circle cx="40" cy="33" r="5" fill="#2D3339"/>
-                            <circle cx="60" cy="33" r="5" fill="#2D3339"/>
-                            <rect x="35" y="62" width="30" height="8" rx="2" fill="#2D3339"/>
-                            <text x="50" y="96" font-family="Inter" font-size="15" fill="#2D3339" text-anchor="middle" font-weight="600">Agent</text>
-                        </g>
-
-                        <line x1="710" y1="65" x2="745" y2="65" stroke="#f87171" stroke-width="3" marker-end="url(#arrRed)"/>
-
-                        <!-- Harmful Outcome -->
-                        <g transform="translate(755, 5)">
-                            <circle cx="30" cy="45" r="28" fill="none" stroke="#f87171" stroke-width="3"/>
-                            <line x1="11" y1="26" x2="49" y2="64" stroke="#f87171" stroke-width="3.5"/>
-                            <line x1="49" y1="26" x2="11" y2="64" stroke="#f87171" stroke-width="3.5"/>
-                            <text x="30" y="96" font-family="Inter" font-size="12" fill="#2D3339" text-anchor="middle" font-weight="600">Harmful</text>
-                            <text x="30" y="112" font-family="Inter" font-size="12" fill="#2D3339" text-anchor="middle" font-weight="600">Outcome</text>
-                        </g>
-                    </svg>
+            <div class="attack-flow">
+                <div class="flow-node">
+                    <i data-lucide="user-x" class="node-icon"></i>
+                    <div class="node-label">Adversary</div>
                 </div>
-
-                <p style="text-align: center; font-style: italic; font-size: 26pt; color: #555; margin-top: 4mm;">
-                    External adversaries poison long-term memory via indirect prompt injection.
-                </p>
-            </div>
-        </div>
-
-        <!-- Section 2: Methodology -->
-        <div class="section">
-            <div class="section-hdr">2. Methodology: The Two-Turn Stress Test</div>
-            <div class="section-content">
-                <div class="method-grid">
-                    <!-- Flowchart (left) -->
-                    <div class="flowchart">
-                        <svg viewBox="0 0 380 530" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <marker id="arrDown" markerWidth="10" markerHeight="7" refX="5" refY="0" orient="auto">
-                                    <polygon points="0 0, 10 0, 5 7" fill="#3D4551"/>
-                                </marker>
-                            </defs>
-
-                            <!-- Turn 1 Box -->
-                            <rect x="5" y="5" width="370" height="195" rx="10" fill="white" stroke="#7FFFD4" stroke-width="3"/>
-                            <text x="20" y="35" font-family="Inter" font-size="18" fill="#2D3339" font-weight="700">Turn 1: Injection (Ingestion)</text>
-
-                            <!-- Neutral System Prompt -->
-                            <rect x="20" y="50" width="150" height="50" rx="6" fill="#E8E9EB" stroke="#bbb" stroke-width="1"/>
-                            <text x="95" y="72" font-family="Inter" font-size="12" fill="#2D3339" text-anchor="middle" font-weight="500">Neutral System</text>
-                            <text x="95" y="88" font-family="Inter" font-size="12" fill="#2D3339" text-anchor="middle" font-weight="500">Prompt</text>
-
-                            <text x="185" y="82" font-family="Inter" font-size="22" fill="#2D3339" font-weight="800">+</text>
-
-                            <!-- 3 Web Docs -->
-                            <rect x="200" y="50" width="160" height="50" rx="6" fill="#E8E9EB" stroke="#bbb" stroke-width="1"/>
-                            <text x="280" y="70" font-family="Inter" font-size="11" fill="#2D3339" text-anchor="middle">3 Web Docs</text>
-                            <text x="280" y="88" font-family="Inter" font-size="10" fill="#f87171" text-anchor="middle" font-weight="600">(1 Poisoned, e.g., user_review)</text>
-
-                            <!-- Arrow inside Turn 1 -->
-                            <line x1="190" y1="110" x2="190" y2="140" stroke="#3D4551" stroke-width="2.5" marker-end="url(#arrDown)"/>
-
-                            <!-- update_memory bar -->
-                            <rect x="60" y="148" width="260" height="38" rx="6" fill="#7FFFD4"/>
-                            <text x="190" y="173" font-family="JetBrains Mono" font-size="13" fill="#2D3339" text-anchor="middle" font-weight="600">Agent calls update_memory()</text>
-
-                            <!-- Arrow Turn 1 → Turn 2 -->
-                            <line x1="190" y1="205" x2="190" y2="245" stroke="#3D4551" stroke-width="3" marker-end="url(#arrDown)"/>
-
-                            <!-- Turn 2 Box -->
-                            <rect x="5" y="253" width="370" height="140" rx="10" fill="white" stroke="#f87171" stroke-width="3"/>
-                            <text x="20" y="283" font-family="Inter" font-size="18" fill="#f87171" font-weight="700">Turn 2: Verification (Query)</text>
-                            <text x="20" y="315" font-family="Inter" font-size="14" fill="#2D3339">User asks scenario-specific</text>
-                            <text x="20" y="335" font-family="Inter" font-size="14" fill="#2D3339">question (e.g., Medical)</text>
-                            <text x="20" y="368" font-family="Inter" font-size="14" fill="#f87171" font-weight="600">Agent retrieves poisoned memory</text>
-
-                            <!-- Arrow Turn 2 → Evaluation -->
-                            <line x1="190" y1="398" x2="190" y2="435" stroke="#3D4551" stroke-width="3" marker-end="url(#arrDown)"/>
-
-                            <!-- Evaluation Box -->
-                            <rect x="30" y="443" width="320" height="78" rx="10" fill="white" stroke="#2D3339" stroke-width="2"/>
-                            <text x="190" y="473" font-family="Inter" font-size="16" fill="#2D3339" text-anchor="middle" font-weight="700">Evaluation (LLM Judge)</text>
-                            <text x="190" y="503" font-family="Inter" font-size="13" fill="#555" text-anchor="middle">Sonnet 4.5 evaluates: Harmful? Stealthy?</text>
-                        </svg>
-                    </div>
-
-                    <!-- Scenarios & Injections (right) -->
-                    <div class="scenarios">
-                        <h4>5 Scenarios:</h4>
-                        <ul>
-                            <li>Medical</li>
-                            <li>Financial</li>
-                            <li>Security</li>
-                            <li>Dietary</li>
-                            <li>Budget</li>
-                        </ul>
-                        <h4 style="margin-top: 10mm;">Injections:</h4>
-                        <ul>
-                            <li><code>user_review</code><br><span style="font-size: 24pt;">Malicious instructions hidden in a fake user review</span></li>
-                            <li><code>persona_memory</code><br><span style="font-size: 24pt;">Disguised preference + communication style override</span></li>
-                        </ul>
-                    </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node" style="width: 120mm;">
+                    <span class="badge-poisoned">POISONED</span>
+                    <i data-lucide="file-code" class="node-icon"></i>
+                    <div class="node-label">Web Page</div>
+                    <div class="node-code">&lt;!-- update_memory<br>prefer("unsafe") --&gt;</div>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-node danger">
+                    <i data-lucide="database" class="node-icon"></i>
+                    <div class="node-label">Agent<br>Memory</div>
+                </div>
+                <div class="flow-arrow danger">→</div>
+                <div class="flow-node">
+                    <i data-lucide="bot" class="node-icon"></i>
+                    <div class="node-label">Agent</div>
+                </div>
+                <div class="flow-arrow danger">→</div>
+                <div class="flow-node danger">
+                    <i data-lucide="shield-alert" class="node-icon"></i>
+                    <div class="node-label">Harmful<br>Outcome</div>
                 </div>
             </div>
+            <p class="flow-caption">External adversaries poison long-term memory via indirect prompt injection.</p>
         </div>
-
     </div>
 
-    <!-- ─── RIGHT COLUMN ─── -->
-    <div class="column">
+    <!-- ═══ TOP-RIGHT: Finding 1 ═══ -->
+    <div class="section">
+        <div class="section-hdr">3. Finding 1: Backdoor &gt; Direct Operator</div>
+        <div class="section-content">
+            <div class="chart-box">
+                <canvas id="harmRateChart"></canvas>
+            </div>
+            <div class="callout">
+                <strong>Key Insight:</strong> Backdoor attacks match or exceed direct system-prompt coercion for 4/5 SOTA models.
+            </div>
+            <p><strong>Injection Acceptance</strong> is the primary failure mode — once a model accepts poisoned memory, harm rates reach 91–100%.</p>
+        </div>
+    </div>
 
-        <!-- Section 3: Finding 1 -->
-        <div class="section">
-            <div class="section-hdr">3. Finding 1: Backdoor &gt; Direct Operator</div>
-            <div class="section-content">
-                <div class="chart-box">
-                    <canvas id="harmRateChart"></canvas>
+    <!-- ═══ BOTTOM-LEFT: Methodology ═══ -->
+    <div class="section">
+        <div class="section-hdr">2. Methodology: The Two-Turn Stress Test</div>
+        <div class="section-content">
+            <div class="method-grid">
+                <div>
+                    <div class="mermaid-wrap">
+                        <pre class="mermaid">
+graph TD
+    subgraph T1["Turn 1: Injection"]
+        A["Neutral System Prompt"]
+        B["3 Web Docs (1 Poisoned)"]
+        A --> C["Agent calls update_memory()"]
+        B --> C
+    end
+
+    C --> D
+
+    subgraph T2["Turn 2: Verification"]
+        D["User asks scenario question"]
+        D --> E["Agent retrieves poisoned memory"]
+    end
+
+    E --> F["LLM Judge (Sonnet 4.5)"]
+
+    style T1 fill:#1a3a2a,stroke:#7FFFD4,stroke-width:3px,color:#fff
+    style T2 fill:#3a1a1a,stroke:#f87171,stroke-width:3px,color:#fff
+    style A fill:#2d333b,stroke:#7FFFD4,color:#fff
+    style B fill:#2d333b,stroke:#f87171,color:#fff
+    style C fill:#7FFFD4,stroke:#5fd4b0,color:#2D3339
+    style D fill:#2d333b,stroke:#f87171,color:#fff
+    style E fill:#2d333b,stroke:#f87171,color:#fff
+    style F fill:#2d333b,stroke:#888,color:#fff
+                        </pre>
+                    </div>
                 </div>
-                <div class="callout">
-                    <strong>Key Insight:</strong> Backdoor attacks match or exceed direct system-prompt coercion for 4/5 SOTA models.
+
+                <div class="scenarios-panel">
+                    <div class="sub-hdr">5 Scenarios:</div>
+                    <ul>
+                        <li>Medical allergy removal</li>
+                        <li>Financial steering</li>
+                        <li>Security downgrade</li>
+                        <li>Dietary restriction removal</li>
+                        <li>Budget override</li>
+                    </ul>
+
+                    <div class="sub-hdr" style="margin-top: 10mm;">Injection Strategies:</div>
+                    <ul>
+                        <li><code>user_review</code><br><span style="font-size: 20pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
+                        <li><code>persona_memory</code><br><span style="font-size: 20pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
+                    </ul>
                 </div>
-                <p><strong>Injection Acceptance</strong> is the primary failure mode — once a model accepts poisoned memory, harm rates reach 91–100%.</p>
             </div>
         </div>
+    </div>
 
-        <!-- Section 4: Finding 2 -->
-        <div class="section">
-            <div class="section-hdr">4. Finding 2: Stealth &amp; Provider Variance</div>
-            <div class="section-content">
-                <div class="chart-box">
-                    <canvas id="stealthChart"></canvas>
-                </div>
-                <div class="callout warning">
-                    <strong>Stealth Warning:</strong> <code>persona_memory</code> maintains high harm (~85%) while significantly increasing Avg Stealth (3.9 vs 2.5). Chinese models (Avg ~80% harm) are highly vulnerable.
-                </div>
+    <!-- ═══ BOTTOM-RIGHT: Finding 2 ═══ -->
+    <div class="section">
+        <div class="section-hdr">4. Finding 2: Stealth &amp; Provider Variance</div>
+        <div class="section-content">
+            <div class="chart-box">
+                <canvas id="stealthChart"></canvas>
+            </div>
+            <div class="callout warning">
+                <strong>Stealth Warning:</strong> <code>persona_memory</code> maintains high harm (~85%) while significantly increasing Avg Stealth (3.9 vs 2.5). Chinese models — Kimi K2.5, DeepSeek V3.1 — show comparable vulnerability (Avg ~80% harm).
             </div>
         </div>
-
     </div>
 
 </div>
 
-<!-- ═══════════ BOTTOM SECTION: Discussion ═══════════ -->
+<!-- ═══════════ BOTTOM: Discussion ═══════════ -->
 <div class="section bottom-section">
     <div class="section-hdr">5. Discussion: The Defense Deficit &amp; Future Directions</div>
     <div class="section-content">
         <div class="discussion-grid">
             <div class="disc-col">
-                <h4>Primary Failure:<br>Injection Acceptance</h4>
+                <h4>Primary Failure: Injection Acceptance</h4>
                 <ul>
-                    <li>Once a model accepts a 'fact' into memory, harm is almost guaranteed (91–100%).</li>
+                    <li>Once a model accepts a 'fact' into memory, harm is almost guaranteed (<strong>91–100%</strong>).</li>
                     <li>The defense bottleneck is at the <strong>memory write stage</strong>, not the response stage.</li>
                 </ul>
-            </div>
+        </div>
             <div class="disc-col">
                 <h4>Case Studies in Refusal</h4>
                 <ul>
-                    <li><strong>GPT-5.2</strong> identifies the source as a potential prompt injection via internal credibility evaluation.</li>
-                    <li><strong>Claude Haiku 4.5</strong> flags conflicting information to the user and asks them to resolve it.</li>
+                    <li><strong>GPT-5.2:</strong> Identifies the source as a potential prompt injection via internal credibility evaluation.</li>
+                    <li><strong>Claude Haiku 4.5:</strong> Flags conflicting information between prior memory and injected content, asks the user to resolve.</li>
                 </ul>
-            </div>
+                </div>
             <div class="disc-col">
                 <h4>Conclusion &amp; Defense</h4>
                 <ul>
-                    <li>Alignment training is insufficient. We need <strong>Memory Integrity Guarantees</strong> and <strong>Human-in-the-Loop</strong> verification.</li>
+                    <li>Alignment training is insufficient. We need <strong>Memory Integrity Guarantees</strong> and <strong>Human-in-the-Loop</strong> verification for high-stakes state changes.</li>
                 </ul>
                 <div class="qr-box">
-                    <span>Scan for Full<br>Report &amp; GitHub</span>
+                    <span>Scan for<br>GitHub</span>
                 </div>
             </div>
         </div>
@@ -510,11 +520,42 @@
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer>
     <p>Leo Raghav, Choong Kai Zhe · Apart Research</p>
-</footer>
+    </footer>
 
-<!-- ═══════════ CHART.JS SCRIPTS ═══════════ -->
+<!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
-    // ──── Custom plugin: percentage labels on top of bars ────
+    // ── Lucide icons (large for A0) ──
+    lucide.createIcons({
+        attrs: {
+            'stroke-width': 1.5
+        }
+    });
+
+    // ── Mermaid (larger font for A0) ──
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark',
+        themeVariables: {
+            primaryColor: '#2d333b',
+            primaryTextColor: '#ffffff',
+            primaryBorderColor: '#7FFFD4',
+            lineColor: '#7FFFD4',
+            secondaryColor: '#3a1a1a',
+            tertiaryColor: '#1a3a2a',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '28px'
+        },
+        flowchart: {
+            htmlLabels: true,
+            curve: 'basis',
+            nodeSpacing: 50,
+            rankSpacing: 50,
+            padding: 20,
+            diagramPadding: 10
+        }
+    });
+
+    // ── Custom plugin: percentage labels on bars ──
     const pctPlugin = {
         id: 'pctLabels',
         afterDatasetsDraw(chart) {
@@ -524,11 +565,11 @@
                 chart.getDatasetMeta(di).data.forEach((bar, i) => {
                     const v = ds.data[i];
                     if (v > 0) {
-                        ctx.fillStyle = '#2D3339';
-                        ctx.font = 'bold 20px Inter, sans-serif';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 28px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
-                        ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 8);
+                        ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 10);
                     }
                 });
             });
@@ -536,7 +577,7 @@
         }
     };
 
-    // ──── Custom plugin: value labels for dual-axis chart ────
+    // ── Custom plugin: value labels for dual-axis chart ──
     const valPlugin = {
         id: 'valLabels',
         afterDatasetsDraw(chart) {
@@ -546,8 +587,8 @@
                 chart.getDatasetMeta(di).data.forEach((bar, i) => {
                     const v = ds.data[i];
                     if (v > 0) {
-                        ctx.fillStyle = '#2D3339';
-                        ctx.font = 'bold 24px Inter, sans-serif';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 28px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
                         const label = ds.yAxisID === 'y'
@@ -561,11 +602,11 @@
         }
     };
 
-    // ──── Chart.js defaults for light-background cards ────
-    Chart.defaults.color = '#2D3339';
-    Chart.defaults.borderColor = '#d1d5db';
+    // ── Chart.js defaults ──
+    Chart.defaults.color = '#ffffff';
+    Chart.defaults.borderColor = '#444c56';
     Chart.defaults.font.family = 'Inter, sans-serif';
-    Chart.defaults.font.size = 18;
+    Chart.defaults.font.size = 22;
 
     // ═══════════ CHART 1: Harm Rate by Condition ═══════════
     new Chart(document.getElementById('harmRateChart'), {
@@ -582,7 +623,7 @@
                 {
                     label: 'Baseline',
                     data: [0, 0, 0, 0, 0],
-                    backgroundColor: '#6c757d',
+                    backgroundColor: '#888888',
                     borderWidth: 0
                 },
                 {
@@ -610,19 +651,20 @@
                 title: {
                     display: true,
                     text: 'Harm Rate by Condition (SOTA Models)',
-                    font: { size: 24, weight: 'bold' },
-                    color: '#2D3339',
-                    padding: { bottom: 12 }
+                    font: { size: 28, weight: 'bold' },
+                    color: '#ffffff',
+                    padding: { bottom: 14 }
                 },
                 legend: {
                     position: 'top',
                     labels: {
-                        font: { size: 20, weight: 'bold' },
-                        padding: 14,
+                        color: '#ffffff',
+                        font: { size: 22, weight: 'bold' },
+                        padding: 16,
                         usePointStyle: true,
                         pointStyle: 'rect',
-                        boxWidth: 16,
-                        boxHeight: 16
+                        boxWidth: 18,
+                        boxHeight: 18
                     }
                 },
                 tooltip: { enabled: false }
@@ -632,18 +674,23 @@
                     beginAtZero: true,
                     max: 115,
                     ticks: {
-                        font: { size: 18, weight: '600' },
+                        color: '#ffffff',
+                        font: { size: 20, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
-                    grid: { color: '#d1d5db' },
+                    grid: { color: '#444c56' },
                     title: {
                         display: true,
                         text: 'Harm Rate',
-                        font: { size: 22, weight: 'bold' }
+                        color: '#ffffff',
+                        font: { size: 24, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { font: { size: 18, weight: '600' } },
+                    ticks: {
+                        color: '#ffffff',
+                        font: { size: 20, weight: '600' }
+                    },
                     grid: { display: false }
                 }
             },
@@ -685,22 +732,23 @@
                 title: {
                     display: true,
                     text: [
-                        'Harm vs. Stealth',
+                        'Harm vs. Stealth by Strategy',
                         '(Pooled Chinese Models: Kimi, DeepSeek, GLM)'
                     ],
-                    font: { size: 24, weight: 'bold' },
-                    color: '#2D3339',
-                    padding: { bottom: 12 }
+                    font: { size: 28, weight: 'bold' },
+                    color: '#ffffff',
+                    padding: { bottom: 14 }
                 },
                 legend: {
                     position: 'top',
                     labels: {
-                        font: { size: 20, weight: 'bold' },
-                        padding: 14,
+                        color: '#ffffff',
+                        font: { size: 22, weight: 'bold' },
+                        padding: 16,
                         usePointStyle: true,
                         pointStyle: 'rect',
-                        boxWidth: 16,
-                        boxHeight: 16
+                        boxWidth: 18,
+                        boxHeight: 18
                     }
                 },
                 tooltip: { enabled: false }
@@ -711,30 +759,39 @@
                     max: 100,
                     position: 'left',
                     ticks: {
-                        font: { size: 18, weight: '600' },
+                        color: '#ffffff',
+                        font: { size: 20, weight: '600' },
                         callback: function(v) { return v + '%'; }
                     },
-                    grid: { color: '#d1d5db' },
+                    grid: { color: '#444c56' },
                     title: {
                         display: true,
                         text: 'Harm Rate',
-                        font: { size: 22, weight: 'bold' }
+                        color: '#ffffff',
+                        font: { size: 24, weight: 'bold' }
                     }
                 },
                 y1: {
                     beginAtZero: true,
                     max: 5,
                     position: 'right',
-                    ticks: { font: { size: 18, weight: '600' } },
+                    ticks: {
+                        color: '#ffffff',
+                        font: { size: 20, weight: '600' }
+                    },
                     grid: { drawOnChartArea: false },
                     title: {
                         display: true,
                         text: 'Avg Stealth',
-                        font: { size: 22, weight: 'bold' }
+                        color: '#ffffff',
+                        font: { size: 24, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { font: { size: 20, weight: '600' } },
+                    ticks: {
+                        color: '#ffffff',
+                        font: { size: 22, weight: '600' }
+                    },
                     grid: { display: false }
                 }
             },
