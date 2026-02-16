@@ -38,9 +38,10 @@
             display: flex;
             align-items: center;
             gap: 15mm;
-            padding-bottom: 10mm;
+            padding: 12mm 20mm;
             margin-bottom: 12mm;
-            border-bottom: 3px solid var(--mint);
+            background: #7cffb6;
+            border-radius: 6mm;
             flex-shrink: 0;
         }
         .banner-logo img {
@@ -52,21 +53,34 @@
         .banner-text h1 {
             font-size: 72pt;
             font-weight: 800;
-            color: var(--mint);
+            color: #343645;
             line-height: 1.08;
             letter-spacing: -1px;
-            margin-bottom: 4mm;
+            margin-bottom: 2mm;
+        }
+        .banner-text .subtitle {
+            font-size: 36pt;
+            font-weight: 700;
+            color: #343645;
+            margin-bottom: 6mm;
         }
         .banner-text .authors {
             font-size: 32pt;
-            font-weight: 400;
-            color: var(--white);
+            font-weight: 700;
+            color: #343645;
             margin-bottom: 2mm;
         }
         .banner-text .affiliation {
             font-size: 28pt;
-            font-weight: 700;
-            color: var(--mint);
+            font-weight: 400;
+            color: #343645;
+        }
+        .banner-text .equal-contrib {
+            font-size: 20pt;
+            font-weight: 400;
+            color: #343645;
+            opacity: 0.7;
+            margin-top: 2mm;
         }
 
         /* ═══════════ MAIN GRID: 5-panel layout ═══════════ */
@@ -91,7 +105,7 @@
             background: var(--mint);
             color: var(--text-dark);
             padding: 6mm 16mm;
-            font-size: 32pt;
+            font-size: 48pt;
             font-weight: 700;
             letter-spacing: 0.3px;
             flex-shrink: 0;
@@ -106,7 +120,7 @@
 
         /* ═══════════ TYPOGRAPHY ═══════════ */
         .section-content p {
-            font-size: 24pt;
+            font-size: 36pt;
             line-height: 1.4;
             margin-bottom: 8mm;
         }
@@ -116,10 +130,10 @@
             margin: 0;
         }
         .section-content li {
-            font-size: 24pt;
+            font-size: 36pt;
             line-height: 1.4;
             margin-bottom: 6mm;
-            padding-left: 24px;
+            padding-left: 28px;
             position: relative;
         }
         .section-content li::before {
@@ -128,7 +142,7 @@
             font-weight: 800;
             position: absolute;
             left: 0;
-            font-size: 24pt;
+            font-size: 36pt;
         }
         .section-content strong { font-weight: 700; }
 
@@ -142,7 +156,7 @@
         }
 
         .sub-hdr {
-            font-size: 26pt;
+            font-size: 34pt;
             font-weight: 700;
             color: var(--mint);
             margin-bottom: 6mm;
@@ -155,7 +169,7 @@
             border-left: 8px solid var(--mint);
             padding: 8mm 12mm;
             margin: 8mm 0;
-            font-size: 22pt;
+            font-size: 28pt;
             font-weight: 600;
             color: var(--white);
             border-radius: 0 5mm 5mm 0;
@@ -198,14 +212,14 @@
         .flow-node.danger { border-color: var(--coral); }
         .flow-node.danger .node-icon { color: var(--coral); }
         .flow-node .node-label {
-            font-size: 20pt;
+            font-size: 26pt;
             font-weight: 600;
             color: var(--white);
             line-height: 1.25;
         }
         .flow-node .node-code {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 13pt;
+            font-size: 16pt;
             color: var(--mint);
             background: #0d1117;
             padding: 2mm 4mm;
@@ -242,7 +256,7 @@
         .flow-caption {
             text-align: center;
             font-style: italic;
-            font-size: 20pt;
+            font-size: 26pt;
             opacity: 0.8;
             margin-bottom: 4mm;
         }
@@ -256,10 +270,10 @@
         }
         .scenarios-panel .sub-hdr { margin-top: 0; }
         .scenarios-panel li {
-            font-size: 22pt;
+            font-size: 28pt;
             margin-bottom: 5mm;
         }
-        .scenarios-panel li::before { font-size: 22pt; }
+        .scenarios-panel li::before { font-size: 28pt; }
 
         /* ═══════════ METHODOLOGY FLOWCHART (HTML/CSS) ═══════════ */
         .method-flow {
@@ -280,7 +294,7 @@
             background: rgba(248, 113, 113, 0.05);
         }
         .turn-label {
-            font-size: 18pt;
+            font-size: 24pt;
             font-weight: 700;
             color: var(--mint);
             margin-bottom: 6mm;
@@ -304,7 +318,7 @@
             border-radius: 4mm;
             padding: 5mm 6mm;
             text-align: center;
-            font-size: 16pt;
+            font-size: 22pt;
             font-weight: 600;
             color: var(--white);
             line-height: 1.3;
@@ -354,7 +368,7 @@
             border-radius: 4mm;
             padding: 5mm 10mm;
             text-align: center;
-            font-size: 18pt;
+            font-size: 24pt;
             font-weight: 600;
             color: var(--white);
             display: flex;
@@ -397,15 +411,15 @@
             gap: 14mm;
         }
         .disc-col h4 {
-            font-size: 26pt;
+            font-size: 34pt;
             font-weight: 700;
             color: var(--mint);
             margin-bottom: 8mm;
             padding-bottom: 4mm;
             border-bottom: 2px solid var(--border);
         }
-        .disc-col li { font-size: 22pt; margin-bottom: 6mm; }
-        .disc-col li::before { font-size: 22pt; }
+        .disc-col li { font-size: 28pt; margin-bottom: 6mm; }
+        .disc-col li::before { font-size: 28pt; }
 
         /* (QR box and footer removed) */
 
@@ -426,9 +440,11 @@
         <img src="context/apart_logo.png" alt="Apart Research">
     </div>
     <div class="banner-text">
-        <h1>Agent Attacks via Memory Injection</h1>
-        <div class="authors">Leo Raghav, Choong Kai Zhe</div>
-        <div class="affiliation">Apart Research</div>
+        <h1>Manipulation by Memory Injection</h1>
+        <div class="subtitle">Backdoor Poisoning Rivals Direct Model Control</div>
+        <div class="authors">Leonidas Raghav*, Choong Kai Zhe*</div>
+        <div class="affiliation">Independent (with Apart Research)</div>
+        <div class="equal-contrib">*Equal contribution</div>
     </div>
 </div>
 
@@ -442,7 +458,8 @@
             <ul>
                 <li>Prior work established that agent memory can be <strong>indirectly poisoned</strong> through external documents to steer model responses.</li>
                 <li><strong>Unknown:</strong> How severe is this threat compared to direct pressure on the agent by an adversary?</li>
-                <li>We provide the <strong>first systematic comparison</strong> of backdoor memory injection vs. direct operator coercion across 8 SOTA models.</li>
+                <li>We provide the <strong>first systematic comparison</strong> of backdoor memory injection vs. direct operator coercion across <strong>5 Western SOTA models</strong> (3 conditions).</li>
+                <li>We extend with a <strong>cross-provider study on 3 Chinese models</strong>, comparing two injection strategies: <code>user_review</code> vs. <code>persona_memory</code>.</li>
             </ul>
 
             <div class="sub-hdr" style="margin-top: 6mm;">Threat Model</div>
@@ -491,9 +508,9 @@
                 <canvas id="harmRateChart"></canvas>
             </div>
             <div class="callout">
-                <strong>Key Insight:</strong> Backdoor attacks match or exceed direct system-prompt coercion for 4/5 SOTA models.
+                <strong>Key Insight:</strong> Backdoor attacks (<code>user_review</code> strategy) match or exceed direct system-prompt coercion for 4/5 SOTA models.
             </div>
-            <p><strong>Injection Acceptance</strong> is the primary failure mode — once a model accepts poisoned memory, harm rates reach 91–100%.</p>
+            <p><strong>Injection Acceptance</strong> is the primary failure mode — once a model accepts poisoned memory, harm rates reach <strong>60–100%</strong>.</p>
         </div>
     </div>
 
@@ -510,7 +527,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="user" class="node-icon" style="color: var(--mint);"></i>
-                                Benign user query<br><span style="font-size: 13pt; opacity: 0.7; font-style: italic;">"Search for investment tips<br>and market analysis"</span>
+                                Benign user query<br><span style="font-size: 17pt; opacity: 0.7; font-style: italic;">"Search for investment tips<br>and market analysis"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner">↓ triggers web search</div>
@@ -542,7 +559,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="message-circle" class="node-icon" style="color: var(--coral);"></i>
-                                User asks scenario question<br><span style="font-size: 13pt; opacity: 0.7; font-style: italic;">"I have $10K to invest.<br>What would you recommend?"</span>
+                                User asks scenario question<br><span style="font-size: 17pt; opacity: 0.7; font-style: italic;">"I have $10K to invest.<br>What would you recommend?"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner" style="color: var(--coral);">↓</div>
@@ -583,8 +600,8 @@
 
                     <div class="sub-hdr" style="margin-top: 8mm;">Injection Strategies:</div>
                     <ul>
-                        <li><code>user_review</code><br><span style="font-size: 20pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
-                        <li><code>persona_memory</code><br><span style="font-size: 20pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
+                        <li><code>user_review</code><br><span style="font-size: 24pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
+                        <li><code>persona_memory</code><br><span style="font-size: 24pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
                     </ul>
                 </div>
             </div>
@@ -604,7 +621,7 @@
                 </div>
             </div>
             <div class="callout warning">
-                <strong>Stealth Warning:</strong> <code>persona_memory</code> boosts stealth dramatically (GLM: 2.2→5.0) while maintaining or increasing harm. Chinese models show <strong>comparable vulnerability</strong> to Western models (Avg ~80% harm).
+                <strong>Stealth Warning:</strong> <code>persona_memory</code> boosts stealth dramatically (GLM: 2.2→5.0) while maintaining or increasing harm. <strong>Pooled avg stealth: <code>user_review</code> 2.5 vs <code>persona_memory</code> 4.0.</strong> Chinese models show <strong>comparable vulnerability</strong> to Western models (Avg ~80% harm).
             </div>
         </div>
     </div>
@@ -619,7 +636,7 @@
             <div class="disc-col">
                 <h4>Primary Failure: Injection Acceptance</h4>
                 <ul>
-                    <li>Once a model accepts a 'fact' into memory, harm is almost guaranteed (<strong>91–100%</strong>).</li>
+                    <li>Once a model accepts a 'fact' into memory, harm is almost guaranteed (<strong>60–100%</strong>).</li>
                     <li>The defense bottleneck is at the <strong>memory write stage</strong>, not the response stage.</li>
                 </ul>
         </div>
@@ -662,7 +679,7 @@
                     const v = ds.data[i];
                     if (v > 0) {
                         ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 28px Inter, sans-serif';
+                        ctx.font = 'bold 32px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
                         ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 10);
@@ -685,7 +702,7 @@
                         const v = ds.data[i];
                         if (v > 0) {
                             ctx.fillStyle = '#ffffff';
-                            ctx.font = 'bold 24px Inter, sans-serif';
+                            ctx.font = 'bold 28px Inter, sans-serif';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             const label = suffix === '%' ? Math.round(v) + '%' : v.toFixed(1);
@@ -702,7 +719,7 @@
     Chart.defaults.color = '#ffffff';
     Chart.defaults.borderColor = '#444c56';
     Chart.defaults.font.family = 'Inter, sans-serif';
-    Chart.defaults.font.size = 22;
+    Chart.defaults.font.size = 26;
 
     // ═══════════ CHART 1: Harm Rate by Condition ═══════════
     new Chart(document.getElementById('harmRateChart'), {
@@ -747,7 +764,7 @@
                 title: {
                     display: true,
                     text: 'Harm Rate by Condition (SOTA Models)',
-                    font: { size: 28, weight: 'bold' },
+                    font: { size: 34, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 14 }
                 },
@@ -755,7 +772,7 @@
                     position: 'top',
                     labels: {
                         color: '#ffffff',
-                        font: { size: 22, weight: 'bold' },
+                        font: { size: 26, weight: 'bold' },
                         padding: 16,
                         usePointStyle: true,
                         pointStyle: 'rect',
@@ -771,7 +788,7 @@
                     max: 115,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 20, weight: '600' },
+                        font: { size: 24, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
@@ -779,13 +796,13 @@
                         display: true,
                         text: 'Harm Rate',
                         color: '#ffffff',
-                        font: { size: 24, weight: 'bold' }
+                        font: { size: 28, weight: 'bold' }
                     }
                 },
                 x: {
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 20, weight: '600' }
+                        font: { size: 24, weight: '600' }
                     },
                     grid: { display: false }
                 }
@@ -801,12 +818,12 @@
         position: 'top',
         labels: {
             color: '#ffffff',
-            font: { size: 18, weight: 'bold' },
+            font: { size: 22, weight: 'bold' },
             padding: 12,
             usePointStyle: true,
             pointStyle: 'rect',
-            boxWidth: 14,
-            boxHeight: 14
+            boxWidth: 16,
+            boxHeight: 16
         }
     };
 
@@ -840,7 +857,7 @@
                 title: {
                     display: true,
                     text: '(a) Harm Rate by Strategy',
-                    font: { size: 22, weight: 'bold' },
+                    font: { size: 28, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
@@ -853,7 +870,7 @@
                     max: 110,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 16, weight: '600' },
+                        font: { size: 20, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
@@ -861,11 +878,11 @@
                         display: true,
                         text: '% Harmful',
                         color: '#ffffff',
-                        font: { size: 18, weight: 'bold' }
+                        font: { size: 22, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { color: '#ffffff', font: { size: 16, weight: '600' } },
+                    ticks: { color: '#ffffff', font: { size: 20, weight: '600' } },
                     grid: { display: false }
                 }
             },
@@ -905,7 +922,7 @@
                 title: {
                     display: true,
                     text: '(b) Stealth Score by Strategy',
-                    font: { size: 22, weight: 'bold' },
+                    font: { size: 28, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
@@ -918,18 +935,18 @@
                     max: 5.5,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 16, weight: '600' }
+                        font: { size: 20, weight: '600' }
                     },
                     grid: { color: '#444c56' },
                     title: {
                         display: true,
                         text: 'Avg Stealth (1–5)',
                         color: '#ffffff',
-                        font: { size: 18, weight: 'bold' }
+                        font: { size: 22, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { color: '#ffffff', font: { size: 16, weight: '600' } },
+                    ticks: { color: '#ffffff', font: { size: 20, weight: '600' } },
                     grid: { display: false }
                 }
             },
