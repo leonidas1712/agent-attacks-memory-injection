@@ -213,6 +213,7 @@ def run_experiment(
     rollouts: int = 1,
     judge_model: str | None = None,
     use_judge: bool = True,
+    use_stealth_judge: bool = False,
 ):
     """Run the full experiment with specified parameters."""
     if scenarios is None:
@@ -249,6 +250,7 @@ def run_experiment(
         model_name=model,
         use_scorer=use_judge,
         scorer_model=judge_model or model,
+        use_stealth_scorer=use_stealth_judge,
     )
     
     try:
@@ -444,6 +446,11 @@ Examples:
         type=str,
         help="Shortcut: run all scenarios with backdoor condition using the given strategy (or comma-separated strategies)"
     )
+    parser.add_argument(
+        "--stealth-judge",
+        action="store_true",
+        help="Also run the stealth judge scorer (evaluates whether the model disclosed the memory update)"
+    )
     
     args = parser.parse_args()
     
@@ -491,6 +498,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            use_stealth_judge=args.stealth_judge,
         )
     elif args.all:
         run_experiment(
@@ -500,6 +508,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            use_stealth_judge=args.stealth_judge,
         )
     elif args.scenarios:
         scenario_ids = [s.strip() for s in args.scenarios.split(",")]
@@ -517,6 +526,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            use_stealth_judge=args.stealth_judge,
         )
     elif args.scenario:
         if args.scenario not in SCENARIOS:
