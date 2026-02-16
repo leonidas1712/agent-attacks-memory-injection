@@ -13,3 +13,6 @@ wheels/
 resources/
 .vscode/*
 .secrets/*
+# Private poster context files
+poster/context/apart_studio.md
+poster/context/updated_abstract_notes.md
