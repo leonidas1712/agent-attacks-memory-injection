@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Agent Attacks via Memory Injection - Poster</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --apart-dark: #1e2329;
@@ -86,6 +87,13 @@
 
         .svg-container { width: 100%; margin: 15mm 0; text-align: center; }
 
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 15mm 0;
+            position: relative;
+        }
+
         footer {
             margin-top: 25mm;
             display: flex;
@@ -164,6 +172,9 @@
                 <div class="callout">
                     Backdoor attacks match or exceed Direct Pressure for 4/5 SOTA models[cite: 10, 74].
                 </div>
+                <div class="chart-container">
+                    <canvas id="harmRateChart"></canvas>
+                </div>
                 <table>
                     <tr><th>Model</th><th>Condition</th><th>% Harm Rate</th><th>Acceptance Rate</th></tr>
                     <tr><td>Grok-4-fast</td><td>Backdoor</td><td><strong>100%</strong></td><td>92%</td></tr>
@@ -200,6 +211,119 @@
             <p style="font-size: 20pt; margin-top: 5mm; opacity: 0.7;">leonidasr.com/research</p>
         </div>
     </footer>
+
+    <script>
+        // Chart.js configuration for harm rate by condition
+        Chart.defaults.color = '#ffffff';
+        Chart.defaults.borderColor = '#444c56';
+        Chart.defaults.font.family = 'Inter, sans-serif';
+        Chart.defaults.font.size = 14;
+
+        const ctx = document.getElementById('harmRateChart').getContext('2d');
+        const harmRateChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['GPT-4o', 'GPT-4.1', 'Claude Sonnet 4', 'Gemini 2.5 Pro', 'Grok-4-fast'],
+                datasets: [
+                    {
+                        label: 'Baseline',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: '#6c757d',
+                        borderColor: '#6c757d',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Direct Pressure',
+                        data: [60, 80, 34.78, 40.91, 76],
+                        backgroundColor: '#0d6efd',
+                        borderColor: '#0d6efd',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Backdoor',
+                        data: [92, 28, 84, 69.57, 100],
+                        backgroundColor: '#fd7e14',
+                        borderColor: '#fd7e14',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: '#ffffff',
+                            font: {
+                                size: 16,
+                                family: 'Inter, sans-serif'
+                            },
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#2d333b',
+                        titleColor: '#4ade80',
+                        bodyColor: '#ffffff',
+                        borderColor: '#444c56',
+                        borderWidth: 1,
+                        padding: 12,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#ffffff',
+                            font: {
+                                size: 14,
+                                family: 'Inter, sans-serif'
+                            },
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: '#444c56',
+                            lineWidth: 1
+                        },
+                        title: {
+                            display: true,
+                            text: '% Harmful Recommendation',
+                            color: '#ffffff',
+                            font: {
+                                size: 16,
+                                family: 'Inter, sans-serif',
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#ffffff',
+                            font: {
+                                size: 14,
+                                family: 'Inter, sans-serif'
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>
