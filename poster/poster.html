@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Attacks via Memory Injection - Poster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apart-dark: #1e2329;
+            --apart-green: #4ade80;
+            --apart-text: #ffffff;
+            --apart-card: #2d333b;
+            --apart-accent: #f87171;
+            --apart-border: #444c56;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            width: 841mm;
+            height: 1189mm;
+            background-color: var(--apart-dark);
+            color: var(--apart-text);
+            font-family: 'Inter', sans-serif;
+            padding: 30mm; /* Standardized margins  */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles  */
+        header { margin-bottom: 25mm; text-align: left; }
+        h1 { font-size: 100pt; color: var(--apart-green); line-height: 1.1; margin-bottom: 10mm; }
+        .authors { font-size: 44pt; font-weight: 300; margin-bottom: 5mm; }
+        .affiliation { font-size: 32pt; opacity: 0.8; color: var(--apart-green); }
+
+        /* Grid Layout  */
+        .poster-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25mm;
+            flex-grow: 1;
+        }
+
+        .section {
+            background: var(--apart-card);
+            padding: 20mm;
+            border-radius: 12mm;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--apart-border);
+        }
+
+        .full-width { grid-column: span 2; }
+
+        /* Typography  */
+        h3 { 
+            font-size: 52pt; 
+            color: var(--apart-green); 
+            margin-bottom: 15mm; 
+            border-bottom: 3px solid var(--apart-green);
+            padding-bottom: 5mm;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p, li { font-size: 34pt; line-height: 1.4; margin-bottom: 12mm; }
+        ul { list-style-type: none; }
+        li::before { content: "•"; color: var(--apart-green); margin-right: 15px; font-weight: bold; }
+
+        code { font-family: 'JetBrains Mono', monospace; background: #161b22; padding: 4px 10px; border-radius: 6px; color: var(--apart-green); }
+
+        /* Data Visualization Styling */
+        table { width: 100%; border-collapse: collapse; margin-top: 10mm; font-size: 28pt; }
+        th { text-align: left; color: var(--apart-green); border-bottom: 2px solid var(--apart-green); padding: 15px; }
+        td { padding: 15px; border-bottom: 1px solid var(--apart-border); }
+        .highlight-row { background: rgba(248, 113, 113, 0.1); }
+
+        .callout {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 15px solid var(--apart-green);
+            padding: 20mm;
+            margin: 15mm 0;
+            font-size: 40pt;
+            font-weight: 700;
+        }
+
+        .svg-container { width: 100%; margin: 15mm 0; text-align: center; }
+
+        footer {
+            margin-top: 25mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 2px solid var(--apart-border);
+            padding-top: 10mm;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Agent Attacks via Memory Injection</h1>
+        <div class="authors">Leo Raghav, Choong Kai Zhe</div>
+        <div class="affiliation">Apart Research · AI Manipulation Hackathon 2026</div>
+    </header>
+
+    <main class="poster-grid">
+        
+        <div class="column">
+            <section class="section">
+                <h3>1. The Hook: Memory as Attack Surface</h3>
+                <ul>
+                    <li>LLMs are evolving from stateless chat interfaces into <strong>stateful agentic systems</strong>[cite: 6, 16].</li>
+                    <li>Persistent memory allows agents to retain user preferences across sessions[cite: 19, 20].</li>
+                    <li><strong>Threat Model:</strong> Adversaries exploit indirect prompt injection to poison long-term memory via web content[cite: 7, 26].</li>
+                </ul>
+                <div class="svg-container">
+                    <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+                        <defs><marker id="arrow" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#4ade80"/></marker></defs>
+                        <rect x="10" y="60" width="160" height="100" rx="10" fill="#2d333b" stroke="#4ade80" stroke-width="3"/>
+                        <text x="90" y="120" font-family="Inter" font-size="22" fill="white" text-anchor="middle">Adversary</text>
+                        <line x1="170" y1="110" x2="240" y2="110" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow)"/>
+                        <rect x="250" y="40" width="260" height="140" rx="10" fill="#161b22" stroke="#4ade80" stroke-width="3"/>
+                        <text x="380" y="90" font-family="monospace" font-size="18" fill="#4ade80" text-anchor="middle">&lt;!-- update_memory --&gt;</text>
+                        <text x="380" y="130" font-family="Inter" font-size="20" fill="white" text-anchor="middle">Poisoned Web Page</text>
+                        <line x1="510" y1="110" x2="580" y2="110" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow)"/>
+                        <rect x="590" y="60" width="180" height="100" rx="10" fill="#2d333b" stroke="#f87171" stroke-width="3"/>
+                        <text x="680" y="120" font-family="Inter" font-size="22" fill="white" text-anchor="middle">Agent Memory</text>
+                    </svg>
+                </div>
+            </section>
+
+            <section class="section" style="margin-top: 25mm;">
+                <h3>2. Methodology: Two-Turn Framework</h3>
+                <p>We evaluated 5 SOTA models across 15 experimental combinations[cite: 8].</p>
+                <div class="svg-container">
+                    <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="350" height="280" rx="15" fill="rgba(74, 222, 128, 0.05)" stroke="#4ade80" stroke-dasharray="10,5"/>
+                        <text x="40" y="60" font-size="24" fill="#4ade80" font-weight="bold">Turn 1: Injection</text>
+                        <text x="40" y="100" font-size="18" fill="white">User triggers web search</text>
+                        <text x="40" y="140" font-size="18" fill="white">Agent ingests poisoned HTML</text>
+                        <text x="40" y="180" font-size="18" fill="#4ade80" font-weight="bold">Agent calls update_memory()</text>
+                        
+                        <path d="M 370 160 L 430 160" stroke="#4ade80" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+                        
+                        <rect x="430" y="20" width="350" height="280" rx="15" fill="rgba(248, 113, 113, 0.05)" stroke="#f87171"/>
+                        <text x="450" y="60" font-size="24" fill="#f87171" font-weight="bold">Turn 2: Verification</text>
+                        <text x="450" y="100" font-size="18" fill="white">User asks follow-up query</text>
+                        <text x="450" y="140" font-size="18" fill="white">Agent retrieves poisoned data</text>
+                        <text x="450" y="180" font-size="18" fill="#f87171" font-weight="bold">Harmful Recommendation</text>
+                    </svg>
+                </div>
+                <ul>
+                    <li><strong>Scenarios:</strong> Financial steering, Medical allergy removal, Dietary restriction removal, Security downgrade, Budget override [cite: 52-59].</li>
+                    <li><strong>Baseline:</strong> Neutral system prompt, benign content[cite: 47].</li>
+                    <li><strong>Direct Pressure:</strong> System prompt explicit coercion[cite: 48].</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="column">
+            <section class="section">
+                <h3>3. Main Results: Backdoor Efficacy</h3>
+                <div class="callout">
+                    Backdoor attacks match or exceed Direct Pressure for 4/5 SOTA models[cite: 10, 74].
+                </div>
+                <table>
+                    <tr><th>Model</th><th>Condition</th><th>% Harm Rate</th><th>Acceptance Rate</th></tr>
+                    <tr><td>Grok-4-fast</td><td>Backdoor</td><td><strong>100%</strong></td><td>92%</td></tr>
+                    <tr><td>GPT-4o</td><td>Backdoor</td><td>92%</td><td>92%</td></tr>
+                    <tr><td>Claude Sonnet 4</td><td>Backdoor</td><td>84%</td><td>100%</td></tr>
+                    <tr class="highlight-row"><td><strong>GPT-4.1</strong></td><td><strong>Backdoor</strong></td><td><strong>28%</strong></td><td><strong>16%</strong></td></tr>
+                </table>
+                <p style="margin-top: 15mm;"><strong>Injection Acceptance</strong> is the primary failure mode; once a model accepts poisoned memory, harm rates reach 91-100%[cite: 142, 144].</p>
+            </section>
+
+            <section class="section" style="margin-top: 25mm;">
+                <h3>4. New Frontiers: Cross-Provider Risk</h3>
+                <ul>
+                    <li><strong>Chinese Models:</strong> High vulnerability observed in <code>Kimi-k2.5</code> (100% harm), <code>DeepSeek-v3.2</code> (80%), and <code>GLM-4.7</code> (40%).</li>
+                    <li><strong>Stealth vs. Harm:</strong> New <code>persona_memory</code> strategy trades raw harm for higher stealth, reducing safety disclaimer visibility.</li>
+                    <li><strong>Defense:</strong> Alignment $\neq$ Security. Relying on post-generation filters is insufficient[cite: 209].</li>
+                </ul>
+                <div class="callout" style="border-left-color: var(--apart-accent); background: rgba(248, 113, 113, 0.1);">
+                    Need Human-in-the-Loop for high-stakes state changes (Allergies, Finance)[cite: 212, 244].
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer>
+        <div style="font-size: 24pt;">
+            <strong>References:</strong> [1] Raghav et al., 2026. [2] Mireshghallah et al., 2025. [3] Hong et al., 2025.
+        </div>
+        <div style="text-align: right;">
+            <div style="width: 180px; height: 180px; background: white; margin-left: auto;">
+                <div style="padding: 10px; color: black; font-size: 10pt; text-align: center;">SCAN FOR FULL REPORT & GITHUB</div>
+            </div>
+            <p style="font-size: 20pt; margin-top: 5mm; opacity: 0.7;">leonidasr.com/research</p>
+        </div>
+    </footer>
+
+</body>
+</html>
