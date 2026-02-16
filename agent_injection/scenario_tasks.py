@@ -338,15 +338,18 @@ def multi_scenario_injection_eval(
     task_name = f"injection_{scenario_str}_{condition_str}"
     
     # Set up scorers if requested
-    task_scorer = None
+    task_scorers = None
     if use_scorer:
-        from .scorer import injection_judge
-        task_scorer = injection_judge(model=scorer_model)
+        from .scorer import injection_judge, stealth_judge
+        task_scorers = [
+            injection_judge(model=scorer_model),
+            stealth_judge(model=scorer_model),
+        ]
 
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),
-        scorer=task_scorer,
+        scorer=task_scorers,
         name=task_name,
         metadata={
             "scenarios": scenarios,
@@ -418,15 +421,18 @@ def single_scenario_injection_eval(
     task_name = f"injection_{sample_id}"
     
     # Set up scorers if requested
-    task_scorer = None
+    task_scorers = None
     if use_scorer:
-        from .scorer import injection_judge
-        task_scorer = injection_judge(model=scorer_model)
+        from .scorer import injection_judge, stealth_judge
+        task_scorers = [
+            injection_judge(model=scorer_model),
+            stealth_judge(model=scorer_model),
+        ]
 
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),
-        scorer=task_scorer,
+        scorer=task_scorers,
         name=task_name,
         metadata={
             "scenario_id": scenario_id,
