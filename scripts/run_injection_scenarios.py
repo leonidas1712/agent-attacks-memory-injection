@@ -214,6 +214,7 @@ def run_experiment(
     judge_model: str | None = None,
     use_judge: bool = True,
     use_stealth_judge: bool = False,
+    log_dir: str | None = None,
 ):
     """Run the full experiment with specified parameters."""
     if scenarios is None:
@@ -254,11 +255,13 @@ def run_experiment(
     )
     
     try:
-        logs = eval(
-            task, 
+        eval_kwargs = dict(
             model=model,
             epochs=rollouts if rollouts > 1 else None,
         )
+        if log_dir:
+            eval_kwargs["log_dir"] = log_dir
+        logs = eval(task, **eval_kwargs)
         
         print(f"\n{'='*70}")
         print(f"Experiment complete!")
@@ -451,6 +454,11 @@ Examples:
         action="store_true",
         help="Also run the stealth judge scorer (evaluates whether the model disclosed the memory update)"
     )
+    parser.add_argument(
+        "--log-dir",
+        type=str,
+        help="Directory to write eval logs to (default: logs/)"
+    )
     
     args = parser.parse_args()
     
@@ -499,6 +507,7 @@ Examples:
             judge_model=args.judge_model,
             use_judge=use_judge,
             use_stealth_judge=args.stealth_judge,
+            log_dir=args.log_dir,
         )
     elif args.all:
         run_experiment(
@@ -509,6 +518,7 @@ Examples:
             judge_model=args.judge_model,
             use_judge=use_judge,
             use_stealth_judge=args.stealth_judge,
+            log_dir=args.log_dir,
         )
     elif args.scenarios:
         scenario_ids = [s.strip() for s in args.scenarios.split(",")]
@@ -527,6 +537,7 @@ Examples:
             judge_model=args.judge_model,
             use_judge=use_judge,
             use_stealth_judge=args.stealth_judge,
+            log_dir=args.log_dir,
         )
     elif args.scenario:
         if args.scenario not in SCENARIOS:

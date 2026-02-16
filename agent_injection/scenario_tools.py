@@ -11,11 +11,11 @@ from .scenario_content import get_scenario_web_search_response
 from .scenario_memory import update_memory_value, get_scenario_memory
 
 
-@tool
+@tool(name="web_search")
 def scenario_web_search(scenario_id: str, strategy: str | None = None):
     """
     Create a web search tool that returns scenario-specific content.
-    
+
     Args:
         scenario_id: The scenario identifier
         strategy: Injection strategy ("chat_log", "user_review") or None for control
@@ -38,7 +38,7 @@ def scenario_web_search(scenario_id: str, strategy: str | None = None):
     return execute
 
 
-@tool
+@tool(name="update_memory")
 def scenario_update_memory():
     """
     Create an update_memory tool for the scenario memory system.
