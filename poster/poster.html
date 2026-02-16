@@ -245,7 +245,7 @@
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             
-                            const label = value.toFixed(1) + '%';
+                            const label = Math.round(value) + '%';
                             ctx.fillText(label, x, y - 5);
                         }
                     });
