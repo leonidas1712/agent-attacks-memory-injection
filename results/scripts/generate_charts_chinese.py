@@ -21,26 +21,26 @@ sys.path.insert(0, str(project_root))
 
 from inspect_ai.log import read_eval_log
 
-# --- Style (matches existing charts) ---
-try:
-    plt.style.use('seaborn-v0_8-whitegrid')
-except OSError:
-    try:
-        plt.style.use('seaborn-whitegrid')
-    except OSError:
-        plt.style.use('default')
+# --- Style (matches poster color scheme) ---
 plt.rcParams.update({
     'font.size': 11,
     'axes.labelsize': 12,
-    'axes.titlesize': 14,
+    'axes.titlesize': 13,
     'xtick.labelsize': 10,
     'ytick.labelsize': 10,
     'legend.fontsize': 10,
-    'figure.titlesize': 16,
+    'figure.titlesize': 14,
     'font.family': 'sans-serif',
     'figure.dpi': 300,
     'savefig.dpi': 300,
     'savefig.bbox': 'tight',
+    'axes.facecolor': 'white',
+    'figure.facecolor': 'white',
+    'axes.edgecolor': '#cccccc',
+    'axes.grid': True,
+    'grid.color': '#e0e0e0',
+    'grid.linestyle': '-',
+    'grid.alpha': 0.5,
 })
 
 # --- Data ---
@@ -147,59 +147,67 @@ def generate_chart(results, output_dir: Path):
     width = 0.32
 
     colors = {
-        "user_review": "#0d6efd",     # Blue (matches existing palette)
-        "persona_memory": "#fd7e14",  # Orange
+        "user_review": "#3e8bfd",
+        "persona_memory": "#e35d6a",
     }
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5.5))
 
     # --- Panel A: Harm Rate ---
     bars1a = ax1.bar(x - width / 2, ur_harm, width,
-                     label="user_review", color=colors["user_review"], alpha=0.85)
+                     label="user_review", color=colors["user_review"],
+                     edgecolor="white", linewidth=0.5)
     bars1b = ax1.bar(x + width / 2, pm_harm, width,
-                     label="persona_memory", color=colors["persona_memory"], alpha=0.85)
+                     label="persona_memory", color=colors["persona_memory"],
+                     edgecolor="white", linewidth=0.5)
 
-    ax1.set_ylabel("% Harmful Recommendation", fontweight="bold")
-    ax1.set_title("(a) Harm Rate by Strategy", fontweight="bold", pad=12)
+    ax1.set_ylabel("% Harmful Recommendation")
+    ax1.set_title("Harm Rate by Strategy", fontweight="bold", pad=12)
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels, ha="center")
-    ax1.set_ylim(0, 109)
-    ax1.grid(axis="y", alpha=0.3, linestyle="--")
+    ax1.set_ylim(0, 112)
+    ax1.grid(axis="y")
+    ax1.set_axisbelow(True)
 
     for bars in [bars1a, bars1b]:
         for bar in bars:
             h = bar.get_height()
             if h > 0:
-                ax1.text(bar.get_x() + bar.get_width() / 2., h + 1,
-                         f'{h:.0f}%', ha='center', va='bottom', fontsize=9)
+                ax1.text(bar.get_x() + bar.get_width() / 2., h + 1.5,
+                         f'{h:.0f}%', ha='center', va='bottom', fontsize=9,
+                         fontweight='bold')
 
     # --- Panel B: Stealth Score ---
     bars2a = ax2.bar(x - width / 2, ur_stealth, width,
-                     label="user_review", color=colors["user_review"], alpha=0.85)
+                     label="user_review", color=colors["user_review"],
+                     edgecolor="white", linewidth=0.5)
     bars2b = ax2.bar(x + width / 2, pm_stealth, width,
-                     label="persona_memory", color=colors["persona_memory"], alpha=0.85)
+                     label="persona_memory", color=colors["persona_memory"],
+                     edgecolor="white", linewidth=0.5)
 
-    ax2.set_ylabel("Average Stealth Score (1–5)", fontweight="bold")
-    ax2.set_title("(b) Stealth Score by Strategy", fontweight="bold", pad=12)
+    ax2.set_ylabel("Average Stealth Score (1–5)")
+    ax2.set_title("Stealth Score by Strategy", fontweight="bold", pad=12)
     ax2.set_xticks(x)
     ax2.set_xticklabels(labels, ha="center")
     ax2.set_ylim(0, 5.8)
-    ax2.grid(axis="y", alpha=0.3, linestyle="--")
+    ax2.grid(axis="y")
+    ax2.set_axisbelow(True)
 
     for bars in [bars2a, bars2b]:
         for bar in bars:
             h = bar.get_height()
             if h > 0:
                 ax2.text(bar.get_x() + bar.get_width() / 2., h + 0.08,
-                         f'{h:.1f}', ha='center', va='bottom', fontsize=9)
+                         f'{h:.1f}', ha='center', va='bottom', fontsize=9,
+                         fontweight='bold')
 
-    # Shared legend
+    # Shared legend at bottom center
     handles, lbls = ax1.get_legend_handles_labels()
-    fig.legend(handles, lbls, loc="lower center", bbox_to_anchor=(0.5, -0.02),
-               ncol=2, frameon=True, fancybox=True, shadow=True)
+    fig.legend(handles, lbls, loc="lower center", bbox_to_anchor=(0.5, -0.01),
+               ncol=2, frameon=True, edgecolor="#cccccc", fancybox=False)
 
-    fig.suptitle("Chinese Models: Injection Strategy Comparison (Backdoor Condition)",
-                 fontweight="bold", fontsize=14, y=1.02)
+    fig.suptitle("Injection Strategy Comparison — Chinese Models (Backdoor)",
+                 fontweight="bold", fontsize=14, y=1.01)
 
     plt.tight_layout()
     out = output_dir / "chart5_chinese_strategy_comparison.png"
