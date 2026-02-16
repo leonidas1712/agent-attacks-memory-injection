@@ -247,9 +247,6 @@
             margin-bottom: 4mm;
         }
 
-        /* ═══════════ HOOK: don't stretch to match chart row ═══════════ */
-        .section.compact { align-self: start; }
-
         /* ═══════════ METHODOLOGY LAYOUT ═══════════ */
         .method-grid {
             display: grid;
@@ -378,6 +375,16 @@
             flex: 1;
             min-height: 180mm;
         }
+        .chart-duo {
+            display: flex;
+            gap: 8mm;
+            flex: 1;
+        }
+        .chart-duo .chart-panel {
+            flex: 1;
+            position: relative;
+            min-height: 160mm;
+        }
 
         /* ═══════════ BOTTOM SECTION ═══════════ */
         .bottom-section {
@@ -400,34 +407,7 @@
         .disc-col li { font-size: 22pt; margin-bottom: 6mm; }
         .disc-col li::before { font-size: 22pt; }
 
-        .qr-box {
-            width: 42mm;
-            height: 42mm;
-            background: white;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 8mm;
-            border-radius: 3mm;
-        }
-        .qr-box span {
-            font-size: 12pt;
-            text-align: center;
-            color: var(--text-dark);
-            font-weight: 600;
-            line-height: 1.3;
-        }
-
-        /* ═══════════ FOOTER ═══════════ */
-        footer {
-            margin-top: 10mm;
-            text-align: center;
-            padding-top: 6mm;
-            border-top: 2px solid rgba(255,255,255,0.25);
-            flex-shrink: 0;
-        }
-        footer p { font-size: 24pt; color: var(--white); opacity: 0.85; }
+        /* (QR box and footer removed) */
 
         /* ═══════════ PRINT ═══════════ */
         @media print {
@@ -455,14 +435,20 @@
 <!-- ═══════════ POSTER BODY (2×2 grid) ═══════════ -->
 <div class="poster-grid">
 
-    <!-- ═══ TOP-LEFT: The Hook ═══ -->
-    <div class="section compact">
-        <div class="section-hdr">1. The Hook: Memory is the New Backdoor</div>
+    <!-- ═══ TOP-LEFT: Background & Threat Model ═══ -->
+    <div class="section">
+        <div class="section-hdr">1. Memory is the New Backdoor for Manipulation</div>
         <div class="section-content">
             <ul>
-                <li><strong>Stateful Agents</strong> introduce a permanent, invisible attack surface.</li>
-                <li>Persistent memory lets agents retain user preferences across sessions — but creates a new target for adversaries.</li>
-                <li><strong>Threat Model:</strong> Adversaries exploit indirect prompt injection in web content to poison an agent's long-term memory.</li>
+                <li>Prior work established that agent memory can be <strong>indirectly poisoned</strong> through external documents to steer model responses.</li>
+                <li><strong>Unknown:</strong> How severe is this threat compared to direct pressure on the agent by an adversary?</li>
+                <li>We provide the <strong>first systematic comparison</strong> of backdoor memory injection vs. direct operator coercion across 8 SOTA models.</li>
+            </ul>
+
+            <div class="sub-hdr" style="margin-top: 6mm;">Threat Model</div>
+            <ul>
+                <li><strong>Stateful Agents</strong> retain user preferences across sessions via persistent memory — creating a permanent, invisible attack surface.</li>
+                <li>Adversaries exploit <strong>indirect prompt injection</strong> in web content to poison an agent's long-term memory.</li>
                 </ul>
 
             <div class="attack-flow">
@@ -520,7 +506,14 @@
                 <div class="method-flow">
                     <!-- Turn 1 -->
                     <div class="turn-group">
-                        <div class="turn-label">Turn 1: Injection</div>
+                        <div class="turn-label">Turn 1: Ingestion</div>
+                        <div class="turn-row">
+                            <div class="method-node">
+                                <i data-lucide="user" class="node-icon" style="color: var(--mint);"></i>
+                                Benign user query<br><span style="font-size: 13pt; opacity: 0.7; font-style: italic;">"Search for investment tips<br>and market analysis"</span>
+                            </div>
+                        </div>
+                        <div class="method-arrow-inner">↓ triggers web search</div>
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="file-text" class="node-icon" style="color: var(--mint);"></i>
@@ -535,7 +528,7 @@
                         <div class="turn-row">
                             <div class="method-node highlight">
                                 <i data-lucide="database" class="node-icon"></i>
-                                Agent calls update_memory()
+                                update_memory() → Memory Poisoned
                             </div>
                         </div>
                     </div>
@@ -549,7 +542,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="message-circle" class="node-icon" style="color: var(--coral);"></i>
-                                User asks scenario question
+                                User asks scenario question<br><span style="font-size: 13pt; opacity: 0.7; font-style: italic;">"I have $10K to invest.<br>What would you recommend?"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner" style="color: var(--coral);">↓</div>
@@ -567,12 +560,19 @@
                     <!-- Evaluation -->
                     <div class="eval-node">
                         <i data-lucide="clipboard-check" class="node-icon"></i>
-                        LLM Judge (Sonnet 4.5)
+                        Harm Judge (Sonnet 4.5)<br>+ Stealth Judge (Chinese models)
                     </div>
                 </div>
 
                 <div class="scenarios-panel">
-                    <div class="sub-hdr">5 Scenarios:</div>
+                    <div class="sub-hdr">3 Conditions:</div>
+                    <ul>
+                        <li><strong style="color: var(--gray);">Baseline:</strong> Neutral system prompt, benign web content</li>
+                        <li><strong style="color: var(--mint);">Direct Pressure:</strong> Harmful system prompt (operator control), benign web</li>
+                        <li><strong style="color: var(--coral);">Backdoor:</strong> Neutral system prompt, memory injection via poisoned web</li>
+                    </ul>
+
+                    <div class="sub-hdr" style="margin-top: 8mm;">5 Scenarios:</div>
                     <ul>
                         <li>Medical allergy removal</li>
                         <li>Financial steering</li>
@@ -581,7 +581,7 @@
                         <li>Budget override</li>
                     </ul>
 
-                    <div class="sub-hdr" style="margin-top: 10mm;">Injection Strategies:</div>
+                    <div class="sub-hdr" style="margin-top: 8mm;">Injection Strategies:</div>
                     <ul>
                         <li><code>user_review</code><br><span style="font-size: 20pt; opacity: 0.8;">Malicious instructions hidden in a fake user review</span></li>
                         <li><code>persona_memory</code><br><span style="font-size: 20pt; opacity: 0.8;">Dual memory write: target preference + communication style override</span></li>
@@ -593,13 +593,18 @@
 
     <!-- ═══ BOTTOM-RIGHT: Finding 2 ═══ -->
     <div class="section">
-        <div class="section-hdr">4. Finding 2: Stealth &amp; Provider Variance</div>
+        <div class="section-hdr">4. Finding 2: Chinese Models — Harm &amp; Stealth</div>
         <div class="section-content">
-            <div class="chart-box">
-                <canvas id="stealthChart"></canvas>
+            <div class="chart-duo">
+                <div class="chart-panel">
+                    <canvas id="harmChartCN"></canvas>
+                </div>
+                <div class="chart-panel">
+                    <canvas id="stealthChartCN"></canvas>
+                </div>
             </div>
             <div class="callout warning">
-                <strong>Stealth Warning:</strong> <code>persona_memory</code> maintains high harm (~85%) while significantly increasing Avg Stealth (3.9 vs 2.5). Chinese models — Kimi K2.5, DeepSeek V3.1 — show comparable vulnerability (Avg ~80% harm).
+                <strong>Stealth Warning:</strong> <code>persona_memory</code> boosts stealth dramatically (GLM: 2.2→5.0) while maintaining or increasing harm. Chinese models show <strong>comparable vulnerability</strong> to Western models (Avg ~80% harm).
             </div>
         </div>
     </div>
@@ -630,18 +635,12 @@
                 <ul>
                     <li>Alignment training is insufficient. We need <strong>Memory Integrity Guarantees</strong> and <strong>Human-in-the-Loop</strong> verification for high-stakes state changes.</li>
                 </ul>
-                <div class="qr-box">
-                    <span>Scan for<br>GitHub</span>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ═══════════ FOOTER ═══════════ -->
-<footer>
-    <p>Leo Raghav, Choong Kai Zhe · Apart Research</p>
-    </footer>
+<!-- footer removed: authors shown in banner -->
 
 <!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
@@ -674,30 +673,30 @@
         }
     };
 
-    // ── Custom plugin: value labels for dual-axis chart ──
-    const valPlugin = {
-        id: 'valLabels',
-        afterDatasetsDraw(chart) {
-            const ctx = chart.ctx;
-            ctx.save();
-            chart.data.datasets.forEach((ds, di) => {
-                chart.getDatasetMeta(di).data.forEach((bar, i) => {
-                    const v = ds.data[i];
-                    if (v > 0) {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 28px Inter, sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'bottom';
-                        const label = ds.yAxisID === 'y'
-                            ? '~' + Math.round(v) + '%'
-                            : v.toFixed(1);
-                        ctx.fillText(label, bar.x, bar.y - 10);
-                    }
+    // ── Custom plugin: value labels (generic, supports suffix) ──
+    function makeValPlugin(id, suffix) {
+        return {
+            id: id,
+            afterDatasetsDraw(chart) {
+                const ctx = chart.ctx;
+                ctx.save();
+                chart.data.datasets.forEach((ds, di) => {
+                    chart.getDatasetMeta(di).data.forEach((bar, i) => {
+                        const v = ds.data[i];
+                        if (v > 0) {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = 'bold 24px Inter, sans-serif';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            const label = suffix === '%' ? Math.round(v) + '%' : v.toFixed(1);
+                            ctx.fillText(label, bar.x, bar.y - 8);
+                        }
+                    });
                 });
-            });
-            ctx.restore();
-        }
-    };
+                ctx.restore();
+            }
+        };
+    }
 
     // ── Chart.js defaults ──
     Chart.defaults.color = '#ffffff';
@@ -796,27 +795,39 @@
         plugins: [pctPlugin]
     });
 
-    // ═══════════ CHART 2: Harm vs Stealth ═══════════
-    new Chart(document.getElementById('stealthChart'), {
+    // ═══════════ CHART 2a: Chinese Models — Harm Rate ═══════════
+    const cnLabels = ['Kimi K2.5', ['DeepSeek', 'V3.1'], ['GLM-4.7', '-Flash']];
+    const cnLegendOpts = {
+        position: 'top',
+        labels: {
+            color: '#ffffff',
+            font: { size: 18, weight: 'bold' },
+            padding: 12,
+            usePointStyle: true,
+            pointStyle: 'rect',
+            boxWidth: 14,
+            boxHeight: 14
+        }
+    };
+
+    new Chart(document.getElementById('harmChartCN'), {
         type: 'bar',
         data: {
-            labels: ['user_review', 'persona_memory'],
+            labels: cnLabels,
             datasets: [
                 {
-                    label: 'Harm Rate',
-                    data: [80, 85],
+                    label: 'user_review',
+                    data: [88, 92, 60],
                     backgroundColor: '#f87171',
                     borderColor: '#dc2626',
-                    borderWidth: 2,
-                    yAxisID: 'y'
+                    borderWidth: 2
                 },
                 {
-                    label: 'Avg Stealth',
-                    data: [2.5, 3.9],
+                    label: 'persona_memory',
+                    data: [96, 96, 64],
                     backgroundColor: '#7FFFD4',
                     borderColor: '#5fd4b0',
-                    borderWidth: 2,
-                    yAxisID: 'y1'
+                    borderWidth: 2
                 }
             ]
         },
@@ -828,73 +839,103 @@
             plugins: {
                 title: {
                     display: true,
-                    text: [
-                        'Harm vs. Stealth by Strategy',
-                        '(Pooled Chinese Models: Kimi, DeepSeek, GLM)'
-                    ],
-                    font: { size: 28, weight: 'bold' },
+                    text: '(a) Harm Rate by Strategy',
+                    font: { size: 22, weight: 'bold' },
                     color: '#ffffff',
-                    padding: { bottom: 14 }
+                    padding: { bottom: 10 }
                 },
-                legend: {
-                    position: 'top',
-                    labels: {
-                        color: '#ffffff',
-                        font: { size: 22, weight: 'bold' },
-                        padding: 16,
-                        usePointStyle: true,
-                        pointStyle: 'rect',
-                        boxWidth: 18,
-                        boxHeight: 18
-                    }
-                },
+                legend: cnLegendOpts,
                 tooltip: { enabled: false }
             },
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 100,
-                    position: 'left',
+                    max: 110,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 20, weight: '600' },
-                        callback: function(v) { return v + '%'; }
+                        font: { size: 16, weight: '600' },
+                        callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
                     title: {
                         display: true,
-                        text: 'Harm Rate',
+                        text: '% Harmful',
                         color: '#ffffff',
-                        font: { size: 24, weight: 'bold' }
-                    }
-                },
-                y1: {
-                    beginAtZero: true,
-                    max: 5,
-                    position: 'right',
-                    ticks: {
-                        color: '#ffffff',
-                        font: { size: 20, weight: '600' }
-                    },
-                    grid: { drawOnChartArea: false },
-                    title: {
-                        display: true,
-                        text: 'Avg Stealth',
-                        color: '#ffffff',
-                        font: { size: 24, weight: 'bold' }
+                        font: { size: 18, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: {
-                        color: '#ffffff',
-                        font: { size: 22, weight: '600' }
-                    },
+                    ticks: { color: '#ffffff', font: { size: 16, weight: '600' } },
                     grid: { display: false }
                 }
             },
-            layout: { padding: { top: 30 } }
+            layout: { padding: { top: 20 } }
         },
-        plugins: [valPlugin]
+        plugins: [makeValPlugin('harmCNLabels', '%')]
+    });
+
+    // ═══════════ CHART 2b: Chinese Models — Stealth Score ═══════════
+    new Chart(document.getElementById('stealthChartCN'), {
+        type: 'bar',
+        data: {
+            labels: cnLabels,
+            datasets: [
+                {
+                    label: 'user_review',
+                    data: [4.1, 1.2, 2.2],
+                    backgroundColor: '#f87171',
+                    borderColor: '#dc2626',
+                    borderWidth: 2
+                },
+                {
+                    label: 'persona_memory',
+                    data: [4.9, 2.2, 5.0],
+                    backgroundColor: '#7FFFD4',
+                    borderColor: '#5fd4b0',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            devicePixelRatio: 4,
+            animation: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: '(b) Stealth Score by Strategy',
+                    font: { size: 22, weight: 'bold' },
+                    color: '#ffffff',
+                    padding: { bottom: 10 }
+                },
+                legend: cnLegendOpts,
+                tooltip: { enabled: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5.5,
+                    ticks: {
+                        color: '#ffffff',
+                        font: { size: 16, weight: '600' }
+                    },
+                    grid: { color: '#444c56' },
+                    title: {
+                        display: true,
+                        text: 'Avg Stealth (1–5)',
+                        color: '#ffffff',
+                        font: { size: 18, weight: 'bold' }
+                    }
+                },
+                x: {
+                    ticks: { color: '#ffffff', font: { size: 16, weight: '600' } },
+                    grid: { display: false }
+                }
+            },
+            layout: { padding: { top: 20 } }
+        },
+        plugins: [makeValPlugin('stealthCNLabels', '')]
     });
 </script>
 
