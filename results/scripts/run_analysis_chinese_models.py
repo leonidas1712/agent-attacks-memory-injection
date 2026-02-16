@@ -3,17 +3,17 @@
 Compare harm rates across Western and Chinese model groups, and compute
 strategy comparison (user_review vs persona_memory) for Chinese models.
 
-Reads .eval log files from benchmark_logs/ and new_data_chinese_models/.
+Reads .eval log files from logs/benchmark_logs/ and logs/new_data_chinese_models/.
 
 Usage:
-  uv run python scripts/compare_harm_rates.py
+  uv run python results/scripts/run_analysis_chinese_models.py
 """
 
 import sys
 from pathlib import Path
 from collections import defaultdict
 
-project_root = Path(__file__).parent.parent
+project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
 from inspect_ai.log import read_eval_log
