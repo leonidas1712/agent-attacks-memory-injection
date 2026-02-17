@@ -88,7 +88,7 @@
         .poster-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-rows: auto 1fr;
             gap: 6mm;
             flex: 1;
         }
@@ -518,12 +518,12 @@
         <div class="section-content">
             <div class="chart-box">
                 <canvas id="harmRateChart"></canvas>
-            </div>
-            <ul>
+                </div>
+                <ul>
                 <li>Backdoor (<code>user_review</code>) ≥ direct coercion in <strong>4/5 models</strong></li>
                 <li><strong>Injection acceptance</strong> is the bottleneck</li>
                 <li>Harm reaches <strong>60–100%</strong> once memory is poisoned</li>
-            </ul>
+                </ul>
         </div>
     </div>
 
@@ -664,8 +664,7 @@
             <div class="disc-col">
                 <h4>Takeaways</h4>
                 <ul>
-                    <li><strong>Zero model access</strong> needed — web content alone enables persistent manipulation</li>
-                    <li><code>persona_memory</code> is <strong>nearly invisible</strong> (stealth up to 5/5)</li>
+                    <li><strong>Zero model access</strong> needed — web content alone enables persistent, <strong>nearly invisible</strong> manipulation</li>
                     <li>Need <strong>Memory Integrity Guarantees</strong> + <strong>Human-in-the-Loop</strong> for high-stakes writes</li>
                 </ul>
             </div>
