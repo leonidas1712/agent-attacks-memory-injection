@@ -695,6 +695,10 @@
     });
 
     // ── Custom plugin: percentage labels on bars ──
+    // Manual x-nudges: nudgeMap[datasetIndex][dataIndex] = px offset
+    const pctNudge = {
+        2: { 0: 4, 1: 4, 2: 4 }  // Backdoor (red) on GPT-4o, GPT-4.1, Sonnet 4
+    };
     const pctPlugin = {
         id: 'pctLabels',
         afterDatasetsDraw(chart) {
@@ -708,7 +712,8 @@
                         ctx.font = 'bold 30px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
-                        ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 10);
+                        const xOff = (pctNudge[di] && pctNudge[di][i]) || 0;
+                        ctx.fillText(Math.round(v) + '%', bar.x + xOff, bar.y - 10);
                     }
                 });
             });
@@ -716,8 +721,8 @@
         }
     };
 
-    // ── Custom plugin: value labels (generic, supports suffix) ──
-    function makeValPlugin(id, suffix) {
+    // ── Custom plugin: value labels (generic, supports suffix + nudge) ──
+    function makeValPlugin(id, suffix, nudgeMap) {
         return {
             id: id,
             afterDatasetsDraw(chart) {
@@ -732,7 +737,8 @@
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             const label = suffix === '%' ? Math.round(v) + '%' : v.toFixed(1);
-                            ctx.fillText(label, bar.x, bar.y - 10);
+                            const xOff = (nudgeMap && nudgeMap[di] && nudgeMap[di][i]) || 0;
+                            ctx.fillText(label, bar.x + xOff, bar.y - 10);
                         }
                     });
                 });
@@ -914,7 +920,9 @@
             },
             layout: { padding: { top: 20 } }
         },
-        plugins: [makeValPlugin('harmCNLabels', '%')]
+        plugins: [makeValPlugin('harmCNLabels', '%', {
+            0: { 0: 4, 1: 4, 2: 4 }  // user_review (red) bars nudged right
+        })]
     });
 
     // ═══════════ CHART 2b: Extended Model Set — Stealth Score ═══════════
