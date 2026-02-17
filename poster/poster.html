@@ -705,10 +705,10 @@
                     const v = ds.data[i];
                     if (v > 0) {
                         ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 26px Inter, sans-serif';
+                        ctx.font = 'bold 30px Inter, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
-                        ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 6);
+                        ctx.fillText(Math.round(v) + '%', bar.x, bar.y - 10);
                     }
                 });
             });
@@ -728,11 +728,11 @@
                         const v = ds.data[i];
                         if (v > 0) {
                             ctx.fillStyle = '#ffffff';
-                            ctx.font = 'bold 30px Inter, sans-serif';
+                            ctx.font = 'bold 34px Inter, sans-serif';
                             ctx.textAlign = 'center';
                             ctx.textBaseline = 'bottom';
                             const label = suffix === '%' ? Math.round(v) + '%' : v.toFixed(1);
-                            ctx.fillText(label, bar.x, bar.y - 8);
+                            ctx.fillText(label, bar.x, bar.y - 10);
                         }
                     });
                 });
@@ -745,7 +745,7 @@
     Chart.defaults.color = '#ffffff';
     Chart.defaults.borderColor = '#444c56';
     Chart.defaults.font.family = 'Inter, sans-serif';
-    Chart.defaults.font.size = 28;
+    Chart.defaults.font.size = 32;
 
     // ═══════════ CHART 1: Harm Rate by Condition ═══════════
     new Chart(document.getElementById('harmRateChart'), {
@@ -790,7 +790,7 @@
                 title: {
                     display: true,
                     text: 'Harm Rate by Condition (SOTA Models)',
-                    font: { size: 36, weight: 'bold' },
+                    font: { size: 40, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 14 }
                 },
@@ -798,7 +798,7 @@
                     position: 'top',
                     labels: {
                         color: '#ffffff',
-                        font: { size: 28, weight: 'bold' },
+                        font: { size: 32, weight: 'bold' },
                         padding: 12,
                         usePointStyle: true,
                         pointStyle: 'rect',
@@ -814,7 +814,7 @@
                     max: 115,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 26, weight: '600' },
+                        font: { size: 30, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
@@ -822,13 +822,13 @@
                         display: true,
                         text: 'Harm Rate',
                         color: '#ffffff',
-                        font: { size: 30, weight: 'bold' }
+                        font: { size: 34, weight: 'bold' }
                     }
                 },
                 x: {
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 26, weight: '600' }
+                        font: { size: 30, weight: '600' }
                     },
                     grid: { display: false }
                 }
@@ -844,7 +844,7 @@
         position: 'top',
         labels: {
             color: '#ffffff',
-            font: { size: 24, weight: 'bold' },
+            font: { size: 28, weight: 'bold' },
             padding: 10,
             usePointStyle: true,
             pointStyle: 'rect',
@@ -883,7 +883,7 @@
                 title: {
                     display: true,
                     text: '(a) Harm Rate by Strategy',
-                    font: { size: 28, weight: 'bold' },
+                    font: { size: 32, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
@@ -896,7 +896,7 @@
                     max: 110,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 22, weight: '600' },
+                        font: { size: 26, weight: '600' },
                         callback: function(v) { return v <= 100 ? v + '%' : ''; }
                     },
                     grid: { color: '#444c56' },
@@ -904,11 +904,11 @@
                         display: true,
                         text: '% Harmful',
                         color: '#ffffff',
-                        font: { size: 26, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { color: '#ffffff', font: { size: 22, weight: '600' } },
+                    ticks: { color: '#ffffff', font: { size: 26, weight: '600' } },
                     grid: { display: false }
                 }
             },
@@ -948,7 +948,7 @@
                 title: {
                     display: true,
                     text: '(b) Stealth Score by Strategy',
-                    font: { size: 28, weight: 'bold' },
+                    font: { size: 32, weight: 'bold' },
                     color: '#ffffff',
                     padding: { bottom: 10 }
                 },
@@ -961,18 +961,18 @@
                     max: 5.5,
                     ticks: {
                         color: '#ffffff',
-                        font: { size: 22, weight: '600' }
+                        font: { size: 26, weight: '600' }
                     },
                     grid: { color: '#444c56' },
                     title: {
                         display: true,
                         text: 'Avg Stealth (1–5)',
                         color: '#ffffff',
-                        font: { size: 26, weight: 'bold' }
+                        font: { size: 30, weight: 'bold' }
                     }
                 },
                 x: {
-                    ticks: { color: '#ffffff', font: { size: 22, weight: '600' } },
+                    ticks: { color: '#ffffff', font: { size: 26, weight: '600' } },
                     grid: { display: false }
                 }
             },
