@@ -658,24 +658,24 @@
     <div class="section-content">
         <div class="discussion-grid">
             <div class="disc-col">
-                <h4>The Threat is Real</h4>
+                <h4>Primary Failure Mode</h4>
                 <ul>
-                    <li>Memory poisoning requires <strong>zero model access</strong> — any adversary controlling web content can persistently manipulate agent behavior</li>
-                    <li><code>persona_memory</code> makes attacks <strong>nearly invisible</strong> (stealth up to 5/5)</li>
+                    <li><strong>Injection acceptance</strong> is the bottleneck — harm is very likely once memory is poisoned (<strong>60–100%</strong> across models)</li>
+                    <li><code>persona_memory</code> adds stealth: attacks become harder to detect while maintaining or increasing harm</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>Defenses Exist But Are Misplaced</h4>
+                <h4>Case Studies in Refusal</h4>
                 <ul>
-                    <li><strong>GPT-5.2</strong> and <strong>Haiku 4.5</strong> show resistance is achievable</li>
-                    <li>Current safeguards operate at <strong>retrieval</strong>, not the <strong>memory write</strong> layer — alignment training alone is insufficient</li>
+                    <li><strong>GPT-5.2:</strong> Detects injection via internal source credibility evaluation at retrieval</li>
+                    <li><strong>Haiku 4.5:</strong> Flags memory conflict, asks user to resolve — suggesting the critical defense window is before memory is written</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>What Needs to Happen</h4>
+                <h4>Takeaways</h4>
                 <ul>
-                    <li><strong>Memory Integrity Guarantees:</strong> treat writes from untrusted sources as privileged operations requiring verification</li>
-                    <li><strong>Human-in-the-Loop:</strong> explicit confirmation for high-stakes memory updates (health, finance, security)</li>
+                    <li>Backdoor memory attacks <strong>rival direct operator control</strong> — and can remain invisible to users (<code>persona_memory</code>)</li>
+                    <li>Response-level safety filters are <strong>bypassed once memory is poisoned</strong> — defenses need to operate earlier</li>
                 </ul>
             </div>
         </div>
