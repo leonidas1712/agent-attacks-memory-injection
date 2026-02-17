@@ -634,38 +634,39 @@
                 </div>
             </div>
             <ul>
-                <li><code>persona_memory</code> boosts stealth (GLM: 2.2 → 5.0) while maintaining harm</li>
+                <li><code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — stealth jumps dramatically (GLM: 2.2 → 5.0) while harm holds or increases</li>
                 <li>Avg stealth: <code>user_review</code> 2.5 vs <code>persona_memory</code> 3.9</li>
-                <li>Extended models show <strong>comparable vulnerability</strong> (~80% harm)</li>
+                <li><strong>Frontier models across providers are equally vulnerable</strong> — extended models average ~80% harm, matching Western SOTA</li>
             </ul>
         </div>
     </div>
 
 </div>
 
-<!-- ═══════════ BOTTOM: Discussion ═══════════ -->
+<!-- ═══════════ BOTTOM: So What? ═══════════ -->
 <div class="section bottom-section">
-    <div class="section-hdr">5. Discussion: The Defense Deficit &amp; Future Directions</div>
+    <div class="section-hdr">5. So What? Implications for AI Safety</div>
     <div class="section-content">
         <div class="discussion-grid">
             <div class="disc-col">
-                <h4>Primary Failure</h4>
+                <h4>The Threat is Real</h4>
                 <ul>
-                    <li>Defense bottleneck is at <strong>memory write</strong>, not response</li>
+                    <li>Memory poisoning requires <strong>zero model access</strong> — any adversary controlling web content can persistently manipulate agent behavior</li>
+                    <li><code>persona_memory</code> makes attacks <strong>nearly invisible</strong> (stealth up to 5/5)</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>Refusal Case Studies</h4>
+                <h4>Defenses Exist But Are Misplaced</h4>
                 <ul>
-                    <li><strong>GPT-5.2:</strong> Detects injection via credibility check</li>
-                    <li><strong>Haiku 4.5:</strong> Flags memory conflicts, asks user to resolve</li>
+                    <li><strong>GPT-5.2</strong> and <strong>Haiku 4.5</strong> show resistance is achievable</li>
+                    <li>Current safeguards operate at <strong>retrieval</strong>, not the <strong>memory write</strong> layer — alignment training alone is insufficient</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>Takeaways</h4>
+                <h4>What Needs to Happen</h4>
                 <ul>
-                    <li><strong>Zero model access</strong> needed — web content alone enables persistent, <strong>nearly invisible</strong> manipulation</li>
-                    <li>Need <strong>Memory Integrity Guarantees</strong> + <strong>Human-in-the-Loop</strong> for high-stakes writes</li>
+                    <li><strong>Memory Integrity Guarantees:</strong> treat writes from untrusted sources as privileged operations requiring verification</li>
+                    <li><strong>Human-in-the-Loop:</strong> explicit confirmation for high-stakes memory updates (health, finance, security)</li>
                 </ul>
             </div>
         </div>
