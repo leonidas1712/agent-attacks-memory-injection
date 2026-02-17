@@ -28,7 +28,17 @@
             background: var(--bg);
             color: var(--white);
             font-family: 'Inter', sans-serif;
-            padding: 26mm;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* Inner wrapper guarantees 26mm (≈1 inch) margin on ALL sides.
+           Content that exceeds this box will clip — a signal to trim. */
+        .poster-inner {
+            width: calc(841mm - 52mm);   /* 789mm */
+            height: calc(1189mm - 52mm); /* 1137mm */
+            margin: 26mm;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -112,7 +122,7 @@
             flex-shrink: 0;
         }
         .section-content {
-            padding: 8mm 14mm;
+            padding: 7mm 14mm;
             color: var(--white);
             flex: 1;
             display: flex;
@@ -388,7 +398,7 @@
             width: 100%;
             position: relative;
             flex: 1;
-            min-height: 140mm;
+            min-height: 120mm;
         }
         .chart-duo {
             display: flex;
@@ -398,12 +408,12 @@
         .chart-duo .chart-panel {
             flex: 1;
             position: relative;
-            min-height: 120mm;
+            min-height: 100mm;
         }
 
         /* ═══════════ BOTTOM SECTION ═══════════ */
         .bottom-section {
-            margin-top: 6mm;
+            margin-top: 5mm;
             flex-shrink: 0;
         }
         .discussion-grid {
@@ -415,11 +425,11 @@
             font-size: 36pt;
             font-weight: 700;
             color: var(--mint);
-            margin-bottom: 5mm;
-            padding-bottom: 3mm;
+            margin-bottom: 3mm;
+            padding-bottom: 2mm;
             border-bottom: 2px solid var(--border);
         }
-        .disc-col li { font-size: 36pt; margin-bottom: 3mm; }
+        .disc-col li { font-size: 36pt; margin-bottom: 2mm; }
         .disc-col li::before { font-size: 36pt; }
 
         /* (QR box and footer removed) */
@@ -446,6 +456,7 @@
     </style>
 </head>
 <body>
+<div class="poster-inner">
 
 <!-- ═══════════ BANNER ═══════════ -->
 <div class="banner">
@@ -521,8 +532,7 @@
                 </div>
                 <ul>
                 <li>Backdoor (<code>user_review</code>) ≥ direct coercion in <strong>4/5 models</strong></li>
-                <li><strong>Injection acceptance</strong> is the bottleneck</li>
-                <li>Harm reaches <strong>60–100%</strong> once memory is poisoned</li>
+                <li><strong>Injection acceptance</strong> is the bottleneck — harm reaches <strong>60–100%</strong> once memory is poisoned</li>
                 </ul>
         </div>
     </div>
@@ -634,8 +644,7 @@
                 </div>
             </div>
             <ul>
-                <li><code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — stealth jumps dramatically (GLM: 2.2 → 5.0) while harm holds or increases</li>
-                <li>Avg stealth: <code>user_review</code> 2.5 vs <code>persona_memory</code> 3.9</li>
+                <li><code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — avg stealth jumps from 2.5 to 3.9</li>
                 <li><strong>Frontier models across providers are equally vulnerable</strong> — extended models average ~80% harm, matching Western SOTA</li>
             </ul>
         </div>
@@ -674,6 +683,7 @@
 </div>
 
 <!-- footer removed: authors shown in banner -->
+</div><!-- /.poster-inner -->
 
 <!-- ═══════════ SCRIPTS ═══════════ -->
 <script>
