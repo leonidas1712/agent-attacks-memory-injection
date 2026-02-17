@@ -697,7 +697,7 @@
     // ── Custom plugin: percentage labels on bars ──
     // Manual x-nudges: nudgeMap[datasetIndex][dataIndex] = px offset
     const pctNudge = {
-        2: { 0: 4, 1: 4, 2: 4 }  // Backdoor (red) on GPT-4o, GPT-4.1, Sonnet 4
+        2: { 0: 8, 1: 8, 2: 8 }  // Backdoor (red) on GPT-4o, GPT-4.1, Sonnet 4
     };
     const pctPlugin = {
         id: 'pctLabels',
@@ -921,7 +921,8 @@
             layout: { padding: { top: 20 } }
         },
         plugins: [makeValPlugin('harmCNLabels', '%', {
-            0: { 0: 4, 1: 4, 2: 4 }  // user_review (red) bars nudged right
+            0: { 0: 0, 1: -1, 2: -1 },  // user_review (red) bars nudged left
+            1: { 0: 10, 1: 10, 2: 10 }       // persona_memory (green) bars nudged right
         })]
     });
 
@@ -986,7 +987,10 @@
             },
             layout: { padding: { top: 20 } }
         },
-        plugins: [makeValPlugin('stealthCNLabels', '')]
+        plugins: [makeValPlugin('stealthCNLabels', '', {
+            0: { 0: -5, 1: -3, 2: -3 },  // user_review nudged left
+            1: { 0: 0, 1: 1, 2: 0 }       // persona_memory nudged right
+        })]
     });
 </script>
 
