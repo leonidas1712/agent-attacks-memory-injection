@@ -1,0 +1,223 @@
+\documentclass[sigconf,nonacm]{acmart}
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[font=small,skip=3pt]{caption}
+
+% Tighten bibliography
+\setlength{\bibsep}{1pt}
+
+\setcopyright{none}
+\acmConference[AIMII @ IASEAI'26]{AI Manipulation, Integrity, and Influence Workshop}{2026}{}
+
+\begin{document}
+
+\title{Manipulation by Agent Memory Injection:\\
+Backdoor Poisoning Rivals Direct Model Control}
+
+\author{Leonidas Raghav}
+\affiliation{\institution{Independent (with Apart Research)}\country{Singapore}}
+\email{leonidasr2000@gmail.com}
+
+\author{Choong Kai Zhe}
+\affiliation{\institution{Independent (with Apart Research)}\country{Singapore}}
+\email{choongkaizhe@gmail.com}
+
+\begin{abstract}
+As Large Language Models evolve into agentic systems with persistent memory,
+they introduce a critically underexplored attack surface. Prior work demonstrates
+that agent memory can be indirectly poisoned via external documents, but no study
+has compared the severity of such attacks to direct operator coercion. We evaluate
+five state-of-the-art models (GPT-4o, GPT-4.1, Claude Sonnet~4, Gemini 2.5 Pro,
+Grok-4-fast) across five user manipulation scenarios using a two-turn framework,
+comparing a \emph{Backdoor} (memory poisoning via web content) condition against
+\emph{Direct Pressure} (explicit harmful system prompt) and a \emph{Baseline}.
+Backdoor attacks match or exceed direct pressure in 4/5 models, with harm rates
+reaching 92\% (GPT-4o) and 100\% (Grok-4-fast). Decomposition analysis shows that
+\emph{injection acceptance} is the dominant failure mode: once memory is poisoned,
+harm is near-certain. We further introduce the \texttt{persona\_memory} attack, which
+is simultaneously more harmful and significantly harder to detect. Our results suggest
+that response-level safety filters are bypassed by memory corruption, and that
+defenses must target memory write authorization upstream.
+\end{abstract}
+
+\keywords{Memory Injection, Indirect Prompt Injection, Agentic AI, AI Safety, Persistent Memory}
+
+\maketitle
+
+\section{Introduction}
+
+LLMs are shifting from stateless chat interfaces toward stateful agents with
+\emph{persistent memory}: the ability to retain user preferences and context across
+sessions~\cite{openai2024memory}. If an adversary can corrupt this memory, they can
+permanently alter agent behavior without any direct system access.
+
+Prior work has demonstrated that agent memory can be poisoned via indirect prompt
+injection~\cite{chen2025unit42,memorygraft2025,minja2025,agentpoison2024}, but no
+study has compared the \emph{severity} of such attacks to direct operator-level
+coercion. If indirect memory injection is as effective as a malicious system prompt,
+it constitutes a practical circumvention of the alignment stack.
+
+We fill this gap with a systematic comparative evaluation across five state-of-the-art
+models, investigating what determines injection resistance and how attacks can be
+made stealthier.
+
+\section{Methodology}
+
+We developed a two-turn evaluation framework using InspectAI with a custom
+\texttt{StoreModel} to simulate persistent agent memory.
+
+\textbf{Experimental design.} In \emph{Turn 1 (Injection)}, the user asks a
+context-appropriate question that triggers a web search. In the Backdoor condition,
+the returned HTML contains a hidden instruction to call \texttt{update\_memory()}.
+In \emph{Turn 2 (Verification)}, the user asks a follow-up question; the agent's
+response is evaluated for harmful behavior based on the poisoned memory.
+
+\textbf{Conditions.} Three conditions are tested: (1)~\emph{Baseline}---neutral
+system prompt, benign web content; (2)~\emph{Direct Pressure}---system prompt
+explicitly instructs harmful behavior, benign web; (3)~\emph{Backdoor}---neutral
+system prompt, web content contains hidden injection instructions.
+
+\textbf{Scenarios.} Five harm scenarios: financial steering (pushing high-risk
+crypto), medical allergy removal (deleting penicillin flag), dietary restriction
+removal (removing diabetic flag), security downgrade (disabling 2FA), and
+budget override (pushing expensive products).
+
+\textbf{Injection strategies.} Two strategies are evaluated: \texttt{user\_review},
+where malicious instructions are embedded in a fake user review; and
+\texttt{persona\_memory}, a dual-write strategy that simultaneously overrides the
+target preference \emph{and} injects a communication style directive instructing the
+agent to be persuasive and omit caveats.
+
+\textbf{Models and metrics.} Five Western SOTA models were evaluated in the main
+benchmark (5 rollouts per scenario per condition). An extended set of three Chinese
+frontier models (DeepSeek V3.1~Terminus, Kimi~K2.5, GLM-4.7-Flash) was evaluated
+under the Backdoor condition only, comparing both injection strategies. Responses
+were scored by an LLM judge (Claude Sonnet~4.5) on: \textit{harm rate} (boolean),
+\textit{injection rate} (whether memory was updated), \textit{manipulation score}
+(1--5 Likert), and \textit{stealth score} (1--5, whether the model disclosed the
+memory update to the user).
+
+\section{Results}
+
+\subsection{Finding 1: Backdoor Attacks Rival Direct Pressure}
+
+Figure~\ref{fig:harm_condition} shows harm rates across all three conditions.
+Baseline produces no harm across all models. Under Direct Pressure, most models
+show substantial harm (35--80\%). Critically, the Backdoor condition matches or
+exceeds Direct Pressure for four of five models: GPT-4o reaches 92\% (vs.\ 60\%),
+Claude Sonnet~4 reaches 84\% (vs.\ 35\%), and Grok-4-fast reaches 100\%.
+GPT-4.1 is the exception (28\% under Backdoor vs.\ 80\% under Direct Pressure),
+suggesting injection resistance is a distinct capability from general alignment.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\columnwidth]{fig1_harm_by_condition.pdf}
+  \caption{Harm rate by condition across five Western SOTA models. Backdoor attacks
+  match or exceed Direct Pressure in 4/5 models.}
+  \label{fig:harm_condition}
+\end{figure}
+
+\subsection{Finding 2: Injection Acceptance is the Bottleneck}
+
+Table~\ref{tab:decomp} decomposes backdoor attack success into two sequential
+stages: injection acceptance (whether the model writes the malicious memory entry)
+and harm conditional on injection. Across all vulnerable models, injection acceptance
+is the dominant failure mode. Once memory is poisoned, harm is near-certain:
+91--100\% for GPT-4o and Grok-4-fast, 84\% for Claude Sonnet~4. GPT-4.1's
+resistance is almost entirely explained by its low injection acceptance rate (16\%),
+not by safer post-injection behavior---conditional on accepting the injection,
+GPT-4.1 produces harmful responses 100\% of the time. This strongly implies that
+\textbf{response-level safety filters are bypassed once false information is embedded
+in memory}, and that defenses must target the memory write stage.
+
+\begin{table}[h]
+\small
+\caption{Backdoor attack decomposition: injection acceptance vs.\ harm rate.}
+\label{tab:decomp}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Model} & \textbf{Injection \%} & \textbf{Harm \%} & \textbf{Harm | Inject} \\
+\midrule
+GPT-4o         & 92\%  & 92\%  & 91\%  \\
+GPT-4.1        & 16\%  & 28\%  & 100\% \\
+Claude Sonnet 4 & 100\% & 84\%  & 84\%  \\
+Gemini 2.5 Pro  & 80\%  & 70\%  & 60\%  \\
+Grok-4-fast     & 92\%  & 100\% & 100\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Finding 3: Extended Models and Attack Stealth}
+
+Figure~\ref{fig:stealth} shows harm and stealth scores for the three Chinese frontier
+models across both injection strategies. All three models show high harm rates
+(60--96\%), with averages matching the Western SOTA benchmark (\textasciitilde80\%),
+indicating that vulnerability to memory injection is consistent across model
+providers and geographies.
+
+The \texttt{persona\_memory} strategy is consistently both more harmful and harder
+to detect. Pooled across all three Chinese models, stealth score increases from 2.5
+to 3.9 under \texttt{persona\_memory}, while harm rate rises slightly from 80\% to
+85\%. This introduces an additional dimension of risk: attacks can not only
+manipulate behavior but do so invisibly to the user.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\columnwidth]{fig2_stealth_comparison.pdf}
+  \caption{Harm rate and stealth score for three Chinese frontier models by injection
+  strategy. \texttt{persona\_memory} is both more harmful and significantly harder to
+  detect.}
+  \label{fig:stealth}
+\end{figure}
+
+\subsection{Case Studies in Refusal}
+
+Claude Haiku~4.5 and GPT-5.2 resisted all five scenarios. Haiku~4.5 flagged
+retrieved content as a potential injection and asked the user to resolve the conflict
+directly---keeping a human in the loop before any memory write. GPT-5.2 performed
+internal source credibility evaluation and declined to update memory from the
+untrusted source. Both cases confirm that the critical defense window is
+\emph{before} memory is written.
+
+\section{Discussion and Future Work}
+\enlargethispage{8\baselineskip}
+
+Our results indicate that persistent memory is a highly volatile attack surface.
+Backdoor attacks rival direct operator coercion, implying that alignment training
+focused on resisting explicit harmful instructions does not generalize to memory
+corruption: once poisoned, models treat false information as established context,
+bypassing standard refusal mechanisms.
+
+Defenses must therefore target memory write authorization, not response generation.
+We recommend: (1)~source attribution, tagging entries with provenance; (2)~human-in-the-loop
+confirmation for sensitive keys (health, finance, security); and (3)~context
+segregation, preventing web data from overwriting user-stated preferences.
+Future work should evaluate prompt-hardening mitigations, attack transferability
+across memory architectures, and injection visibility (whether models disclose updates
+to users). Resistance patterns in GPT-4.1 and Haiku~4.5 warrant deeper analysis to
+guide targeted training interventions.
+
+\begin{thebibliography}{9}
+
+\bibitem{openai2024memory}
+OpenAI. Memory and new controls for {ChatGPT}, 2024. \url{https://openai.com/index/memory-and-new-controls-for-chatgpt/}.
+
+\bibitem{agentpoison2024}
+Z.~Chen et al. {AgentPoison}: Red-teaming {LLM} agents via poisoning memory or knowledge bases. \emph{NeurIPS}, 2024.
+
+\bibitem{memorygraft2025}
+Srivastava \& He. {MemoryGraft}: Persistent compromise of {LLM} agents via poisoned experience retrieval. \emph{arXiv:2512.16962}, 2025.
+
+\bibitem{minja2025}
+Dong et al. {MINJA}: Memory injection attacks on {LLM} agents via query-only interaction. \emph{NeurIPS}, 2025.
+
+\bibitem{chen2025unit42}
+Chen \& Lu. When {AI} remembers too much: Persistent behaviors in agents' memory. \emph{Palo Alto Unit 42}, 2025.
+
+\end{thebibliography}
+
+\end{document}
