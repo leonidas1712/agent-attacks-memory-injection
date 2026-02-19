@@ -18,3 +18,5 @@ abstract/context/
 poster/*
 !poster/drafts/
 !poster/poster.html
+!poster/apart_logo.png
+docs/
