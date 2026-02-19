@@ -20,3 +20,4 @@ poster/*
 !poster/poster.html
 !poster/apart_logo.png
 docs/
+sample_poisoned_documents/
