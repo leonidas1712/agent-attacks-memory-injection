@@ -11,6 +11,11 @@
 \setlength{\bibsep}{1pt}
 
 \setcopyright{none}
+
+% Match pdflatex/Overleaf uppercase headings under XeTeX
+\renewcommand\abstractname{ABSTRACT}
+\def\keywordsname{KEYWORDS}
+\renewcommand\refname{REFERENCES}
 \acmConference[AIMII @ IASEAI'26]{AI Manipulation, Integrity, and Influence Workshop}{2026}{}
 
 \begin{document}
@@ -65,7 +70,7 @@ We fill this gap with a systematic comparative evaluation across five state-of-t
 models, investigating what determines injection resistance and how attacks can be
 made stealthier.
 
-\section{Methodology}
+\section{METHODOLOGY}
 
 We developed a two-turn evaluation framework using InspectAI with a custom
 \texttt{StoreModel} to simulate persistent agent memory.
@@ -101,7 +106,7 @@ were scored by an LLM judge (Claude Sonnet~4.5) on: \textit{harm rate} (boolean)
 (1--5 Likert), and \textit{stealth score} (1--5, whether the model disclosed the
 memory update to the user).
 
-\section{Results}
+\section{RESULTS}
 
 \subsection{Finding 1: Backdoor Attacks Rival Direct Pressure}
 
@@ -115,7 +120,7 @@ suggesting injection resistance is a distinct capability from general alignment.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\columnwidth]{../results/charts/chart2_backdoor_vs_pressure.png}
+  \includegraphics[width=\columnwidth]{../results/charts/chart1_harm_by_condition.png}
   \caption{Harm rate by condition across five Western SOTA models. Backdoor attacks
   match or exceed Direct Pressure in 4/5 models.}
   \label{fig:harm_condition}
@@ -183,7 +188,7 @@ internal source credibility evaluation and declined to update memory from the
 untrusted source. Both cases confirm that the critical defense window is
 \emph{before} memory is written.
 
-\section{Discussion and Future Work}
+\section{DISCUSSION AND FUTURE WORK}
 \enlargethispage{8\baselineskip}
 
 Our results indicate that persistent memory is a highly volatile attack surface.

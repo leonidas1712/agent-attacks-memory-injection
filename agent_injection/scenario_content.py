@@ -4,6 +4,7 @@ Content generation for multi-scenario memory injection attacks.
 Provides parameterized injection templates that work with any scenario,
 and functions to build complete web search responses.
 """
+from __future__ import annotations
 
 from .scenarios import get_scenario, get_benign_pages, INJECTION_STRATEGIES
 from .stealth_strategies import STEALTH_BUILDERS
