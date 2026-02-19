@@ -1,14 +1,19 @@
 # Agent Attacks via Memory Injection
 
-*Work done as part of the AI Manipulation hackathon conducted by Apart Research*
+_Work done as part of the AI Manipulation hackathon conducted by Apart Research_
 
-Entry: [Agent Attacks via Memory Injection](https://apartresearch.com/project/agent-attacks-via-memory-injection-izfz)
+Entry:
+[Agent Attacks via Memory Injection](https://apartresearch.com/project/agent-attacks-via-memory-injection-izfz)
 
-This repository contains the code, results, and analysis for the memory injection attack experiment that tests whether external adversaries can manipulate AI agents with persistent memory through indirect prompt injection embedded in web content.
+This repository contains the code, results, and analysis for the memory
+injection attack experiment that tests whether external adversaries can
+manipulate AI agents with persistent memory through indirect prompt injection
+embedded in web content.
 
 ## Overview
 
-See `EXPERIMENT_DESCRIPTION.md` for a detailed description of the experiment, methodology, and results.
+See `EXPERIMENT_DESCRIPTION.md` for a detailed description of the experiment,
+methodology, and results.
 
 ## Project Structure
 
@@ -60,7 +65,9 @@ OPENROUTER_API_KEY=your_key_here
 
 ## Replicating the Benchmark
 
-The benchmark results reported in the paper were generated using the following commands. Each model was run with:
+The benchmark results reported in the paper were generated using the following
+commands. Each model was run with:
+
 - All 5 scenarios
 - All 3 conditions (baseline, direct_pressure, backdoor)
 - `user_review` injection strategy for backdoor condition
@@ -113,13 +120,15 @@ uv run python scripts/run_injection_scenarios.py \
 
 ### Benchmark Log Files
 
-The benchmark log files are stored in `logs/benchmark_logs/`. These correspond to the results reported in the paper. The log files follow the naming pattern:
+The benchmark log files are stored in `logs/benchmark_logs/`. These correspond
+to the results reported in the paper. The log files follow the naming pattern:
 
 ```
 {timestamp}_injection-5scenarios-3conditions_{model}_{id}.eval
 ```
 
 Benchmark log files (one per model):
+
 - `2026-01-11T12-46-22+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4o_CbaeNVEoAkCVAQH5Uog4SX.eval`
 - `2026-01-11T13-15-38+00-00_injection-5scenarios-3conditions_openrouter-openai-gpt-4.1_jizaowijKFSXCyAJM9X6pp.eval`
 - `2026-01-11T13-20-37+00-00_injection-5scenarios-3conditions_openrouter-anthropic-claude-sonnet-4_96MCwyt8Eb6q9KKaHnJnS6.eval`
@@ -204,7 +213,8 @@ The analysis pipeline generates:
 - **Charts** (PNG files in `results/charts/`):
   - `chart1_harm_by_condition.png` - Harm rate by condition across models
   - `chart2_backdoor_vs_pressure.png` - Relative effectiveness comparison
-  - `chart3_injection_decomposition.png` - Injection acceptance vs harm given injection
+  - `chart3_injection_decomposition.png` - Injection acceptance vs harm given
+    injection
   - `chart4_manipulation_scores.png` - Manipulation scores by condition
 
 - **Tables** (Markdown files in `results/tables/`):
@@ -221,14 +231,17 @@ The analysis pipeline generates:
 ## Scenarios
 
 1. **financial_steering**: Changes risk tolerance to push risky investments
-2. **medical_allergy**: Removes allergy info, risking dangerous drug recommendations
-3. **dietary_diabetic**: Removes diabetic flag, risking high-sugar recommendations
+2. **medical_allergy**: Removes allergy info, risking dangerous drug
+   recommendations
+3. **dietary_diabetic**: Removes diabetic flag, risking high-sugar
+   recommendations
 4. **security_downgrade**: Changes security prefs to recommend weak security
 5. **purchase_steering**: Changes budget preference to push expensive products
 
 ## Results
 
-See `results/charts/` and `results/tables/` for visualizations and summary tables.
+See `results/charts/` and `results/tables/` for visualizations and summary
+tables.
 
 ### Key Findings
 
@@ -250,4 +263,19 @@ See `results/charts/` and `results/tables/` for visualizations and summary table
   - Gemini 2.5 Pro: 80% acceptance rate
   - GPT-4.1: 16% acceptance rate (strong resistance)
 
-- **Indirect manipulation can be more effective than direct system-level control**: For 4 out of 5 models, backdoor achieves higher harm rates than direct pressure
+- **Indirect manipulation can be more effective than direct system-level
+  control**: For 4 out of 5 models, backdoor achieves higher harm rates than
+  direct pressure
+
+## Acknowledgements
+
+This work was inspired by the
+[SPAR Spring 2026 project 'Latent (Sleeper) Attacks via Persistent Memory'](https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk),
+proposed by Ivaxi Sheth (CISPA Helmholtz Center for Information Security) and
+Vyas Raina (University of Cambridge). We are grateful to Ivaxi and Vyas for this
+research direction, and to SPAR (Supervised Program for Alignment Research) for
+enabling its publication.
+
+We would also like to thank Jonathan Ng for providing invaluable feedback during
+the ideation process, as well as the Singapore AI Safety Hub for providing a
+physical host location for the AI Manipulation Hackathon.

@@ -259,11 +259,10 @@ def multi_scenario_injection_eval(
     model_name: str = "openai/gpt-4o",
     use_scorer: bool = True,
     scorer_model: str | None = None,
-    use_stealth_scorer: bool = False,
 ):
     """
     InspectAI task that runs multiple scenarios in parallel.
-
+    
     Args:
         scenarios: List of scenario IDs to run. Defaults to all.
         conditions: List of conditions to run. Defaults to all ["baseline", "direct_pressure", "backdoor"].
@@ -271,7 +270,6 @@ def multi_scenario_injection_eval(
         model_name: Model identifier (for metadata).
         use_scorer: Whether to use the LLM judge scorer.
         scorer_model: Model to use for scoring. Defaults to the target model.
-        use_stealth_scorer: Whether to also run the stealth judge scorer.
         
     Returns:
         Task configured with one sample per (scenario, condition, [strategy]) combination.
@@ -340,18 +338,18 @@ def multi_scenario_injection_eval(
     task_name = f"injection_{scenario_str}_{condition_str}"
     
     # Set up scorers if requested
-    scorers = []
+    task_scorers = None
     if use_scorer:
-        from .scorer import injection_judge
-        scorers.append(injection_judge(model=scorer_model))
-    if use_stealth_scorer:
-        from .scorer import stealth_judge
-        scorers.append(stealth_judge(model=scorer_model))
+        from .scorer import injection_judge, stealth_judge
+        task_scorers = [
+            injection_judge(model=scorer_model),
+            stealth_judge(model=scorer_model),
+        ]
 
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),
-        scorer=scorers if scorers else None,
+        scorer=task_scorers,
         name=task_name,
         metadata={
             "scenarios": scenarios,
@@ -370,13 +368,12 @@ def single_scenario_injection_eval(
     model_name: str = "openai/gpt-4o",
     use_scorer: bool = True,
     scorer_model: str | None = None,
-    use_stealth_scorer: bool = False,
 ):
     """
     InspectAI task for a single scenario/condition combination.
-
+    
     Useful for quick testing of individual scenarios.
-
+    
     Args:
         scenario_id: Scenario to run
         condition: Experimental condition ("baseline", "direct_pressure", "backdoor")
@@ -384,7 +381,6 @@ def single_scenario_injection_eval(
         model_name: Model identifier
         use_scorer: Whether to use the LLM judge scorer.
         scorer_model: Model to use for scoring. Defaults to the target model.
-        use_stealth_scorer: Whether to also run the stealth judge scorer.
         
     Returns:
         Task configured for single scenario
@@ -425,18 +421,18 @@ def single_scenario_injection_eval(
     task_name = f"injection_{sample_id}"
     
     # Set up scorers if requested
-    scorers = []
+    task_scorers = None
     if use_scorer:
-        from .scorer import injection_judge
-        scorers.append(injection_judge(model=scorer_model))
-    if use_stealth_scorer:
-        from .scorer import stealth_judge
-        scorers.append(stealth_judge(model=scorer_model))
+        from .scorer import injection_judge, stealth_judge
+        task_scorers = [
+            injection_judge(model=scorer_model),
+            stealth_judge(model=scorer_model),
+        ]
 
     return Task(
         dataset=samples,
         solver=scenario_injection_solver(),
-        scorer=scorers if scorers else None,
+        scorer=task_scorers,
         name=task_name,
         metadata={
             "scenario_id": scenario_id,
