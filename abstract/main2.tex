@@ -154,7 +154,14 @@ Our results indicate that persistent memory is a highly volatile attack surface.
 \textbf{Limitations.} Our memory abstraction (a key--value store serialized into the system prompt) may not capture all production dynamics such as RAG-based retrieval or ranking heuristics. Empty verification-turn responses were conservatively scored as non-harmful, so reported harm rates may be lower bounds. The Chinese-model evaluation covers only the Backdoor condition, and we do not implement or test defensive mitigations. Future work should address multi-session persistence, attack transferability across memory architectures, and defense evaluation.
 
 \begin{acks}
-This work was inspired by the SPAR Spring 2026 project \href{https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk}{`Latent (Sleeper) Attacks via Persistent Memory'}, proposed by Ivaxi Sheth (CISPA) and Vyas Raina (Cambridge). We thank Ivaxi and Vyas for the research direction, SPAR for enabling publication, Jonathan Ng for feedback during ideation, and the Singapore AI Safety Hub for hosting the AI Manipulation Hackathon.
+This work was inspired by the SPAR Spring 2026 project
+\href{https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk}{`Latent (Sleeper) Attacks via Persistent Memory'},
+proposed by Ivaxi Sheth (CISPA Helmholtz Center for Information Security) and
+Vyas Raina (University of Cambridge). We are grateful to Ivaxi and Vyas for this
+research direction, and to SPAR (Supervised Program for Alignment Research) for
+enabling its publication. We would also like to thank Jonathan Ng for providing
+invaluable feedback during the ideation process, as well as the Singapore AI
+Safety Hub for providing a physical host location for the AI Manipulation Hackathon.
 \end{acks}
 
 \begin{thebibliography}{9}
