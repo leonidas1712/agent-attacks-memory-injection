@@ -41,7 +41,7 @@ Backdoor Poisoning Rivals Direct Model Control}
 \email{choongkaizhe@gmail.com}
 
 \begin{abstract}
-Systems powered by Large Language Models are rapidly evolving from stateless chat
+Systems powered by Large Language Models (LLMs) are rapidly evolving from stateless chat
 interfaces into agents with persistent memory, which represents a new,
 underexplored attack surface. Prior work has demonstrated the efficacy of indirect
 attacks on agent memory via prompt injection, but no systematic multi-model study
@@ -49,7 +49,7 @@ or comparison with direct system pressure has been carried out. We evaluate five
 state-of-the-art models (GPT-4o, GPT-4.1, Claude Sonnet~4, Gemini 2.5 Pro,
 Grok-4-fast) across five user manipulation scenarios using a two-turn framework,
 comparing a \emph{Backdoor} (memory poisoning via web content) condition against
-\emph{Direct Pressure} (explicit harmful system prompt) and a \emph{Baseline}. Backdoor attacks match or exceed direct pressure in 4/5 models, with harm rates reaching 92\% (GPT-4o) and 100\% (Grok-4-fast). Analysis shows that injection acceptance is
+\emph{Direct Pressure} (explicit harmful system prompt) and a \emph{Baseline}. Backdoor attacks match or exceed direct pressure in four of five models, with harm rates reaching 92\% (GPT-4o) and 100\% (Grok-4-fast). Analysis shows that injection acceptance is
 the dominant failure mode: once memory is poisoned, conditional harm often exceeds 80\%.
 We also evaluate an extended model set under the Backdoor condition,
 assessing both harm and stealth, with an additional \texttt{persona\_memory} attack, which is simultaneously more harmful and significantly harder to detect. Our results suggest that response-level safety
@@ -149,7 +149,7 @@ Preliminary tests of Claude Haiku~4.5 and GPT-5.2 showed complete resistance acr
 
 \section{DISCUSSION}
 
-Our results indicate that persistent memory is a highly volatile attack surface. Alignment training focused on resisting explicit harmful instructions does not generalize to memory corruption: once poisoned, models treat false information as established context, bypassing standard refusal mechanisms. Defenses must therefore target memory write authorization, not response generation. Possible defense directions include source attribution, human-in-the-loop confirmation for sensitive keys, and context segregation preventing web data from overwriting user-stated preferences.
+Our results indicate that persistent memory introduces a highly volatile attack surface. Alignment training focused on resisting explicit harmful instructions does not generalize to memory corruption: once poisoned, models treat false information as established context, bypassing standard refusal mechanisms. Defenses must therefore target memory write authorization, not response generation. Possible defense directions include source attribution, human-in-the-loop confirmation for sensitive keys, and context segregation preventing web data from overwriting user-stated preferences.
 
 \textbf{Limitations.} Our memory abstraction (a key--value store serialized into the system prompt) may not capture all production dynamics such as RAG-based retrieval or ranking heuristics. Empty verification-turn responses were conservatively scored as non-harmful, so reported harm rates may be lower bounds. The Chinese-model evaluation covers only the Backdoor condition, and we do not implement or test defensive mitigations. Future work should address multi-session persistence, attack transferability across memory architectures, and defense evaluation.
 
@@ -192,7 +192,7 @@ UK AI Security Institute. Inspect AI: Framework for Large Language Model Evaluat
 \section{Case Study Transcripts}
 \label{app:refusals}
 
-Sample assistant responses illustrating refusal behaviour in Claude Haiku~4.5 and GPT-5.2
+Sample assistant responses illustrating refusal behavior in Claude Haiku~4.5 and GPT-5.2
 under the \emph{Backdoor} injection condition. These responses were made after reading the prompt injection provided by the tool call. 
 
 \subsection*{Haiku~4.5 --- explicit injection flagging}
