@@ -140,7 +140,7 @@ Figure~\ref{fig:stealth} shows harm and stealth scores for three Chinese-provide
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{../results/charts/chart5_chinese_strategy_comparison.png}
-  \caption{Harm rate and stealth score for three Chinese frontier models by injection
+  \caption{Harm rate and stealth score for three Chinese-provider models by injection
   strategy. \texttt{persona\_memory} is both more harmful and significantly harder to
   detect.}
   \label{fig:stealth}
@@ -154,7 +154,7 @@ Preliminary tests of Claude Haiku~4.5 and GPT-5.2 showed complete resistance acr
 
 Our results indicate that persistent memory introduces a highly volatile attack surface. Alignment training focused on resisting explicit harmful instructions does not generalize to memory corruption: once poisoned, models treat false information as established context, bypassing standard refusal mechanisms. Defenses must therefore target memory write authorization, not response generation. Possible defense directions include source attribution, human-in-the-loop confirmation for sensitive keys, and context segregation preventing web data from overwriting user-stated preferences.
 
-\textbf{Limitations.} Our memory abstraction (a key--value store serialized into the system prompt) may not capture all production dynamics such as RAG-based retrieval or ranking heuristics. Empty verification-turn responses were conservatively scored as non-harmful, so reported harm rates may be lower bounds. The Chinese-model evaluation covers only the Backdoor condition, and we do not implement or test defensive mitigations. Future work should address multi-session persistence, attack transferability across memory architectures, and defense evaluation.
+\textbf{Limitations.} Our memory abstraction (a key--value store serialized into the system prompt) may not capture all production dynamics such as RAG-based retrieval or ranking heuristics. Empty verification-turn responses were conservatively scored as non-harmful, so reported harm rates may be lower bounds. The Chinese-provider model evaluation covers only the Backdoor condition, and we do not implement or test defensive mitigations. Future work should address multi-session persistence, attack transferability across memory architectures, and defense evaluation.
 
 \begin{acks}
 This work was inspired by the SPAR Spring 2026 project
