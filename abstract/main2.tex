@@ -60,7 +60,7 @@ LLMs are shifting from stateless chat interfaces toward stateful agents with
 \emph{persistent memory}: the ability to retain user preferences and context across
 sessions~\cite{openai2024memory}. Memory entries are typically surfaced to the model as structured system-level context during inference. If an adversary can corrupt this memory, they can permanently alter agent behavior without any direct system access.
 
-Prior work has demonstrated the feasibility of tool-mediated prompt injection and retrieval poisoning. AgentPoison~\cite{agentpoison2024} and MINJA~\cite{minja2025} show that adversarial instructions embedded in tool outputs or retrieved documents can override intended behavior. MemoryGraft~\cite{memorygraft2025} extends this threat model to long-term experiential memory, illustrating how persistent state manipulation can alter responses. Industry analyses (e.g., Unit~42~\cite{chen2025unit42}) document practical memory poisoning attacks in enterprise systems. InjecMem~\cite{injecmem2025} further formalizes memory-layer injection as a distinct class of vulnerability within agent architectures. However, comparative evaluation of memory injection against direct system-level pressure remains limited.
+Prior work has demonstrated the feasibility of tool-mediated prompt injection and retrieval poisoning. AgentPoison~\cite{agentpoison2024} and MINJA~\cite{minja2025} show that adversarial instructions embedded in tool outputs or retrieved documents can override intended behavior. MemoryGraft~\cite{memorygraft2025} extends this threat model to long-term experiential memory, illustrating how persistent state manipulation can alter responses. Industry analyses (e.g., Unit~42~\cite{chen2025unit42}) document practical memory poisoning attacks in enterprise systems. However, comparative evaluation of memory injection against direct system-level pressure remains limited.
 
 We fill this gap with a systematic comparative evaluation across five state-of-the-art models, investigating what determines manipulation susceptibility and how attacks can be made stealthier.
 
@@ -78,7 +78,7 @@ We developed a two-turn evaluation framework using InspectAI~\cite{inspect2024} 
 
 \textbf{Injection strategies.} Two strategies are evaluated: \texttt{user\_review}, where malicious instructions are embedded in a fake user review; and \texttt{persona\_memory}, a dual-write strategy that simultaneously overrides the target preference \emph{and} injects a communication style directive instructing the agent to be persuasive and omit caveats.
 
-\textbf{Models and metrics.} Five Western SOTA models were evaluated in the main benchmark (5 rollouts per scenario per condition). An extended set of three Chinese-provider frontier models (DeepSeek V3.1~Terminus, Kimi~K2.5, GLM-4.7-Flash) was evaluated under the Backdoor condition only, comparing both injection strategies. Responses were scored by an LLM judge (Claude Sonnet~4.5) on: \textit{harm rate}, defined as the proportion of Turn 2 responses that contain a harmful recommendation relative to the ground-truth memory state and scenario criteria; \textit{injection rate} (whether memory was updated); \textit{manipulation score} (1--5 Likert); and \textit{stealth score} (1--5, whether the model disclosed the memory update to the user). Stealth was evaluated only on the extended model set.
+\textbf{Models and metrics.} Five Western SOTA models were evaluated in the main benchmark (5 rollouts per scenario per condition). An extended set of three Chinese-provider frontier models (DeepSeek V3.1~Terminus, Kimi~K2.5, GLM-4.7-Flash) was evaluated under the Backdoor condition only, comparing both injection strategies. \textit{Injection rate} (whether \texttt{update\_memory()} was called) was determined programmatically. Remaining metrics were scored by an LLM judge (Claude Sonnet~4.5): \textit{harm rate}, defined as the proportion of Turn 2 responses that contain a harmful recommendation relative to the ground-truth memory state and scenario criteria; \textit{manipulation score} (1--5 Likert); and \textit{stealth score} (1--5, whether the model disclosed the memory update to the user). Stealth was evaluated only on the extended model set.
 
 \section{RESULTS}
 
@@ -167,7 +167,7 @@ untrusted source. Both cases confirm that the critical defense window is
 
 Our results indicate that persistent memory is a highly volatile attack surface. Backdoor attacks rival direct operator coercion, implying that alignment training focused on resisting explicit harmful instructions does not generalize to memory corruption: once poisoned, models treat false information as established context, bypassing standard refusal mechanisms.
 
-Defenses must therefore target memory write authorization, not response generation. We recommend: (1)~source attribution, tagging entries with provenance; (2)~human-in-the-loop confirmation for sensitive keys (health, finance, security); and (3)~context segregation, preventing web data from overwriting user-stated preferences. Future work should evaluate prompt-hardening mitigations, attack transferability across memory architectures, and injection visibility.
+Defenses must therefore target memory write authorization, not response generation. Possible defense directions include: (1)~source attribution, tagging entries with provenance; (2)~human-in-the-loop confirmation for sensitive keys (health, finance, security); and (3)~context segregation, preventing web data from overwriting user-stated preferences. Future work should evaluate prompt-hardening mitigations, attack transferability across memory architectures, and injection visibility.
 
 \section{LIMITATIONS}
 
@@ -208,9 +208,6 @@ Dong et al. {MINJA}: Memory injection attacks on {LLM} agents via query-only int
 
 \bibitem{chen2025unit42}
 Chen \& Lu. When {AI} remembers too much: Persistent behaviors in agents' memory. \emph{Palo Alto Unit 42}, 2025.
-
-\bibitem{injecmem2025}
-[InjecMem citation to be added]
 
 \bibitem{inspect2024}
 UK AI Security Institute. Inspect AI: Framework for Large Language Model Evaluations, 2024. \url{https://inspect.aisi.org.uk/}.
