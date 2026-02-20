@@ -22,8 +22,8 @@
 
 \begin{document}
 
-\title{Agent Attacks via Memory Injection:\\
-Backdoor Vulnerabilities in Persistent LLM Memory Systems}
+\title{Manipulation by Agent Memory Injection:\\
+Backdoor Poisoning Rivals Direct Model Control}
 
 \author{Leonidas Raghav}
 \affiliation{\institution{Independent (with Apart Research)}\country{Singapore}}
@@ -34,7 +34,26 @@ Backdoor Vulnerabilities in Persistent LLM Memory Systems}
 \email{choongkaizhe@gmail.com}
 
 \begin{abstract}
-Persistent memory enables large language models (LLMs) to maintain user state across interactions, but it also introduces a new attack surface: memory-layer manipulation. We evaluate a proof-of-concept memory injection attack in which adversarial content embedded within tool outputs (e.g., web search results) is written into persistent memory and later influences model behavior. Across five realistic scenarios and three experimental conditions, we find that backdoor-style memory injection can induce harmful recommendations at rates comparable to or exceeding explicit system-level pressure in several frontier models. Harm rate is defined as the proportion of Turn 2 responses that contain a harmful recommendation relative to the ground-truth memory state and scenario criteria. Across susceptible models, conditional harm probability given successful injection exceeds 90\%, suggesting that injection acceptance is the primary bottleneck. We additionally evaluate a secondary set of Chinese-language models under the Backdoor condition, assessing both harm and stealth characteristics. Our results indicate that persistent memory introduces systemic vulnerabilities not captured by single-session prompt injection analyses.
+Systems powered by Large Language Models are rapidly evolving from stateless chat
+interfaces into agents with persistent memory, which represents a new,
+underexplored attack surface. Prior work has demonstrated the efficacy of indirect
+attacks on agent memory via prompt injection, but no systematic multi-model study
+or comparison with direct system pressure has been carried out. We evaluate five
+state-of-the-art models (GPT-4o, GPT-4.1, Claude Sonnet~4, Gemini 2.5 Pro,
+Grok-4-fast) across five user manipulation scenarios using a two-turn framework,
+comparing a \emph{Backdoor} (memory poisoning via web content) condition against
+\emph{Direct Pressure} (explicit harmful system prompt) and a \emph{Baseline}.
+Harm rate is defined as the proportion of Turn~2 responses containing a harmful
+recommendation relative to the ground-truth memory state. Backdoor attacks match
+or exceed direct pressure in 4/5 models, with harm rates reaching 92\% (GPT-4o)
+and 100\% (Grok-4-fast). Decomposition analysis shows that injection acceptance is
+the dominant failure mode: once memory is poisoned, conditional harm exceeds 90\%.
+We additionally evaluate an extended model set under the Backdoor condition,
+assessing both harm and stealth. We further introduce the
+\texttt{persona\_memory} attack, which is simultaneously more harmful and
+significantly harder to detect. Our results suggest that response-level safety
+filters are bypassed by memory corruption, and that defenses must target memory
+write authorization upstream.
 \end{abstract}
 
 \keywords{Memory Injection, Indirect Prompt Injection, Agentic AI, AI Safety, Persistent Memory}
@@ -204,7 +223,7 @@ UK AI Security Institute. Inspect AI: Framework for Large Language Model Evaluat
 
 \end{thebibliography}
 
-\newpage
+\clearpage
 \appendix
 
 \section{Case Study Transcripts}
