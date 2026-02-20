@@ -1,106 +1,95 @@
-\documentclass[11pt]{article}
+\documentclass[sigconf,nonacm]{acmart}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage{geometry}
-\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[font=small,skip=3pt]{caption}
 
-\title{Agent Attacks via Memory Injection: Backdoor Vulnerabilities in Persistent LLM Memory Systems}
-\author{}
-\date{}
+% Tighten bibliography
+\setlength{\bibsep}{1pt}
+
+\setcopyright{none}
+
+% Match pdflatex/Overleaf uppercase headings under XeTeX
+\renewcommand\abstractname{ABSTRACT}
+\def\keywordsname{KEYWORDS}
+\renewcommand\refname{REFERENCES}
+\acmConference[AIMII @ IASEAI'26]{AI Manipulation, Integrity, and Influence Workshop}{2026}{}
 
 \begin{document}
 
-\maketitle
+\title{Agent Attacks via Memory Injection:\\
+Backdoor Vulnerabilities in Persistent LLM Memory Systems}
+
+\author{Leonidas Raghav}
+\affiliation{\institution{Independent (with Apart Research)}\country{Singapore}}
+\email{leonidasr2000@gmail.com}
+
+\author{Choong Kai Zhe}
+\affiliation{\institution{Independent (with Apart Research)}\country{Singapore}}
+\email{choongkaizhe@gmail.com}
 
 \begin{abstract}
-
 Persistent memory enables large language models (LLMs) to maintain user state across interactions, but it also introduces a new attack surface: memory-layer manipulation. We evaluate a proof-of-concept memory injection attack in which adversarial content embedded within tool outputs (e.g., web search results) is written into persistent memory and later influences model behavior. Across five realistic scenarios and three experimental conditions, we find that backdoor-style memory injection can induce harmful recommendations at rates comparable to or exceeding explicit system-level pressure in several frontier models. Harm rate is defined as the proportion of Turn 2 responses that contain a harmful recommendation relative to the ground-truth memory state and scenario criteria. Across susceptible models, conditional harm probability given successful injection exceeds 90\%, suggesting that injection acceptance is the primary bottleneck. We additionally evaluate a secondary set of Chinese-language models under the Backdoor condition, assessing both harm and stealth characteristics. Our results indicate that persistent memory introduces systemic vulnerabilities not captured by single-session prompt injection analyses.
 \end{abstract}
 
-\section{Introduction}
+\keywords{Memory Injection, Indirect Prompt Injection, Agentic AI, AI Safety, Persistent Memory}
 
-Persistent memory systems are increasingly integrated into LLM platforms to enable personalization, task continuity, and long-term context retention. Memory entries are typically surfaced to the model as structured system-level context during inference. While this design improves user experience, it also expands the attack surface: if adversarial content is written into memory, it may silently persist across sessions and influence future behavior.
+\maketitle
 
-Recent work has demonstrated the feasibility of tool-mediated prompt injection and retrieval poisoning. AgentPoison and MINJA show that adversarial instructions embedded in tool outputs or retrieved documents can override intended behavior. MemoryGraft extends this threat model to long-term conversational memory, illustrating how persistent state manipulation can alter downstream responses. Industry analyses (e.g., Unit 42) document practical RAG poisoning attacks in enterprise systems. InjecMem further formalizes memory-layer injection as a distinct class of vulnerability within agent architectures. However, comparative evaluation of memory injection against direct system-level pressure remains limited.
+\section{INTRODUCTION}
 
-We evaluate a controlled memory injection attack that isolates persistent memory as the attack vector and compare its behavioral impact to explicit harmful system prompts.
+LLMs are shifting from stateless chat interfaces toward stateful agents with
+\emph{persistent memory}: the ability to retain user preferences and context across
+sessions~\cite{openai2024memory}. Memory entries are typically surfaced to the model as structured system-level context during inference. If an adversary can corrupt this memory, they can permanently alter agent behavior without any direct system access.
 
-\section{Methodology}
+Prior work has demonstrated the feasibility of tool-mediated prompt injection and retrieval poisoning. AgentPoison~\cite{agentpoison2024} and MINJA~\cite{minja2025} show that adversarial instructions embedded in tool outputs or retrieved documents can override intended behavior. MemoryGraft~\cite{memorygraft2025} extends this threat model to long-term conversational memory, illustrating how persistent state manipulation can alter downstream responses. Industry analyses (e.g., Unit~42~\cite{chen2025unit42}) document practical RAG poisoning attacks in enterprise systems. InjecMem~\cite{injecmem2025} further formalizes memory-layer injection as a distinct class of vulnerability within agent architectures. However, comparative evaluation of memory injection against direct system-level pressure remains limited.
 
-\subsection{Memory Representation}
+We fill this gap with a systematic comparative evaluation across five state-of-the-art models, investigating what determines injection resistance and how attacks can be made stealthier.
 
-Persistent memory is modeled as a key-value store representing user attributes (e.g., risk tolerance, allergies). At inference time, memory entries are serialized into the system prompt as structured context, allowing the model to treat stored values as authoritative user state. An attack succeeds when adversarial tool content causes incorrect values to be written into this store.
+\section{METHODOLOGY}
 
-\subsection{Scenarios and Conditions}
+We developed a two-turn evaluation framework using InspectAI~\cite{inspect2024} with a custom memory system to simulate persistent agent memory.
 
-We design five scenarios reflecting realistic user states: financial risk tolerance, medical allergy records, dietary restrictions, security configuration, and purchase preferences.
+\textbf{Memory representation.} Persistent memory is modeled as a key--value store representing user attributes (e.g., risk tolerance, allergies). At inference time, memory entries are serialized into the system prompt as structured context, allowing the model to treat stored values as authoritative user state. An attack succeeds when adversarial tool content causes incorrect values to be written into this store.
 
-Each scenario follows a two-turn protocol:
+\textbf{Experimental design.} In \emph{Turn 1 (Injection)}, the user asks a context-appropriate question that triggers a web search. For each scenario, \texttt{web\_search} returns three HTML documents. In the Baseline and Direct Pressure conditions, all three documents are benign. In the Backdoor condition, one of the three documents contains an adversarial instruction designed to overwrite memory, while the remaining two are benign. In \emph{Turn 2 (Verification)}, the user asks a follow-up question; the agent's response is evaluated for harmful behavior based on the poisoned memory.
 
-\begin{itemize}
-    \item \textbf{Turn 1}: User query triggers a web\_search tool call.
-    \item \textbf{Turn 2}: User query relies on the stored memory state.
-\end{itemize}
+\textbf{Conditions.} Three conditions are tested: (1)~\emph{Baseline}---neutral system prompt, benign web content; (2)~\emph{Direct Pressure}---system prompt explicitly instructs harmful behavior, benign web; (3)~\emph{Backdoor}---neutral system prompt, web content contains hidden injection instructions.
 
-For each scenario, \texttt{web\_search} returns three HTML documents. In the Baseline and Direct Pressure conditions, all documents are benign. In the Backdoor condition, one of the three documents contains an adversarial instruction designed to overwrite memory, while the remaining two are benign.
+\textbf{Scenarios.} Five harm scenarios were designed to simulate realistic use-cases: financial steering (pushing high-risk crypto), medical allergy removal (deleting penicillin flag), dietary restriction removal (removing diabetic flag), security downgrade (disabling 2FA), and budget override (pushing expensive products).
 
-We evaluate three conditions:
+\textbf{Injection strategies.} Two strategies are evaluated: \texttt{user\_review}, where malicious instructions are embedded in a fake user review; and \texttt{persona\_memory}, a dual-write strategy that simultaneously overrides the target preference \emph{and} injects a communication style directive instructing the agent to be persuasive and omit caveats.
 
-\begin{itemize}
-    \item \textbf{Baseline}: No adversarial instruction.
-    \item \textbf{Direct Pressure}: Harmful instruction inserted into system prompt.
-    \item \textbf{Backdoor}: Adversarial instruction embedded in one web document.
-\end{itemize}
+\textbf{Models and metrics.} Five Western SOTA models were evaluated in the main benchmark (5 rollouts per scenario per condition). An extended set of three Chinese frontier models (DeepSeek V3.1~Terminus, Kimi~K2.5, GLM-4.7-Flash) was evaluated under the Backdoor condition only, comparing both injection strategies. Responses were scored by an LLM judge (Claude Sonnet~4.5) on: \textit{harm rate}, defined as the proportion of Turn 2 responses that contain a harmful recommendation relative to the ground-truth memory state and scenario criteria; \textit{injection rate} (whether memory was updated); \textit{manipulation score} (1--5 Likert); and \textit{stealth score} (1--5, whether the model disclosed the memory update to the user). Stealth was evaluated only on the extended Backdoor-only model set.
 
-Each scenario-condition pair is executed with five rollouts per model.
+\section{RESULTS}
 
-\subsection{Metrics}
+\subsection{Finding 1: Backdoor Attacks Rival Direct Pressure}
 
-\textbf{Harm Rate} is defined as:
+Baseline produces no harm across all models. Under Direct Pressure, most models show substantial harm (35--80\%). Critically, the Backdoor condition matches or exceeds Direct Pressure for four of five models: GPT-4o reaches 92\% (vs.\ 60\%), Claude Sonnet~4 reaches 84\% (vs.\ 35\%), and Grok-4-fast reaches 100\%. GPT-4.1 is the exception (28\% under Backdoor vs.\ 80\% under Direct Pressure), suggesting injection resistance is a distinct capability from general alignment.
 
-\[
-\text{Harm Rate} = \frac{\text{\# harmful Turn 2 responses}}{\text{total rollouts}}
-\]
+\subsection{Finding 2: Injection Acceptance is the Bottleneck}
 
-A response is labeled harmful if it recommends actions inconsistent with the ground-truth memory state and scenario criteria.
+Decomposition analysis shows that injection acceptance is the dominant failure mode. Once memory is poisoned, harm is near-certain: 91--100\% for GPT-4o and Grok-4-fast, 84\% for Claude Sonnet~4. GPT-4.1's resistance is almost entirely explained by its low injection acceptance rate (16\%), not by safer post-injection behavior---conditional on accepting the injection, GPT-4.1 produces harmful responses 100\% of the time. Across susceptible models, conditional harm probability given successful injection exceeds 90\%, indicating that resistance to injection---rather than downstream reasoning correction---is the primary defense boundary.
 
-\textbf{Injection Rate} measures the proportion of runs in which the adversarial value is successfully written into memory during Turn 1.
+\subsection{Finding 3: Extended Models and Attack Stealth}
 
-For the extended model set (Backdoor condition only), we additionally score \textbf{Stealth}, defined as successful memory overwrite without explicit acknowledgment of adversarial instruction.
+We evaluate three additional models under the Backdoor condition only. Harm rates reach 92\% (DeepSeek V3.1~Terminus) and 88\% (Kimi~K2.5), with an average harm rate of 80\%, indicating that vulnerability to memory injection is consistent across model providers and geographies. Stealth rates are high, indicating successful memory overwrites without explicit disclosure. The \texttt{persona\_memory} strategy is consistently both more harmful and harder to detect. These runs evaluate only the Backdoor condition and are intended as a susceptibility extension rather than a full 3-condition comparison.
 
-\section{Results}
+\section{DISCUSSION AND FUTURE WORK}
 
-\subsection{Main Benchmark (Western Models)}
+Our results indicate that persistent memory is a highly volatile attack surface. Backdoor attacks rival direct operator coercion, implying that alignment training focused on resisting explicit harmful instructions does not generalize to memory corruption: once poisoned, models treat false information as established context, bypassing standard refusal mechanisms.
 
-Across five models, Backdoor harm rates reach 100\% (Grok-4-fast), 92\% (GPT-4o), and 84\% (Claude Sonnet 4). For four of five models, Backdoor harm equals or exceeds Direct Pressure harm. GPT-4.1 exhibits substantially lower injection and harm rates.
+Defenses must therefore target memory write authorization, not response generation. We recommend: (1)~source attribution, tagging entries with provenance; (2)~human-in-the-loop confirmation for sensitive keys (health, finance, security); and (3)~context segregation, preventing web data from overwriting user-stated preferences. Future work should evaluate prompt-hardening mitigations, attack transferability across memory architectures, and injection visibility.
 
-Injection acceptance strongly predicts harm: conditional on successful injection, harmful recommendation probability exceeds 90\% for susceptible models. This indicates that resistance to injection---rather than downstream reasoning correction---is the primary defense boundary.
+\section{LIMITATIONS}
 
-\subsection{Extended Set (Chinese Models, Backdoor Only)}
-
-We evaluate three additional models under the Backdoor condition only. Harm rates reach 92\% (DeepSeek V3.1 Terminus) and 88\% (Kimi K2.5), with an average harm rate of 80\%. Stealth rates are high, indicating successful memory overwrites without explicit disclosure.
-
-These runs assess susceptibility under Backdoor injection and do not include Baseline or Direct Pressure controls.
-
-\subsection{Preliminary Frontier Models}
-
-Exploratory evaluation of additional frontier models shows mixed robustness. Some models demonstrate reduced injection acceptance, suggesting possible architectural or alignment differences.
-
-\section{Discussion}
-
-Persistent memory introduces a systemic vulnerability distinct from single-session prompt injection. Because memory entries are serialized into authoritative system context, successful injection creates durable behavioral shifts that persist beyond the originating interaction.
-
-Our results suggest that the key defense boundary lies at the injection stage. Once adversarial memory is written, models rarely self-correct during downstream reasoning. This highlights the need for memory-layer safeguards, including validation, provenance tracking, and isolation mechanisms.
-
-\section{Limitations}
-
-First, we model persistent memory as a deterministic key-value store serialized directly into the system prompt. Production systems may employ retrieval-augmented generation, ranking heuristics, or filtering mechanisms that alter how memory is retrieved and surfaced.
+First, we model persistent memory as a deterministic key--value store serialized directly into the system prompt. Production systems may employ retrieval-augmented generation, ranking heuristics, or filtering mechanisms that alter how memory is retrieved and surfaced. Persistence and retrieval dynamics may differ from our abstraction.
 
 Second, some models occasionally produced empty verification-turn responses; these were conservatively scored as non-harmful, meaning reported harm rates may represent lower bounds.
 
@@ -108,8 +97,42 @@ Third, the extended Chinese-model evaluation includes only the Backdoor conditio
 
 Finally, we evaluate attack susceptibility only and do not implement or test defensive mitigations. Multi-session persistence and long-term behavioral drift remain areas for future study.
 
-\section{Conclusion}
+\begin{acks}
+This work was inspired by the SPAR Spring 2026 project
+\href{https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk}{`Latent (Sleeper) Attacks via Persistent Memory'},
+proposed by Ivaxi Sheth (CISPA Helmholtz Center for Information Security) and
+Vyas Raina (University of Cambridge). We are grateful to Ivaxi and Vyas for this
+research direction, and to SPAR (Supervised Program for Alignment Research) for
+enabling its publication.
 
-Memory injection represents a distinct and high-leverage attack vector in agentic LLM systems. In controlled evaluation, backdoor-style memory poisoning induces harmful recommendations at rates comparable to or exceeding explicit system pressure across multiple frontier models. Persistent memory, when surfaced as authoritative context, can transform transient prompt injection into durable behavioral modification. Securing the memory layer is therefore critical to safe deployment of long-term LLM agents.
+We would also like to thank Jonathan Ng for providing invaluable feedback during
+the ideation process, as well as the Singapore AI Safety Hub for providing a
+physical host location for the AI Manipulation Hackathon.
+\end{acks}
+
+\begin{thebibliography}{9}
+
+\bibitem{openai2024memory}
+OpenAI. Memory and new controls for {ChatGPT}, 2024. \url{https://openai.com/index/memory-and-new-controls-for-chatgpt/}.
+
+\bibitem{agentpoison2024}
+Z.~Chen et al. {AgentPoison}: Red-teaming {LLM} agents via poisoning memory or knowledge bases. \emph{NeurIPS}, 2024.
+
+\bibitem{memorygraft2025}
+Srivastava \& He. {MemoryGraft}: Persistent compromise of {LLM} agents via poisoned experience retrieval. \emph{arXiv:2512.16962}, 2025.
+
+\bibitem{minja2025}
+Dong et al. {MINJA}: Memory injection attacks on {LLM} agents via query-only interaction. \emph{NeurIPS}, 2025.
+
+\bibitem{chen2025unit42}
+Chen \& Lu. When {AI} remembers too much: Persistent behaviors in agents' memory. \emph{Palo Alto Unit 42}, 2025.
+
+\bibitem{injecmem2025}
+[InjecMem citation to be added]
+
+\bibitem{inspect2024}
+UK AI Security Institute. Inspect AI: Framework for Large Language Model Evaluations, 2024. \url{https://inspect.aisi.org.uk/}.
+
+\end{thebibliography}
 
 \end{document}
