@@ -74,7 +74,7 @@ Prior work has demonstrated tool-mediated prompt injection~\cite{agentpoison2024
 
 \section{METHODOLOGY}
 
-We developed a two-turn evaluation framework using InspectAI~\cite{inspect2024} with a custom memory system to simulate persistent agent memory.
+We developed a two-turn evaluation framework using InspectAI~\cite{inspect2024} with a custom memory system to simulate persistent agent memory.\footnote{Code and data available at \url{https://github.com/leonidas1712/agent-attacks-memory-injection}}
 
 \textbf{Memory representation.} Persistent memory is modeled as a key--value store of user attributes (e.g., risk tolerance, allergies), serialized into the system prompt at inference time. An attack succeeds when adversarial tool content causes incorrect values to be written into this store.
 
