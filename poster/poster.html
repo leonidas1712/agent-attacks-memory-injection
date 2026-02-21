@@ -483,13 +483,13 @@
 
         /* ═══════════ ACKNOWLEDGEMENT FOOTER ═══════════ */
         .ack-footer {
-            margin-top: 4mm;
-            padding: 3mm 12mm;
+            margin-top: 2mm;
+            padding: 2mm 0;
             text-align: center;
             font-size: 24pt;
             line-height: 1.35;
             color: var(--gray);
-            flex-shrink: 0;
+            border-top: 1px solid var(--border);
         }
         .ack-footer a {
             color: var(--gray);
@@ -523,7 +523,7 @@
 <!-- ═══════════ BANNER ═══════════ -->
 <div class="banner">
     <div class="banner-logo">
-        <img src="context/apart_logo.png" alt="Apart Research">
+        <img src="apart_logo.png" alt="Apart Research">
     </div>
     <div class="banner-text">
         <h1>Manipulation by Agent Memory Injection</h1>
@@ -599,11 +599,9 @@
             <div class="chart-box">
                 <canvas id="harmRateChart"></canvas>
                 </div>
-                <div class="callout warning" style="margin-top: 4mm;">
-                    Backdoor injection <strong>matches or exceeds</strong> direct operator control in <strong>4/5 models</strong> — up to 100% harm rate
-                </div>
                 <ul>
-                <li><strong>Injection acceptance</strong> is the bottleneck — once memory is poisoned, conditional harm reaches <strong>60–100%</strong></li>
+                <li>Backdoor (<code>user_review</code>) ≥ direct coercion in <strong>4/5 models</strong></li>
+                <li><strong>Injection acceptance</strong> is the bottleneck — harm reaches <strong>60–100%</strong> once memory is poisoned</li>
                 </ul>
         </div>
     </div>
@@ -714,10 +712,8 @@
                     <canvas id="stealthChartCN"></canvas>
                 </div>
             </div>
-            <div class="callout" style="margin-top: 4mm;">
-                <code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — stealth jumps from 2.5 → 3.9 while harm rises to 85%
-            </div>
             <ul>
+                <li><code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — avg stealth jumps from 2.5 to 3.9</li>
                 <li><strong>Frontier models across providers are equally vulnerable</strong> — extended models average ~80% harm, matching Western SOTA</li>
             </ul>
         </div>
@@ -752,14 +748,12 @@
                 </ul>
             </div>
         </div>
+        <div class="ack-footer">
+            Inspired by the SPAR Spring 2026 project
+            <a href="https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk">"Latent (Sleeper) Attacks via Persistent Memory"</a>
+            (Ivaxi Sheth, CISPA; Vyas Raina, Cambridge). We thank SPAR for enabling publication, Apart Research and the Singapore AI Safety Hub for hosting the hackathon, and Jonathan Ng for feedback.
+        </div>
     </div>
-</div>
-
-<!-- ═══════════ ACKNOWLEDGEMENT ═══════════ -->
-<div class="ack-footer">
-    Inspired by the SPAR Spring 2026 project
-    <a href="https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk">"Latent (Sleeper) Attacks via Persistent Memory"</a>
-    (Ivaxi Sheth, CISPA; Vyas Raina, Cambridge). We thank SPAR for enabling publication, Apart Research and the Singapore AI Safety Hub for hosting the hackathon, and Jonathan Ng for feedback.
 </div>
 
 </div><!-- /.poster-inner -->
