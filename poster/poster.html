@@ -141,6 +141,8 @@
             grid-template-rows: auto 1fr;
             gap: 6mm;
             flex: 1;
+            min-height: 0;       /* Override min-height: auto — allow flex shrink */
+            overflow: hidden;    /* Clip grid content that doesn't fit */
         }
 
         /* ═══════════ SECTION CARDS ═══════════ */
