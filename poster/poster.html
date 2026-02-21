@@ -795,6 +795,29 @@
         }
     };
 
+    // ── Custom plugin: "B>D" markers on Backdoor bars that beat Direct ──
+    const bdMarkerPlugin = {
+        id: 'bdMarkers',
+        afterDatasetsDraw(chart) {
+            const direct = chart.data.datasets[1].data;   // Direct Pressure
+            const backdoor = chart.data.datasets[2].data;  // Backdoor
+            const meta = chart.getDatasetMeta(2);           // Backdoor bar positions
+            const ctx = chart.ctx;
+            ctx.save();
+            meta.data.forEach((bar, i) => {
+                if (backdoor[i] > direct[i]) {
+                    ctx.fillStyle = '#f87171';
+                    ctx.font = 'bold 24px Inter, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    const xOff = (pctNudge[2] && pctNudge[2][i]) || 0;
+                    ctx.fillText('▲ B>D', bar.x + xOff, bar.y - 38);
+                }
+            });
+            ctx.restore();
+        }
+    };
+
     // ── Custom plugin: value labels (generic, supports suffix + nudge) ──
     function makeValPlugin(id, suffix, nudgeMap) {
         return {
@@ -872,7 +895,14 @@
                     text: 'Harm Rate by Condition (SOTA Models)',
                     font: { size: 44, weight: 'bold' },
                     color: '#ffffff',
-                    padding: { bottom: 14 }
+                    padding: { bottom: 4 }
+                },
+                subtitle: {
+                    display: true,
+                    text: 'Backdoor ≥ Direct Pressure in 4/5 models',
+                    font: { size: 34, weight: '600' },
+                    color: '#f87171',
+                    padding: { bottom: 10 }
                 },
                 legend: {
                     position: 'top',
@@ -915,7 +945,7 @@
             },
             layout: { padding: { top: 30 } }
         },
-        plugins: [pctPlugin]
+        plugins: [pctPlugin, bdMarkerPlugin]
     });
 
     // ═══════════ CHART 2a: Extended Model Set — Harm Rate ═══════════
@@ -965,7 +995,14 @@
                     text: '(a) Harm Rate by Strategy',
                     font: { size: 34, weight: 'bold' },
                     color: '#ffffff',
-                    padding: { bottom: 10 }
+                    padding: { bottom: 2 }
+                },
+                subtitle: {
+                    display: true,
+                    text: 'persona_memory ≥ user_review in all models',
+                    font: { size: 26, weight: '600' },
+                    color: '#7FFFD4',
+                    padding: { bottom: 6 }
                 },
                 legend: cnLegendOpts,
                 tooltip: { enabled: false }
@@ -1033,7 +1070,14 @@
                     text: '(b) Stealth Score by Strategy',
                     font: { size: 34, weight: 'bold' },
                     color: '#ffffff',
-                    padding: { bottom: 10 }
+                    padding: { bottom: 2 }
+                },
+                subtitle: {
+                    display: true,
+                    text: 'Avg stealth: 2.5 → 3.9 with persona_memory',
+                    font: { size: 26, weight: '600' },
+                    color: '#7FFFD4',
+                    padding: { bottom: 6 }
                 },
                 legend: cnLegendOpts,
                 tooltip: { enabled: false }
@@ -1064,7 +1108,47 @@
         plugins: [makeValPlugin('stealthCNLabels', '', {
             0: { 0: -5, 1: -3, 2: -3 },  // user_review nudged left
             1: { 0: 0, 1: 1, 2: 0 }       // persona_memory nudged right
-        })]
+        }), {
+            id: 'avgLines',
+            afterDatasetsDraw(chart) {
+                const ctx = chart.ctx;
+                const yScale = chart.scales.y;
+                const area = chart.chartArea;
+                const avgUR = 2.5;   // user_review average
+                const avgPM = 3.9;   // persona_memory average
+                ctx.save();
+
+                // Draw user_review avg line (coral dashed)
+                const yUR = yScale.getPixelForValue(avgUR);
+                ctx.strokeStyle = '#f87171';
+                ctx.lineWidth = 3;
+                ctx.setLineDash([12, 8]);
+                ctx.beginPath();
+                ctx.moveTo(area.left, yUR);
+                ctx.lineTo(area.right, yUR);
+                ctx.stroke();
+                // Label
+                ctx.fillStyle = '#f87171';
+                ctx.font = 'bold 22px Inter, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('avg ' + avgUR, area.right - 4, yUR - 4);
+
+                // Draw persona_memory avg line (mint dashed)
+                const yPM = yScale.getPixelForValue(avgPM);
+                ctx.strokeStyle = '#7FFFD4';
+                ctx.beginPath();
+                ctx.moveTo(area.left, yPM);
+                ctx.lineTo(area.right, yPM);
+                ctx.stroke();
+                // Label
+                ctx.fillStyle = '#7FFFD4';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('avg ' + avgPM, area.right - 4, yPM - 4);
+
+                ctx.restore();
+            }
+        }]
     });
 </script>
 
