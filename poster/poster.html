@@ -1127,12 +1127,17 @@
                 ctx.moveTo(area.left, yUR);
                 ctx.lineTo(area.right, yUR);
                 ctx.stroke();
-                // Label
-                ctx.fillStyle = '#f87171';
+                // Label (centered on line with background)
+                const midX = (area.left + area.right) / 2;
                 ctx.font = 'bold 22px Inter, sans-serif';
-                ctx.textAlign = 'right';
-                ctx.textBaseline = 'bottom';
-                ctx.fillText('avg ' + avgUR, area.right - 4, yUR - 4);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const urLabel = 'avg ' + avgUR;
+                const urWidth = ctx.measureText(urLabel).width;
+                ctx.fillStyle = '#2d333b';
+                ctx.fillRect(midX - urWidth/2 - 6, yUR - 12, urWidth + 12, 24);
+                ctx.fillStyle = '#f87171';
+                ctx.fillText(urLabel, midX, yUR);
 
                 // Draw persona_memory avg line (mint dashed)
                 const yPM = yScale.getPixelForValue(avgPM);
@@ -1141,10 +1146,14 @@
                 ctx.moveTo(area.left, yPM);
                 ctx.lineTo(area.right, yPM);
                 ctx.stroke();
-                // Label
+                // Label (centered on line with background)
+                const pmLabel = 'avg ' + avgPM;
+                const pmWidth = ctx.measureText(pmLabel).width;
+                ctx.fillStyle = '#2d333b';
+                ctx.fillRect(midX - pmWidth/2 - 6, yPM - 12, pmWidth + 12, 24);
                 ctx.fillStyle = '#7FFFD4';
-                ctx.textBaseline = 'bottom';
-                ctx.fillText('avg ' + avgPM, area.right - 4, yPM - 4);
+                ctx.textBaseline = 'middle';
+                ctx.fillText(pmLabel, midX, yPM);
 
                 ctx.restore();
             }
