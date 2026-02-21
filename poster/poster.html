@@ -94,6 +94,46 @@
             margin-top: 1mm;
         }
 
+        .banner-right {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .qr-placeholder {
+            width: 50mm;
+            height: 50mm;
+            background: #ffffff;
+            border-radius: 4mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 2mm;
+        }
+        .qr-placeholder .qr-icon {
+            width: 28mm;
+            height: 28mm;
+            color: #343645;
+            opacity: 0.35;
+        }
+        .qr-placeholder .qr-label {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #343645;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .qr-caption {
+            font-size: 20pt;
+            font-weight: 600;
+            color: #343645;
+            margin-top: 2mm;
+            text-align: center;
+        }
+
         /* ═══════════ MAIN GRID: 5-panel layout ═══════════ */
         .poster-grid {
             display: grid;
@@ -305,7 +345,7 @@
             background: rgba(248, 113, 113, 0.05);
         }
         .turn-label {
-            font-size: 28pt;
+            font-size: 34pt;
             font-weight: 700;
             color: var(--mint);
             margin-bottom: 4mm;
@@ -329,7 +369,7 @@
             border-radius: 4mm;
             padding: 3mm 5mm;
             text-align: center;
-            font-size: 24pt;
+            font-size: 30pt;
             font-weight: 600;
             color: var(--white);
             line-height: 1.25;
@@ -346,8 +386,8 @@
         }
         .method-node.poisoned { border-color: var(--coral); }
         .method-node .node-icon {
-            width: 18mm;
-            height: 18mm;
+            width: 22mm;
+            height: 22mm;
             margin-right: 4mm;
             flex-shrink: 0;
         }
@@ -359,7 +399,7 @@
             align-items: center;
             justify-content: center;
             height: 10mm;
-            font-size: 28pt;
+            font-size: 32pt;
             color: var(--mint);
             font-weight: 300;
         }
@@ -368,7 +408,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            font-size: 28pt;
+            font-size: 32pt;
             color: var(--mint);
             margin: 2mm 0;
         }
@@ -379,7 +419,7 @@
             border-radius: 4mm;
             padding: 3mm 8mm;
             text-align: center;
-            font-size: 24pt;
+            font-size: 30pt;
             font-weight: 600;
             color: var(--white);
             display: flex;
@@ -388,8 +428,8 @@
             gap: 3mm;
         }
         .eval-node .node-icon {
-            width: 16mm;
-            height: 16mm;
+            width: 20mm;
+            height: 20mm;
             color: var(--gray);
         }
 
@@ -428,11 +468,33 @@
             margin-bottom: 3mm;
             padding-bottom: 2mm;
             border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 3mm;
+        }
+        .disc-col h4 .disc-icon {
+            width: 14mm;
+            height: 14mm;
+            color: var(--mint);
+            flex-shrink: 0;
         }
         .disc-col li { font-size: 36pt; margin-bottom: 2mm; }
         .disc-col li::before { font-size: 36pt; }
 
-        /* (QR box and footer removed) */
+        /* ═══════════ ACKNOWLEDGEMENT FOOTER ═══════════ */
+        .ack-footer {
+            margin-top: 4mm;
+            padding: 3mm 12mm;
+            text-align: center;
+            font-size: 24pt;
+            line-height: 1.35;
+            color: var(--gray);
+            flex-shrink: 0;
+        }
+        .ack-footer a {
+            color: var(--gray);
+            text-decoration: underline;
+        }
 
         /* ═══════════ PRINT ═══════════ */
         @page {
@@ -469,6 +531,13 @@
         <div class="authors">Leonidas Raghav*, Choong Kai Zhe*</div>
         <div class="affiliation">Independent (with Apart Research)</div>
         <div class="equal-contrib">*Equal contribution</div>
+    </div>
+    <div class="banner-right">
+        <div class="qr-placeholder">
+            <i data-lucide="qr-code" class="qr-icon"></i>
+            <span class="qr-label">QR Code</span>
+        </div>
+        <div class="qr-caption">Scan for paper</div>
     </div>
 </div>
 
@@ -530,9 +599,11 @@
             <div class="chart-box">
                 <canvas id="harmRateChart"></canvas>
                 </div>
+                <div class="callout warning" style="margin-top: 4mm;">
+                    Backdoor injection <strong>matches or exceeds</strong> direct operator control in <strong>4/5 models</strong> — up to 100% harm rate
+                </div>
                 <ul>
-                <li>Backdoor (<code>user_review</code>) ≥ direct coercion in <strong>4/5 models</strong></li>
-                <li><strong>Injection acceptance</strong> is the bottleneck — harm reaches <strong>60–100%</strong> once memory is poisoned</li>
+                <li><strong>Injection acceptance</strong> is the bottleneck — once memory is poisoned, conditional harm reaches <strong>60–100%</strong></li>
                 </ul>
         </div>
     </div>
@@ -550,7 +621,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="user" class="node-icon" style="color: var(--mint);"></i>
-                                Benign user query<br><span style="font-size: 18pt; opacity: 0.7; font-style: italic;">"Search for investment tips"</span>
+                                Benign user query<br><span style="font-size: 24pt; opacity: 0.7; font-style: italic;">"Search for investment tips"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner">↓ triggers web search</div>
@@ -582,7 +653,7 @@
                         <div class="turn-row">
                             <div class="method-node">
                                 <i data-lucide="message-circle" class="node-icon" style="color: var(--coral);"></i>
-                                User asks scenario question<br><span style="font-size: 18pt; opacity: 0.7; font-style: italic;">"I have $10K to invest"</span>
+                                User asks scenario question<br><span style="font-size: 24pt; opacity: 0.7; font-style: italic;">"I have $10K to invest"</span>
                             </div>
                         </div>
                         <div class="method-arrow-inner" style="color: var(--coral);">↓</div>
@@ -643,8 +714,10 @@
                     <canvas id="stealthChartCN"></canvas>
                 </div>
             </div>
+            <div class="callout" style="margin-top: 4mm;">
+                <code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — stealth jumps from 2.5 → 3.9 while harm rises to 85%
+            </div>
             <ul>
-                <li><code>persona_memory</code> is <strong>both more harmful AND harder to detect</strong> — avg stealth jumps from 2.5 to 3.9</li>
                 <li><strong>Frontier models across providers are equally vulnerable</strong> — extended models average ~80% harm, matching Western SOTA</li>
             </ul>
         </div>
@@ -658,31 +731,37 @@
     <div class="section-content">
         <div class="discussion-grid">
             <div class="disc-col">
-                <h4>Primary Failure Mode</h4>
+                <h4><i data-lucide="shield-off" class="disc-icon"></i> Primary Failure Mode</h4>
                 <ul>
-                    <li><strong>Memory injection acceptance</strong> is the bottleneck — harm is very likely once memory is poisoned</li>
-                    <li><code>persona_memory</code> adds stealth: attacks become harder to detect while maintaining or increasing harm</li>
+                    <li><strong>Injection acceptance</strong> is the bottleneck — harm is very likely once memory is poisoned</li>
+                    <li><code>persona_memory</code> adds stealth: harder to detect while increasing harm</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>Case Studies in Refusal</h4>
+                <h4><i data-lucide="shield-check" class="disc-icon"></i> Case Studies in Refusal</h4>
                 <ul>
-                    <li><strong>GPT-5.2:</strong> Detects injection via internal source credibility evaluation at retrieval</li>
-                    <li><strong>Haiku 4.5:</strong> Flags memory conflict, asks user to resolve — suggesting the critical defense window is before memory is written</li>
+                    <li><strong>GPT-5.2:</strong> Detects injection via internal source credibility evaluation</li>
+                    <li><strong>Haiku 4.5:</strong> Flags memory conflict, asks user to resolve — defense window is before memory write</li>
                 </ul>
             </div>
             <div class="disc-col">
-                <h4>Takeaways</h4>
+                <h4><i data-lucide="lightbulb" class="disc-icon"></i> Takeaways</h4>
                 <ul>
-                    <li>Backdoor memory attacks <strong>rival direct operator control</strong> — and can remain invisible to users (<code>persona_memory</code>)</li>
-                    <li>Response-level safety filters are <strong>bypassed once memory is poisoned</strong> — defenses need to operate earlier</li>
+                    <li>Backdoor attacks <strong>rival direct operator control</strong> — and can remain invisible (<code>persona_memory</code>)</li>
+                    <li>Response-level safety is <strong>bypassed once memory is poisoned</strong> — defenses must target memory writes</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
-<!-- footer removed: authors shown in banner -->
+<!-- ═══════════ ACKNOWLEDGEMENT ═══════════ -->
+<div class="ack-footer">
+    Inspired by the SPAR Spring 2026 project
+    <a href="https://sparai.org/projects/sp26/rec76ks7AdCnaW6sk">"Latent (Sleeper) Attacks via Persistent Memory"</a>
+    (Ivaxi Sheth, CISPA; Vyas Raina, Cambridge). We thank SPAR for enabling publication, Apart Research and the Singapore AI Safety Hub for hosting the hackathon, and Jonathan Ng for feedback.
+</div>
+
 </div><!-- /.poster-inner -->
 
 <!-- ═══════════ SCRIPTS ═══════════ -->
