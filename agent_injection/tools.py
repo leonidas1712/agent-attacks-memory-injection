@@ -7,11 +7,12 @@ Defines web_search and update_memory tools that the agent can use.
 from inspect_ai.tool import tool
 
 from .content import get_web_search_response
+from .defenses import wrap_untrusted_document
 from .memory_store import get_memory
 
 
 @tool
-def web_search(variation: str = "control"):
+def web_search(variation: str = "control", mark_untrusted: bool = False):
     """
     Create a web search tool that returns static content.
     
@@ -32,7 +33,10 @@ def web_search(variation: str = "control"):
         """
         # Always return the same static content regardless of query
         # (for experimental simplicity)
-        return get_web_search_response(variation)
+        content = get_web_search_response(variation)
+        if mark_untrusted:
+            return wrap_untrusted_document(content)
+        return content
     
     return execute
 
@@ -85,4 +89,3 @@ def update_memory():
             return f"Error: '{key}' is not a valid memory key. Valid keys are: user_name, favorite_drink, dietary_notes"
     
     return execute
-
