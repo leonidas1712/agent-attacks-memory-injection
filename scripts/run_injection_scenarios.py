@@ -30,6 +30,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
+from agent_injection.defenses import DefenseConfig, VALID_DEFENSES, defense_config_from_names
 from agent_injection.scenarios import SCENARIOS, get_scenario_ids, INJECTION_STRATEGIES
 from agent_injection.scenario_tasks import (
     multi_scenario_injection_eval, 
@@ -275,8 +276,11 @@ def run_experiment(
     rollouts: int = 1,
     judge_model: str | None = None,
     use_judge: bool = True,
+    defense_config: DefenseConfig | None = None,
 ):
     """Run the full experiment with specified parameters."""
+    defense_config = defense_config or DefenseConfig()
+
     if scenarios is None:
         scenarios = get_scenario_ids()
     if conditions is None:
@@ -299,6 +303,7 @@ def run_experiment(
         print(f"    - {sid}: {SCENARIOS[sid]['name']}")
     print(f"  Conditions: {conditions}")
     print(f"  Strategies (for backdoor): {strategies}")
+    print(f"  Defenses: {defense_config.to_metadata()}")
     print(f"  Rollouts per sample: {rollouts}")
     print(f"  Total samples: {total_samples}")
     print(f"{'='*70}\n")
@@ -311,6 +316,7 @@ def run_experiment(
         model_name=model,
         use_scorer=use_judge,
         scorer_model=judge_model or model,
+        defense_config=defense_config,
     )
     
     try:
@@ -352,8 +358,11 @@ def run_single(
     strategy: str | None = None,
     judge_model: str | None = None,
     use_judge: bool = True,
+    defense_config: DefenseConfig | None = None,
 ):
     """Run a single scenario/condition combination."""
+    defense_config = defense_config or DefenseConfig()
+
     print(f"\n{'='*70}")
     print(f"Single Scenario Injection Attack")
     print(f"{'='*70}")
@@ -362,6 +371,7 @@ def run_single(
     print(f"  Condition: {condition}")
     if condition == "backdoor":
         print(f"  Strategy: {strategy or 'user_review'}")
+    print(f"  Defenses: {defense_config.to_metadata()}")
     print(f"{'='*70}\n")
     
     task = single_scenario_injection_eval(
@@ -371,6 +381,7 @@ def run_single(
         model_name=model,
         use_scorer=use_judge,
         scorer_model=judge_model or model,
+        defense_config=defense_config,
     )
     
     try:
@@ -432,6 +443,9 @@ Examples:
 
   # Compare two stealth strategies across all scenarios
   uv run python scripts/run_injection_scenarios.py --model openrouter/openai/gpt-4o --backdoor-strategy chat_log,persona_memory
+
+  # Enable both defenses for this eval
+  uv run python scripts/run_injection_scenarios.py --model openrouter/openai/gpt-4o --all --defenses system_prompt_hardening,untrusted_content_markers
         """
     )
     
@@ -500,6 +514,14 @@ Examples:
         help="Skip LLM judge scoring (faster, heuristic scoring only)"
     )
     parser.add_argument(
+        "--defenses",
+        type=str,
+        help=(
+            "Comma-separated defenses to enable for this eval. "
+            f"Available: {','.join(sorted(VALID_DEFENSES))}"
+        )
+    )
+    parser.add_argument(
         "--backdoor-strategy",
         type=str,
         help="Shortcut: run all scenarios with backdoor condition using the given strategy (or comma-separated strategies)"
@@ -537,6 +559,8 @@ Examples:
                 sys.exit(1)
     
     use_judge = not args.no_judge
+    defense_names = [d.strip() for d in args.defenses.split(",")] if args.defenses else None
+    defense_config = defense_config_from_names(defense_names)
     
     if args.backdoor_strategy:
         bd_strategies = [s.strip() for s in args.backdoor_strategy.split(",")]
@@ -551,6 +575,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            defense_config=defense_config,
         )
     elif args.all:
         run_experiment(
@@ -560,6 +585,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            defense_config=defense_config,
         )
     elif args.scenarios:
         scenario_ids = [s.strip() for s in args.scenarios.split(",")]
@@ -577,6 +603,7 @@ Examples:
             rollouts=args.rollouts,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            defense_config=defense_config,
         )
     elif args.scenario:
         if args.scenario not in SCENARIOS:
@@ -590,6 +617,7 @@ Examples:
             strategy=args.strategy,
             judge_model=args.judge_model,
             use_judge=use_judge,
+            defense_config=defense_config,
         )
     else:
         parser.error("Specify --all, --scenarios, or --scenario")

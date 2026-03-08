@@ -7,12 +7,17 @@ the dynamic scenario memory system.
 
 from inspect_ai.tool import tool
 
+from .defenses import wrap_untrusted_document
 from .scenario_content import get_scenario_web_search_response
 from .scenario_memory import update_memory_value, get_scenario_memory
 
 
 @tool(name="web_search")
-def scenario_web_search(scenario_id: str, strategy: str | None = None):
+def scenario_web_search(
+    scenario_id: str,
+    strategy: str | None = None,
+    mark_untrusted: bool = False,
+):
     """
     Create a web search tool that returns scenario-specific content.
 
@@ -33,7 +38,10 @@ def scenario_web_search(scenario_id: str, strategy: str | None = None):
             Combined HTML content of relevant web pages
         """
         # Return scenario-specific content regardless of query
-        return get_scenario_web_search_response(scenario_id, strategy)
+        content = get_scenario_web_search_response(scenario_id, strategy)
+        if mark_untrusted:
+            return wrap_untrusted_document(content)
+        return content
     
     return execute
 
@@ -62,4 +70,3 @@ def scenario_update_memory():
         return message
     
     return execute
-
